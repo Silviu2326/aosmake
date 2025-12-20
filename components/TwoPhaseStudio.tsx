@@ -14,7 +14,7 @@ export const TwoPhaseStudio: React.FC<TwoPhaseStudioProps> = ({ isConsoleOpen, s
     <div className="relative h-full w-full flex flex-col">
       {/* Visual Handoff Overlay (SVG Layer) */}
       <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-        <svg className="w-full h-full">
+        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <defs>
                 <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
                     <polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" />
@@ -26,28 +26,28 @@ export const TwoPhaseStudio: React.FC<TwoPhaseStudioProps> = ({ isConsoleOpen, s
                 </linearGradient>
             </defs>
             
-            {/* Connection 1: PreCrafter Emitter (approx y=600 in col 1) to Spec Panel (mid) */}
+            {/* Connection 1: PreCrafter Emitter to Spec Panel */}
             <path 
-                d="M 33% 600 C 35% 600, 36% 500, 41.6% 300" 
+                d="M 33 60 C 35 60, 36 50, 41.6 30" 
                 stroke="url(#handoffGradient)" 
-                strokeWidth="2" 
+                strokeWidth="0.2" 
                 fill="none"
-                strokeDasharray="6 4"
+                strokeDasharray="1 1"
                 className="animate-[dash_30s_linear_infinite]"
             />
-             {/* Connection 2: Spec Panel (mid) to Crafter Input (approx y=90 in col 3) */}
+             {/* Connection 2: Spec Panel to Crafter Input */}
             <path 
-                d="M 58.3% 300 C 64% 100, 65% 90, 67% 90" 
+                d="M 58.3 30 C 64 10, 65 9, 67 9" 
                 stroke="url(#handoffGradient)" 
-                strokeWidth="2" 
+                strokeWidth="0.2" 
                 fill="none" 
-                strokeDasharray="6 4"
+                strokeDasharray="1 1"
                 markerEnd="url(#arrowhead)"
                 className="animate-[dash_30s_linear_infinite]"
             />
             
             {/* Central "Knot" representing the Contract being the bridge */}
-            <circle cx="50%" cy="300" r="4" fill="#a855f7" className="animate-pulse" />
+            <circle cx="50" cy="30" r="0.4" fill="#a855f7" className="animate-pulse" />
         </svg>
       </div>
 

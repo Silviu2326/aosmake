@@ -141,14 +141,15 @@ You CANNOT create or delete nodes, or modify edges.
 Output a STRICT JSON block inside \`\`\`json ... \`\`\` with the following structure:
 {
   "actions": [
-    { "type": "updateNode", "payload": { "id": "node_id", "data": { "label": "New Name", "userPrompt": "...", "systemPrompt": "..." } } }
+    { "type": "updateNode", "payload": { "id": "node_id", "data": { "label": "New Name", "userPrompt": "...", "systemPrompt": "...", "schema": {...} } } }
   ]
 }
 IMPORTANT:
 1. Only generate 'updateNode' actions.
-2. You can update 'label', 'userPrompt', 'systemPrompt' or other data fields inside 'data'.
-3. Focus on the nodes specified in the user request or the focused nodes.
-4. Do not include the JSON block if no changes are needed.
+2. You can update 'label', 'userPrompt', 'systemPrompt', 'schema' (for structured output) or other data fields inside 'data'.
+3. The 'schema' field should be a JSON object (not a string) that defines the structured output format.
+4. Focus on the nodes specified in the user request or the focused nodes.
+5. Do not include the JSON block if no changes are needed.
 `;
         }
 
@@ -347,17 +348,17 @@ IMPORTANT:
 
                 {/* Node Selector (Dropdown) */}
                 {isDropdownOpen && !pendingActions && (
-                    <div className="absolute bottom-[72px] left-0 right-0 bg-[#1A1A1A] border-t border-white/10 max-h-[200px] overflow-y-auto p-2 shadow-2xl z-10 animate-[slideInUp_0.1s_ease-out]">
-                        <div className="text-[10px] text-gray-500 font-semibold mb-2 px-2">SELECT NODES TO FOCUS</div>
+                    <div className="absolute bottom-[72px] left-0 right-0 bg-[#1A1A1A] border-t border-white/20 max-h-[150px] overflow-y-auto p-3 shadow-2xl z-40 animate-[slideInUp_0.1s_ease-out]">
+                        <div className="text-[11px] text-gray-400 font-semibold mb-3 px-2">SELECT NODES TO FOCUS</div>
                         <div className="grid grid-cols-2 gap-2">
                             {nodes.map(node => (
                                 <button
                                     key={node.id}
                                     onClick={() => toggleNodeSelection(node.id)}
-                                    className={`flex items-center gap-2 p-2 rounded text-left text-xs transition-colors ${
-                                        selectedNodeIds.includes(node.id) 
-                                        ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' 
-                                        : 'bg-black/20 text-gray-400 border border-white/5 hover:bg-white/5'
+                                    className={`flex items-center gap-2 p-2.5 rounded text-left text-xs transition-colors ${
+                                        selectedNodeIds.includes(node.id)
+                                        ? 'bg-purple-500/30 text-purple-200 border border-purple-500/50 font-medium'
+                                        : 'bg-[#0D0D0D] text-gray-300 border border-white/10 hover:bg-white/10 hover:border-white/20'
                                     }`}
                                 >
                                     {selectedNodeIds.includes(node.id) ? <CheckSquare size={14} /> : <Square size={14} />}
@@ -371,31 +372,29 @@ IMPORTANT:
                 {/* Input Area */}
                 {!pendingActions && (
                     <div className="bg-surface border-t border-white/5 flex flex-col relative z-20">
-                        {/* Toggle Bar */}
-                        <div 
-                            className="h-6 flex items-center justify-between px-4 bg-[#151515] cursor-pointer hover:bg-[#1A1A1A] transition-colors border-b border-white/5"
-                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        >
-                            <span className="text-[10px] text-gray-500 flex items-center gap-1">
-                                {selectedNodeIds.length > 0 ? (
-                                    <span className="text-purple-400">{selectedNodeIds.length} nodes focused</span>
-                                ) : (
-                                    "Select nodes for context..."
-                                )}
-                            </span>
-                            {isDropdownOpen ? <ChevronDown size={12} className="text-gray-500" /> : <ChevronUp size={12} className="text-gray-500" />}
-                        </div>
-
                         <div className="p-4 relative">
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                placeholder={mode === 'action' ? "Describe changes to make..." : (mode === 'edit-node' ? "How should I update the nodes?" : "Ask about your workflow...")} 
-                                className={`w-full bg-[#0D0D0D] border rounded-full py-3 pl-4 pr-12 text-sm text-white focus:outline-none placeholder-gray-600 transition-colors ${getModeBorderColor(mode)}`}
+                                placeholder={mode === 'action' ? "Describe changes to make..." : (mode === 'edit-node' ? "How should I update the nodes?" : "Ask about your workflow...")}
+                                className={`w-full bg-[#0D0D0D] border rounded-full py-3 pl-12 pr-12 text-sm text-white focus:outline-none placeholder-gray-600 transition-colors ${getModeBorderColor(mode)}`}
                             />
-                            <button 
+                            {/* Node Selector Button */}
+                            <button
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                className={`absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${
+                                    selectedNodeIds.length > 0
+                                    ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
+                                    : 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-gray-300'
+                                }`}
+                                title={selectedNodeIds.length > 0 ? `${selectedNodeIds.length} nodes focused` : "Select nodes for context"}
+                            >
+                                {isDropdownOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                            </button>
+                            {/* Send Button */}
+                            <button
                                 onClick={handleSend}
                                 disabled={!inputValue.trim()}
                                 className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all ${getModeBtnColor(mode)}`}

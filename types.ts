@@ -23,13 +23,15 @@ export enum NodeStatus {
 export interface NodeVariant {
   id: string;
   label: string;
+  model?: string;
   systemPrompt?: string;
   userPrompt?: string;
   temperature?: number;
   recency?: 'month' | 'week' | 'day' | 'hour';
   citations?: boolean;
   output?: any;
-  status?: 'idle' | 'running' | 'success' | 'error';
+  status?: NodeStatus | 'idle' | 'running' | 'success' | 'error'; // Allow string literals or enum
+  schema?: string | object;
 }
 
 export interface NodeData {
@@ -40,7 +42,8 @@ export interface NodeData {
   tokens?: string;
   inputs: string[];
   outputs: string[];
-  schema?: string;
+  schema?: string | object; // Allow both string and object for flexibility
+  model?: string;
   systemPrompt?: string;
   userPrompt?: string;
   outputData?: any;

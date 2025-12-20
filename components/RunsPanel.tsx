@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Play, Clock, AlertCircle, CheckCircle, MoreHorizontal, Filter, Search, ChevronRight, X } from 'lucide-react';
+import { Play, Clock, AlertCircle, CheckCircle, MoreHorizontal, Filter, Search, ChevronRight, X, Download } from 'lucide-react';
 
 interface Run {
     id: string;
@@ -14,7 +14,7 @@ interface Run {
 // Ensure we are using the correct backend URL
 const getApiUrl = (path: string) => {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return `http://localhost:3001/api/workflows/${path}`;
+        return `https://backendaos-production.up.railway.app/api/workflows/${path}`;
     }
     return `https://backendaos-production.up.railway.app/api/workflows/${path}`;
 };
@@ -80,6 +80,30 @@ export const RunsPanel: React.FC = () => {
         const hours = Math.floor(mins / 60);
         if (hours < 24) return `${hours}h ago`;
         return new Date(dateStr).toLocaleDateString();
+    };
+
+    const handleDownloadRun = (run: Run) => {
+        const runData = {
+            id: run.id,
+            status: run.status,
+            start_time: run.start_time,
+            duration_ms: run.duration_ms,
+            workflow_version: run.workflow_version,
+            type: run.type || activeTab,
+            results: run.results
+        };
+
+        const dataStr = JSON.stringify(runData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `run_${run.id.substring(0, 8)}_${new Date(run.start_time).toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     };
 
     return (
@@ -162,9 +186,21 @@ export const RunsPanel: React.FC = () => {
                             <StatusBadge status={selectedRun.status} />
                             <span className="text-sm font-mono text-gray-500">{selectedRun.id.substring(0, 8)}...</span>
                         </div>
-                        <button onClick={() => setSelectedRun(null)} className="p-1 hover:bg-white/10 rounded">
-                            <X size={16} className="text-gray-400" />
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => handleDownloadRun(selectedRun)}
+                                className="p-1.5 hover:bg-white/10 rounded text-gray-400 hover:text-white transition-colors"
+                                title="Download run data"
+                            >
+                                <Download size={14} />
+                            </button>
+                            <button
+                                onClick={() => setSelectedRun(null)}
+                                className="p-1 hover:bg-white/10 rounded text-gray-400 hover:text-white transition-colors"
+                            >
+                                <X size={16} />
+                            </button>
+                        </div>
                     </div>
                     
                     <div className="flex-1 overflow-y-auto p-6">
@@ -179,24 +215,70 @@ export const RunsPanel: React.FC = () => {
                             </div>
                         </div>
 
-                        <h3 className="text-xs font-bold text-gray-500 uppercase mb-3">Node Outputs</h3>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase mb-3">Node Execution Results</h3>
                         <div className="space-y-4">
                             {selectedRun.results ? (
-                                Object.entries(selectedRun.results).map(([nodeId, output]) => (
-                                    <div key={nodeId} className="bg-black/20 rounded-lg border border-white/5 overflow-hidden">
-                                        <div className="bg-white/5 px-3 py-2 text-xs font-medium text-gray-300 border-b border-white/5 flex justify-between">
-                                            <span>{nodeId}</span>
-                                            <span className="text-[10px] text-gray-500">JSON</span>
+                                Object.entries(selectedRun.results).map(([nodeId, result]) => {
+                                    // Support both old format (string) and new format ({input, output})
+                                    const hasInputOutput = typeof result === 'object' && result !== null && 'output' in result;
+                                    const output = hasInputOutput ? result.output : result;
+                                    const input = hasInputOutput ? result.input : null;
+
+                                    return (
+                                        <div key={nodeId} className="bg-black/20 rounded-lg border border-white/5 overflow-hidden">
+                                            <div className="bg-white/5 px-3 py-2 text-xs font-medium text-gray-300 border-b border-white/5">
+                                                <span className="text-purple-400">{nodeId}</span>
+                                            </div>
+
+                                            {/* Input Section */}
+                                            {input && (
+                                                <div className="border-b border-white/5">
+                                                    <div className="bg-blue-500/5 px-3 py-1.5 text-[10px] font-semibold text-blue-400 uppercase flex items-center gap-2">
+                                                        <span>Input</span>
+                                                        <span className="text-[8px] text-gray-500">({input.model || 'N/A'})</span>
+                                                    </div>
+                                                    <div className="p-3 space-y-2">
+                                                        {input.systemPrompt && (
+                                                            <div>
+                                                                <div className="text-[9px] text-gray-500 mb-1">System Prompt:</div>
+                                                                <pre className="text-[10px] font-mono text-gray-300 whitespace-pre-wrap bg-black/30 p-2 rounded">
+                                                                    {input.systemPrompt}
+                                                                </pre>
+                                                            </div>
+                                                        )}
+                                                        {input.userPrompt && (
+                                                            <div>
+                                                                <div className="text-[9px] text-gray-500 mb-1">User Prompt:</div>
+                                                                <pre className="text-[10px] font-mono text-gray-300 whitespace-pre-wrap bg-black/30 p-2 rounded">
+                                                                    {input.userPrompt}
+                                                                </pre>
+                                                            </div>
+                                                        )}
+                                                        {input.temperature !== undefined && (
+                                                            <div className="text-[9px] text-gray-400">
+                                                                Temperature: <span className="text-blue-400">{input.temperature}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Output Section */}
+                                            <div>
+                                                <div className="bg-green-500/5 px-3 py-1.5 text-[10px] font-semibold text-green-400 uppercase">
+                                                    Output
+                                                </div>
+                                                <div className="p-3 overflow-x-auto">
+                                                    <pre className="text-[10px] font-mono text-green-400 whitespace-pre-wrap">
+                                                        {typeof output === 'string' ? output : JSON.stringify(output, null, 2)}
+                                                    </pre>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="p-3 overflow-x-auto">
-                                            <pre className="text-[10px] font-mono text-green-400 whitespace-pre-wrap">
-                                                {typeof output === 'string' ? output : JSON.stringify(output, null, 2)}
-                                            </pre>
-                                        </div>
-                                    </div>
-                                ))
+                                    );
+                                })
                             ) : (
-                                <div className="text-xs text-gray-500 italic">No output data recorded.</div>
+                                <div className="text-xs text-gray-500 italic">No execution data recorded.</div>
                             )}
                         </div>
                     </div>

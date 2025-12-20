@@ -111,12 +111,16 @@ export const CrafterPanel: React.FC = () => {
               });
               
               const data = await response.json();
-              
+
               if (data.success) {
-                  results[nodeId] = data.output;
+                  // Store both input and output for comprehensive run tracking
+                  results[nodeId] = {
+                      input: data.input || {},
+                      output: data.output
+                  };
                   setExecutionResults(prev => ({ ...prev, [nodeId]: data.output }));
                   setNodes((nds) => nds.map(n => n.id === nodeId ? { ...n, data: { ...n.data, status: NodeStatus.SUCCESS, outputData: data.output } } : n));
-                  
+
                   outgoingEdges[nodeId].forEach(targetId => {
                       incomingEdges[targetId]--;
                       if (incomingEdges[targetId] === 0) queue.push(targetId);
@@ -307,33 +311,44 @@ export const CrafterPanel: React.FC = () => {
 
       actions.forEach(action => {
           if (action.type === 'createNode') {
-              const { id: tempId, label, type, x, y, systemPrompt, userPrompt, ...otherData } = action.payload;
+              const { id: tempId, label, type, x, y, systemPrompt, userPrompt, schema, ...otherData } = action.payload;
               const realId = `c-node_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-              
+
               if (tempId) {
                   tempIdMap[tempId] = realId;
               }
+
+              // Normalize schema to string if it comes as object
+              const normalizedSchema = schema && typeof schema === 'object'
+                  ? JSON.stringify(schema)
+                  : schema;
 
               const newNode: Node = {
                   id: realId,
                   type: 'custom',
                   position: { x: x || 100, y: y || 100 },
-                  data: { 
-                      label: label || 'New Node', 
-                      type: type || 'LLM', 
-                      status: NodeStatus.IDLE, 
-                      inputs: ['input'], 
+                  data: {
+                      label: label || 'New Node',
+                      type: type || 'LLM',
+                      status: NodeStatus.IDLE,
+                      inputs: ['input'],
                       outputs: ['output'],
                       systemPrompt,
                       userPrompt,
-                      ...otherData 
+                      schema: normalizedSchema,
+                      ...otherData
                   }
               };
               setNodes(nds => [...nds, newNode]);
           } else if (action.type === 'updateNode') {
               const { id, data } = action.payload;
               const realId = tempIdMap[id] || id;
-              setNodes(nds => nds.map(n => n.id === realId ? { ...n, data: { ...n.data, ...data } } : n));
+              // Normalize schema to string if it comes as object
+              const normalizedData = { ...data };
+              if (normalizedData.schema && typeof normalizedData.schema === 'object') {
+                  normalizedData.schema = JSON.stringify(normalizedData.schema);
+              }
+              setNodes(nds => nds.map(n => n.id === realId ? { ...n, data: { ...n.data, ...normalizedData } } : n));
           } else if (action.type === 'deleteNode') {
               const { id } = action.payload;
               const realId = tempIdMap[id] || id;

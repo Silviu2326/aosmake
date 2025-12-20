@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ReactFlow, { 
   Node, 
   Edge, 
@@ -8,13 +8,17 @@ import ReactFlow, {
   Background, 
   Controls, 
   MiniMap,
-  ConnectionMode
+  ConnectionMode,
+  EdgeTypes
 } from 'reactflow';
 import CustomNode from './CustomNode';
+import GroupNode from './GroupNode';
+import { DataPeekEdge } from './DataPeekEdge';
 import 'reactflow/dist/style.css';
 
 const nodeTypes = {
   custom: CustomNode,
+  group: GroupNode,
 };
 
 interface NodeGraphProps {
@@ -24,6 +28,7 @@ interface NodeGraphProps {
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   onNodeClick?: (event: React.MouseEvent, node: Node) => void;
+  children?: React.ReactNode;
 }
 
 export const NodeGraph: React.FC<NodeGraphProps> = ({ 
@@ -32,8 +37,19 @@ export const NodeGraph: React.FC<NodeGraphProps> = ({
   onNodesChange, 
   onEdgesChange, 
   onConnect,
-  onNodeClick
+  onNodeClick,
+  children
 }) => {
+  const edgeTypes = useMemo<EdgeTypes>(() => ({
+    dataPeek: DataPeekEdge,
+  }), []);
+
+  const defaultEdgeOptions = {
+    type: 'dataPeek',
+    style: { stroke: '#555', strokeWidth: 2 },
+    animated: true
+  };
+
   return (
     <div className="h-full w-full">
       <ReactFlow
@@ -44,6 +60,8 @@ export const NodeGraph: React.FC<NodeGraphProps> = ({
         onConnect={onConnect}
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        defaultEdgeOptions={defaultEdgeOptions}
         connectionMode={ConnectionMode.Loose}
         fitView
         className="bg-[#0D0D0D]"
@@ -55,6 +73,7 @@ export const NodeGraph: React.FC<NodeGraphProps> = ({
             maskColor="rgba(0, 0, 0, 0.6)" 
             className="bg-surface border border-white/10 rounded-lg overflow-hidden" 
         />
+        {children}
       </ReactFlow>
     </div>
   );

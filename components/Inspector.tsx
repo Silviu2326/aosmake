@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { NodeData, NodeVariant } from '../types';
 import { Edge } from 'reactflow';
-import { X, Play, Save, ChevronRight, FileOutput, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Globe } from 'lucide-react';
+import { X, Play, Save, ChevronRight, FileOutput, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Globe, Sparkles, Maximize2 } from 'lucide-react';
 import { getNodeFields } from '../utils/nodeUtils';
+import { VariationGeneratorModal } from './VariationGeneratorModal';
+import { PromptEditorModal } from './PromptEditorModal';
 
 interface InspectorProps {
     node?: NodeData;
@@ -18,11 +20,14 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
     const [systemPrompt, setSystemPrompt] = useState('');
     const [userPrompt, setUserPrompt] = useState('');
     const [jsonSchema, setJsonSchema] = useState('');
+    const [model, setModel] = useState('');
     const [temperature, setTemperature] = useState(0.7);
     const [recency, setRecency] = useState<'month' | 'week' | 'day' | 'hour'>('month');
     const [citations, setCitations] = useState(false);
     const [isTesting, setIsTesting] = useState(false);
     const [testOutput, setTestOutput] = useState('');
+    const [isAiVarModalOpen, setIsAiVarModalOpen] = useState(false);
+    const [isPromptEditorOpen, setIsPromptEditorOpen] = useState(false);
 
     const variants = node?.variants || [];
     const activeVariantId = node?.activeVariantId || 'master';
@@ -37,17 +42,18 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
 
     useEffect(() => {
         if (activeData) {
-            const schemaValue = node?.schema 
-                ? (typeof node.schema === 'object' ? JSON.stringify(node.schema, null, 2) : node.schema)
+            const schemaValue = activeData.schema
+                ? (typeof activeData.schema === 'object' ? JSON.stringify(activeData.schema, null, 2) : activeData.schema)
                 : '{\n  "type": "object",\n  "properties": {\n    "result": { "type": "string" }\n  }\n}';
-            
+
             setJsonSchema(schemaValue);
             setSystemPrompt(activeData.systemPrompt || (activeVariantId === 'master' ? `You are a specialist agent.\n\nTask: ${node?.label}\n\nContext: Analyze incoming data and transformations.\nOutput strictly JSON or requested format.` : ''));
             setUserPrompt(activeData.userPrompt || '');
+            setModel(activeData.model || (node.type === 'PERPLEXITY' ? 'sonar' : 'gemini-3-pro-preview'));
             setTemperature(activeData.temperature ?? 0.7);
             setRecency(activeData.recency || 'month');
             setCitations(activeData.citations || false);
-            
+
             // If viewing a variant, show its output if available
             if (activeVariantId !== 'master') {
                 const v = variants.find(v => v.id === activeVariantId);
@@ -57,7 +63,7 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                  setTestOutput(node?.outputData ? JSON.stringify(node.outputData, null, 2) : '');
             }
         }
-    }, [node?.id, activeVariantId, variants, activeData]); 
+    }, [node?.id, node?.schema, activeVariantId, variants, activeData]); 
 
     if (!node || !activeData) return null;
 
@@ -84,6 +90,36 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
             variants: [...variants, newVariant],
             activeVariantId: newVariant.id 
         });
+    };
+
+    const handleGenerateAiVariants = async (instructions: string[]) => {
+        try {
+            const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/generate-variations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    node: {
+                        systemPrompt,
+                        userPrompt,
+                        temperature,
+                        schema: jsonSchema
+                    },
+                    instructions 
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.variations) {
+                 onNodeUpdate(node.id, { 
+                    variants: [...variants, ...data.variations],
+                });
+            } else {
+                console.error('Failed to generate variations:', data.error);
+            }
+        } catch (error) {
+            console.error('Error calling generate variations:', error);
+        }
     };
 
     const handleDeleteVariant = (e: React.MouseEvent, id: string) => {
@@ -130,19 +166,40 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
 
     const handleTestPrompt = async () => {
         setIsTesting(true);
+        // Calculate model explicitly to ensure it's never undefined
+        const effectiveModel = model || activeData.model || (node.type === 'PERPLEXITY' ? 'sonar' : 'gemini-3-pro-preview');
+
+        console.log('[Inspector] handleTestPrompt Debug:', {
+            nodeId: node?.id,
+            nodeType: node?.type,
+            modelState: model,
+            activeDataModel: activeData?.model,
+            effectiveModel
+        });
+
         try {
+            const payload = { 
+                node: {
+                    ...node,
+                    id: node.id, // Explicitly ensure ID is present
+                    model: effectiveModel, 
+                    systemPrompt,
+                    userPrompt,
+                    temperature,
+                    schema: jsonSchema
+                },
+                debug: {
+                    modelState: model,
+                    effectiveModel,
+                    nodeId: node?.id
+                }
+            };
+            console.log('Sending Test Payload:', payload);
+            
             const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/run-node', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    node: {
-                        ...node,
-                        systemPrompt,
-                        userPrompt,
-                        temperature,
-                        schema: jsonSchema
-                    }
-                })
+                body: JSON.stringify(payload)
             });
             const data = await response.json();
             if (data.success) {
@@ -173,6 +230,11 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
     const handleUserPromptChange = (value: string) => {
         setUserPrompt(value);
         updateActiveData({ userPrompt: value });
+    };
+
+    const handleModelChange = (value: string) => {
+        setModel(value);
+        updateActiveData({ model: value });
     };
 
     const handleTemperatureChange = (value: string) => {
@@ -209,6 +271,23 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
         updateActiveData({ userPrompt: newValue });
     };
 
+    const handlePromptEditorSave = (newSystemPrompt: string, newUserPrompt: string) => {
+        setSystemPrompt(newSystemPrompt);
+        setUserPrompt(newUserPrompt);
+        
+        if (activeVariantId === 'master') {
+            onNodeUpdate(node.id, { 
+                systemPrompt: newSystemPrompt,
+                userPrompt: newUserPrompt
+            });
+        } else {
+            const newVariants = variants.map(v => 
+                v.id === activeVariantId ? { ...v, systemPrompt: newSystemPrompt, userPrompt: newUserPrompt } : v
+            );
+            onNodeUpdate(node.id, { variants: newVariants });
+        }
+    };
+
     // Filter nodes to only show ancestors (upstream nodes)
     const ancestorNodes = useMemo(() => {
         if (!node || !edges.length) return [];
@@ -236,6 +315,15 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
         return availableNodes.filter(n => ancestors.has(n.id));
     }, [node, edges, availableNodes]);
 
+    // Prepare variables for the modal
+    const availableVariables = useMemo(() => {
+        return ancestorNodes.map(n => ({
+            nodeId: n.id,
+            nodeLabel: n.label,
+            fields: getNodeFields(n)
+        }));
+    }, [ancestorNodes]);
+
     return (
         <div className="flex flex-col h-full bg-surface text-sm">
             {/* Header */}
@@ -248,6 +336,14 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                 />
                 
                 <div className="flex items-center gap-2">
+                     <button 
+                        onClick={() => setIsAiVarModalOpen(true)}
+                        className="flex items-center gap-1 px-2 py-1 rounded bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 hover:text-purple-300 text-xs transition-colors border border-purple-500/20"
+                        title="Generate Variations with AI"
+                    >
+                        <Sparkles size={12} /> AI Gen
+                    </button>
+
                      {isWinner ? (
                         <div className="flex items-center gap-1 px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-semibold border border-green-500/30">
                             <CheckCircle2 size={12} /> Winner
@@ -333,7 +429,15 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                 {activeTab === 'prompt' && (
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <label className="text-xs text-gray-500 font-semibold block">SYSTEM PROMPT</label>
+                             <div className="flex justify-between items-center">
+                                <label className="text-xs text-gray-500 font-semibold block">SYSTEM PROMPT</label>
+                                <button 
+                                    onClick={() => setIsPromptEditorOpen(true)}
+                                    className="flex items-center gap-1 text-[10px] bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded transition-colors"
+                                >
+                                    <Maximize2 size={10} /> Expand & Edit
+                                </button>
+                            </div>
                             <textarea 
                                 className="w-full h-32 bg-background border border-border rounded p-3 text-gray-300 text-xs font-mono focus:border-accent focus:ring-0 resize-none leading-relaxed"
                                 value={systemPrompt}
@@ -425,7 +529,7 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                                 className={`flex items-center gap-1 text-xs bg-accent/10 hover:bg-accent/20 border border-accent/20 px-3 py-1.5 rounded text-accent transition-colors ${isTesting ? 'opacity-50 cursor-not-allowed' : ''}`}
                              >
                                  {isTesting ? <div className="w-3 h-3 border-2 border-accent border-t-transparent rounded-full animate-spin" /> : <Play size={10} />}
-                                 {isTesting ? 'Running...' : 'Test Prompt'}
+                                 {isTesting ? 'Running...' : 'Test Prompt (v2)'}
                              </button>
                          </div>
 
@@ -463,12 +567,17 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                     <div className="space-y-4">
                          <div className="space-y-1">
                              <label className="text-xs text-gray-500">Model</label>
-                             <select className="w-full bg-background border border-border rounded p-2 text-xs text-white">
+                             <select 
+                                value={model}
+                                onChange={(e) => handleModelChange(e.target.value)}
+                                className="w-full bg-background border border-border rounded p-2 text-xs text-white"
+                             >
                                  {node.type === 'PERPLEXITY' ? (
                                     <>
                                         <option value="sonar-pro">sonar-pro</option>
                                         <option value="sonar">sonar</option>
-                                        <option value="r1-1776">r1-1776</option>
+                                        <option value="sonar-reasoning">sonar-reasoning</option>
+                                        <option value="sonar-reasoning-pro">sonar-reasoning-pro</option>
                                     </>
                                  ) : (
                                     <>
@@ -569,6 +678,22 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                      <Save size={12} /> Save
                  </button>
             </div>
+            
+            <VariationGeneratorModal 
+                isOpen={isAiVarModalOpen} 
+                onClose={() => setIsAiVarModalOpen(false)} 
+                onGenerate={handleGenerateAiVariants} 
+            />
+            
+            <PromptEditorModal 
+                isOpen={isPromptEditorOpen}
+                onClose={() => setIsPromptEditorOpen(false)}
+                onSave={handlePromptEditorSave}
+                initialSystemPrompt={systemPrompt}
+                initialUserPrompt={userPrompt}
+                nodeLabel={node.label}
+                availableVariables={availableVariables}
+            />
         </div>
     );
 };

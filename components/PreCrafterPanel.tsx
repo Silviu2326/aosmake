@@ -8,11 +8,12 @@ import { useConsole } from '../context/ConsoleContext';
 import { JsonEditorModal } from './JsonEditorModal';
 import { getNodeFields } from '../utils/nodeUtils';
 import { AgentPopup } from './AgentPopup';
-import { Play, Copy, GitBranch, Search, Maximize2, Plus, Save, RotateCcw, Bot, Upload, Download, Layout, History } from 'lucide-react';
+import { Play, Copy, GitBranch, Search, Maximize2, Plus, Save, RotateCcw, Bot, Upload, Download, Layout, History, BoxSelect } from 'lucide-react';
 import { VersionHistoryModal } from './VersionHistoryModal';
 import dagre from 'dagre';
+import { useOnSelectionChange } from 'reactflow';
 
-const API_URL = 'https://backendaos-production.up.railway.app';
+const API_URL = 'https://backendaos-production.up.railway.app/api/workflows/precrafter';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -25,6 +26,7 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'LR') => 
   dagreGraph.setGraph({ rankdir: direction });
 
   nodes.forEach((node) => {
+    if (node.type === 'group') return; // Skip groups in auto-layout for now or handle them specifically
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
   });
 
@@ -35,6 +37,7 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'LR') => 
   dagre.layout(dagreGraph);
 
   const layoutedNodes = nodes.map((node) => {
+    if (node.type === 'group') return node;
     const nodeWithPosition = dagreGraph.node(node.id);
     
     // We are shifting the dagre node position (anchor=center center) to the top left
@@ -62,6 +65,7 @@ export const PreCrafterPanel: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(INITIAL_NODES);
   const [edges, setEdges, onEdgesChange] = useEdgesState(INITIAL_EDGES);
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>(undefined);
+  const [selectedNodes, setSelectedNodes] = useState<string[]>([]); // Track multiple selection
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
   const [isAgentOpen, setIsAgentOpen] = useState(false);
@@ -72,6 +76,56 @@ export const PreCrafterPanel: React.FC = () => {
   const [executionResults, setExecutionResults] = useState<Record<string, any>>({});
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Helper component to handle selection inside ReactFlow context
+  const SelectionListener = ({ onChange }: { onChange: (ids: string[]) => void }) => {
+    useOnSelectionChange({
+      onChange: ({ nodes }) => {
+          onChange(nodes.map(n => n.id));
+      },
+    });
+    return null;
+  };
+
+  const handleGroupNodes = () => {
+    if (selectedNodes.length < 2) return;
+
+    const nodesToGroup = nodes.filter(n => selectedNodes.includes(n.id) && n.type !== 'group' && !n.parentNode);
+    if (nodesToGroup.length === 0) return;
+
+    // Calculate Bounding Box
+    const padding = 40;
+    const minX = Math.min(...nodesToGroup.map(n => n.position.x));
+    const minY = Math.min(...nodesToGroup.map(n => n.position.y));
+    const maxX = Math.max(...nodesToGroup.map(n => n.position.x + (n.width || 250)));
+    const maxY = Math.max(...nodesToGroup.map(n => n.position.y + (n.height || 150)));
+
+    const groupNodeId = `group_${Date.now()}`;
+    
+    const groupNode: Node = {
+        id: groupNodeId,
+        type: 'group',
+        position: { x: minX - padding, y: minY - padding },
+        style: { width: (maxX - minX) + padding * 2, height: (maxY - minY) + padding * 2 },
+        data: { label: 'New Group' },
+    };
+
+    const updatedChildren = nodesToGroup.map(node => ({
+        ...node,
+        parentNode: groupNodeId,
+        extent: 'parent', // Optional: keeps child inside group
+        position: {
+            x: node.position.x - (minX - padding),
+            y: node.position.y - (minY - padding),
+        }
+    }));
+
+    const otherNodes = nodes.filter(n => !selectedNodes.includes(n.id));
+    
+    // Add group node BEFORE children so it renders behind (or handle via z-index in node)
+    setNodes([...otherNodes, groupNode, ...updatedChildren]);
+    setSelectedNodes([]); // Clear selection
+  };
 
   const onLayout = useCallback((direction: string) => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
@@ -152,6 +206,27 @@ export const PreCrafterPanel: React.FC = () => {
     setExecutionContext(contextItems);
   }, [executionResults, nodes, setExecutionContext]);
 
+  // Update edges with data flow for DataPeek
+  useEffect(() => {
+    if (Object.keys(executionResults).length === 0) return;
+
+    setEdges((currentEdges) =>
+        currentEdges.map((edge) => {
+            const sourceResult = executionResults[edge.source];
+            // Extract output from result (support both old and new format)
+            const sourceOutput = sourceResult?.output || sourceResult;
+            // Update edge data if source has output and it's different/new
+            if (sourceOutput !== undefined && edge.data?.output !== sourceOutput) {
+                return {
+                    ...edge,
+                    data: { ...edge.data, output: sourceOutput }
+                };
+            }
+            return edge;
+        })
+    );
+  }, [executionResults, setEdges]);
+
   // Helper for frontend substitution for logs
   const replaceVariables = (text: string, ctx: Record<string, string>) => {
     if (!text) return '';
@@ -199,7 +274,7 @@ export const PreCrafterPanel: React.FC = () => {
           input: `System: ${logSystemPrompt}\n\nUser: ${logUserPrompt}`
       });
 
-      const response = await fetch('http://localhost:3001/api/workflows/run-node', {
+      const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/run-node', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -223,7 +298,7 @@ export const PreCrafterPanel: React.FC = () => {
           
           // Save Run
           try {
-              await fetch('https://backendaos-production.up.railway.app/runs', {
+              await fetch('https://backendaos-production.up.railway.app/api/workflows/precrafter/runs', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
@@ -315,8 +390,13 @@ export const PreCrafterPanel: React.FC = () => {
           const data = await executeNode(node.data, dependencyState.current.results);
           
           if (data.success) {
-              dependencyState.current.results[nodeId] = data.output;
-              setExecutionResults(prev => ({ ...prev, [nodeId]: data.output }));
+              // Store both input and output for comprehensive run tracking
+              const resultData = {
+                  input: data.input || {},
+                  output: data.output
+              };
+              dependencyState.current.results[nodeId] = resultData;
+              setExecutionResults(prev => ({ ...prev, [nodeId]: resultData }));
               setNodes((nds) => nds.map(n => n.id === nodeId ? { ...n, data: { ...n.data, status: NodeStatus.SUCCESS, outputData: data.output } } : n));
               addLog({ nodeId: node.id, nodeLabel: node.data.label, status: 'success', message: 'Completed successfully.', output: data.output });
               
@@ -604,33 +684,44 @@ export const PreCrafterPanel: React.FC = () => {
 
       actions.forEach(action => {
           if (action.type === 'createNode') {
-              const { id: tempId, label, type, x, y, systemPrompt, userPrompt, ...otherData } = action.payload;
+              const { id: tempId, label, type, x, y, systemPrompt, userPrompt, schema, ...otherData } = action.payload;
               const realId = `node_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-              
+
               if (tempId) {
                   tempIdMap[tempId] = realId;
               }
+
+              // Normalize schema to string if it comes as object
+              const normalizedSchema = schema && typeof schema === 'object'
+                  ? JSON.stringify(schema)
+                  : schema;
 
               const newNode: Node = {
                   id: realId,
                   type: 'custom',
                   position: { x: x || 100, y: y || 100 },
-                  data: { 
-                      label: label || 'New Node', 
-                      type: type || 'LLM', 
-                      status: NodeStatus.IDLE, 
-                      inputs: ['input'], 
+                  data: {
+                      label: label || 'New Node',
+                      type: type || 'LLM',
+                      status: NodeStatus.IDLE,
+                      inputs: ['input'],
                       outputs: ['output'],
                       systemPrompt,
                       userPrompt,
-                      ...otherData 
+                      schema: normalizedSchema,
+                      ...otherData
                   }
               };
               setNodes(nds => [...nds, newNode]);
           } else if (action.type === 'updateNode') {
               const { id, data } = action.payload;
               const realId = tempIdMap[id] || id;
-              setNodes(nds => nds.map(n => n.id === realId ? { ...n, data: { ...n.data, ...data } } : n));
+              // Normalize schema to string if it comes as object
+              const normalizedData = { ...data };
+              if (normalizedData.schema && typeof normalizedData.schema === 'object') {
+                  normalizedData.schema = JSON.stringify(normalizedData.schema);
+              }
+              setNodes(nds => nds.map(n => n.id === realId ? { ...n, data: { ...n.data, ...normalizedData } } : n));
           } else if (action.type === 'deleteNode') {
               const { id } = action.payload;
               const realId = tempIdMap[id] || id;
@@ -770,6 +861,14 @@ export const PreCrafterPanel: React.FC = () => {
             </div>
             <div className="pointer-events-auto flex gap-1 bg-surface border border-white/10 rounded-md shadow-lg p-1">
                  <button 
+                    className={`p-1 rounded transition-colors ${selectedNodes.length > 1 ? 'hover:bg-white/10 text-purple-400' : 'text-gray-600 cursor-not-allowed'}`} 
+                    title="Group Selected Nodes"
+                    onClick={handleGroupNodes}
+                    disabled={selectedNodes.length < 2}
+                 >
+                    <BoxSelect size={14} />
+                 </button>
+                 <button 
                     className="p-1 hover:bg-white/10 rounded" 
                     title="Auto Layout"
                     onClick={() => onLayout('LR')}
@@ -789,7 +888,9 @@ export const PreCrafterPanel: React.FC = () => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 onNodeClick={onNodeClick}
-            />
+            >
+                <SelectionListener onChange={setSelectedNodes} />
+            </NodeGraph>
 
             {/* Inspector Drawer */}
             {selectedNodeId && getSelectedNodeData()?.type !== 'JSON' && getSelectedNodeData()?.type !== 'JSON_BUILDER' && (
