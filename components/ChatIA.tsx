@@ -72,7 +72,7 @@ export const ChatIA: React.FC<ChatIAProps> = ({ isOpen, onClose }) => {
         setIsTyping(true);
 
         try {
-            const response = await fetch('http://localhost:3001/api/workflows/chat', {
+            const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: fullContent })

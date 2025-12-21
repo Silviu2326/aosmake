@@ -13,7 +13,7 @@ import { VersionHistoryModal } from './VersionHistoryModal';
 import dagre from 'dagre';
 import { useOnSelectionChange } from 'reactflow';
 
-const API_URL = 'http://localhost:3001/api/workflows/precrafter';
+const API_URL = 'https://backendaos-production.up.railway.app/api/workflows/precrafter';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -278,7 +278,7 @@ export const PreCrafterPanel: React.FC = () => {
           input: `System: ${logSystemPrompt}\n\nUser: ${logUserPrompt}`
       });
 
-      const response = await fetch('http://localhost:3001/api/workflows/run-node', {
+      const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/run-node', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -302,7 +302,7 @@ export const PreCrafterPanel: React.FC = () => {
           
           // Save Run
           try {
-              await fetch('http://localhost:3001/api/workflows/precrafter/runs', {
+              await fetch('https://backendaos-production.up.railway.app/api/workflows/precrafter/runs', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({

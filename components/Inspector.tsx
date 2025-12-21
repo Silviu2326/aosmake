@@ -94,7 +94,7 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
 
     const handleGenerateAiVariants = async (instructions: string[]) => {
         try {
-            const response = await fetch('http://localhost:3001/api/workflows/generate-variations', {
+            const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/generate-variations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -196,7 +196,7 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
             };
             console.log('Sending Test Payload:', payload);
             
-            const response = await fetch('http://localhost:3001/api/workflows/run-node', {
+            const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/run-node', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

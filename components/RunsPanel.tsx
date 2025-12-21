@@ -14,9 +14,9 @@ interface Run {
 // Ensure we are using the correct backend URL
 const getApiUrl = (path: string) => {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return `http://localhost:3001/api/workflows/${path}`;
+        return `https://backendaos-production.up.railway.app/api/workflows/${path}`;
     }
-    return `http://localhost:3001/api/workflows/${path}`;
+    return `https://backendaos-production.up.railway.app/api/workflows/${path}`;
 };
 
 export const RunsPanel: React.FC = () => {
