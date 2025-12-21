@@ -8,7 +8,7 @@ import { AgentPopup } from './AgentPopup';
 import { Play, GitBranch, Search, Maximize2, Send, Download, Copy, ExternalLink, ChevronUp, ChevronDown, GitCompare, Plus, Save, Bot, Upload, History } from 'lucide-react';
 import { VersionHistoryModal } from './VersionHistoryModal';
 
-const API_URL = 'https://backendaos-production.up.railway.app/api/workflows/crafter';
+const API_URL = 'http://localhost:3001/api/workflows/crafter';
 
 // Mock Data (Fallback)
 const INITIAL_NODES: Node[] = [];
@@ -95,7 +95,7 @@ export const CrafterPanel: React.FC = () => {
           setNodes((nds) => nds.map(n => n.id === nodeId ? { ...n, data: { ...n.data, status: NodeStatus.RUNNING } } : n));
 
           try {
-              const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/run-node', {
+              const response = await fetch('http://localhost:3001/api/workflows/run-node', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ 
@@ -138,7 +138,7 @@ export const CrafterPanel: React.FC = () => {
 
       // Save Run
       try {
-          await fetch('https://backendaos-production.up.railway.app/api/workflows/crafter/runs', {
+          await fetch('http://localhost:3001/api/workflows/crafter/runs', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

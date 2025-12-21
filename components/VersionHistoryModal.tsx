@@ -18,7 +18,7 @@ interface VersionHistoryModalProps {
 
 // Ensure we are using the correct backend URL
 const getApiUrl = (endpoint: string) => {
-    return `https://backendaos-production.up.railway.app/api/workflows/${endpoint}`;
+    return `http://localhost:3001/api/workflows/${endpoint}`;
 };
 
 export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({ 

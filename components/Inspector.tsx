@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { NodeData, NodeVariant } from '../types';
 import { Edge } from 'reactflow';
-import { X, Play, Save, ChevronRight, FileOutput, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Globe, Sparkles, Maximize2 } from 'lucide-react';
+import { X, Play, Save, ChevronRight, FileOutput, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Globe, Sparkles, Maximize2, Download } from 'lucide-react';
 import { getNodeFields } from '../utils/nodeUtils';
 import { VariationGeneratorModal } from './VariationGeneratorModal';
 import { PromptEditorModal } from './PromptEditorModal';
@@ -94,7 +94,7 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
 
     const handleGenerateAiVariants = async (instructions: string[]) => {
         try {
-            const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/generate-variations', {
+            const response = await fetch('http://localhost:3001/api/workflows/generate-variations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -196,7 +196,7 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
             };
             console.log('Sending Test Payload:', payload);
             
-            const response = await fetch('https://backendaos-production.up.railway.app/api/workflows/run-node', {
+            const response = await fetch('http://localhost:3001/api/workflows/run-node', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -324,6 +324,31 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
         }));
     }, [ancestorNodes]);
 
+    const handleDownloadVariantsJSON = () => {
+        if (!variants || variants.length === 0) return;
+
+        const dataToExport = {
+            nodeId: node.id,
+            nodeLabel: node.label,
+            timestamp: new Date().toISOString(),
+            variants: variants.map(v => ({
+                id: v.id,
+                label: v.label,
+                systemPrompt: v.systemPrompt,
+                userPrompt: v.userPrompt,
+                output: v.output
+            }))
+        };
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataToExport, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", `${node.label.replace(/\s+/g, '_')}_variants.json`);
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    };
+
     return (
         <div className="flex flex-col h-full bg-surface text-sm">
             {/* Header */}
@@ -336,6 +361,16 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                 />
                 
                 <div className="flex items-center gap-2">
+                     {variants && variants.length > 0 && (
+                        <button 
+                            onClick={handleDownloadVariantsJSON}
+                            className="flex items-center gap-1 px-2 py-1 rounded bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 text-xs transition-colors border border-blue-500/20"
+                            title="Download All Variants JSON"
+                        >
+                            <Download size={12} /> JSONs
+                        </button>
+                     )}
+
                      <button 
                         onClick={() => setIsAiVarModalOpen(true)}
                         className="flex items-center gap-1 px-2 py-1 rounded bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 hover:text-purple-300 text-xs transition-colors border border-purple-500/20"
