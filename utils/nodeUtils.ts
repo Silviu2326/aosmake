@@ -4,10 +4,9 @@ export const flattenObject = (obj: any, prefix = ''): string[] => {
     let keys: string[] = [];
     for (const key in obj) {
         const newKey = prefix ? `${prefix}.${key}` : key;
+        keys.push(newKey);
         if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
             keys = keys.concat(flattenObject(obj[key], newKey));
-        } else {
-            keys.push(newKey);
         }
     }
     return keys;
@@ -19,11 +18,11 @@ const flattenSchemaProperties = (properties: any, prefix = ''): string[] => {
         const newKey = prefix ? `${prefix}.${key}` : key;
         const prop = properties[key];
         
+        keys.push(newKey);
+        
         // If it's an object and has nested properties, recurse
         if (prop && prop.type === 'object' && prop.properties) {
             keys = keys.concat(flattenSchemaProperties(prop.properties, newKey));
-        } else {
-            keys.push(newKey);
         }
     }
     return keys;

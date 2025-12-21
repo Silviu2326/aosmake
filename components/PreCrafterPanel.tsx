@@ -241,7 +241,11 @@ export const PreCrafterPanel: React.FC = () => {
                 try {
                     const parsed = JSON.parse(nodeOutput);
                     const val = property.split('.').reduce((o, i) => (o ? o[i] : undefined), parsed);
-                    return val !== undefined ? val : match;
+                    
+                    if (val !== undefined) {
+                        return typeof val === 'object' ? JSON.stringify(val, null, 2) : String(val);
+                    }
+                    return match;
                 } catch (e) {
                         if (property === 'output') return nodeOutput;
                     return match;
