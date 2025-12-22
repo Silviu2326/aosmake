@@ -5,8 +5,9 @@ import { NodeData, NodeStatus } from '../types';
 import { Inspector } from './Inspector';
 import { AddNodeModal } from './AddNodeModal';
 import { AgentPopup } from './AgentPopup';
-import { Play, GitBranch, Search, Maximize2, Send, Download, Copy, ExternalLink, ChevronUp, ChevronDown, GitCompare, Plus, Save, Bot, Upload, History } from 'lucide-react';
+import { Play, GitBranch, Search, Maximize2, Send, Download, Copy, ExternalLink, ChevronUp, ChevronDown, GitCompare, Plus, Save, Bot, Upload, History, Snowflake } from 'lucide-react';
 import { VersionHistoryModal } from './VersionHistoryModal';
+import { useChristmas } from '../context/ChristmasContext';
 
 const API_URL = 'https://backendaos-production.up.railway.app/api/workflows/crafter';
 
@@ -28,6 +29,7 @@ export const CrafterPanel: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [executionResults, setExecutionResults] = useState<Record<string, string>>({});
   const [startTime, setStartTime] = useState<string | null>(null);
+  const { isChristmasMode, toggleChristmasMode } = useChristmas();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -389,6 +391,15 @@ export const CrafterPanel: React.FC = () => {
                 >
                     <Bot size={14} />
                     <span className="text-xs">Agent</span>
+                </button>
+
+                <button
+                    onClick={toggleChristmasMode}
+                    className={`flex items-center gap-1.5 px-2 py-1.5 rounded hover:bg-white/10 transition-colors ${isChristmasMode ? 'text-red-400 hover:text-red-300' : 'text-gray-400 hover:text-white'}`}
+                    title="va toca para alegrarte"
+                >
+                    <Snowflake size={14} />
+                    <span className="text-xs">Navidad</span>
                 </button>
 
                  <button 
