@@ -42,7 +42,7 @@ export const AgentPopup: React.FC<AgentPopupProps> = ({ isOpen, onClose, nodes, 
     }, [messages, isOpen, pendingActions]);
 
     const toggleNodeSelection = (id: string) => {
-        setSelectedNodeIds(prev => 
+        setSelectedNodeIds(prev =>
             prev.includes(id) ? prev.filter(nid => nid !== id) : [...prev, id]
         );
     };
@@ -85,7 +85,7 @@ export const AgentPopup: React.FC<AgentPopupProps> = ({ isOpen, onClose, nodes, 
             default: return 'border-white/10 focus:border-purple-500/50';
         }
     };
-    
+
     const getModeBtnColor = (m: typeof mode) => {
         switch (m) {
             case 'action': return 'bg-orange-500 hover:bg-orange-600';
@@ -98,8 +98,8 @@ export const AgentPopup: React.FC<AgentPopupProps> = ({ isOpen, onClose, nodes, 
         if (!inputValue.trim()) return;
 
         // Construct context with current graph state
-        const graphContext = JSON.stringify({ 
-            nodes: nodes.map(n => ({ id: n.id, label: n.data.label, type: n.data.type, ...n.data })), 
+        const graphContext = JSON.stringify({
+            nodes: nodes.map(n => ({ id: n.id, label: n.data.label, type: n.data.type, ...n.data })),
             edges: edges.map(e => ({ source: e.source, target: e.target })),
             focusedNodeIds: selectedNodeIds
         }, null, 2);
@@ -135,7 +135,7 @@ IMPORTANT:
 4. Do not include the JSON block if no changes are needed. Just reply normally.
 `;
         } else if (mode === 'edit-node') {
-             systemInstruction = `
+            systemInstruction = `
 You are in NODE EDITOR MODE. Your ONLY job is to UPDATE existing nodes based on the user's request.
 You CANNOT create or delete nodes, or modify edges.
 Output a STRICT JSON block inside \`\`\`json ... \`\`\` with the following structure:
@@ -202,7 +202,7 @@ IMPORTANT:
                     actions: extractedActions || undefined
                 };
                 setMessages(prev => [...prev, aiMsg]);
-                
+
                 if (extractedActions) {
                     setPendingActions(extractedActions);
                 }
@@ -244,21 +244,21 @@ IMPORTANT:
                         <div>
                             <div className="text-sm font-semibold text-white">Graph Agent</div>
                             <div className="flex items-center gap-2">
-                                <button 
+                                <button
                                     onClick={() => setMode('question')}
                                     className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 transition-colors ${mode === 'question' ? 'bg-purple-500/20 text-purple-300' : 'text-gray-500 hover:text-gray-300'}`}
                                 >
                                     <HelpCircle size={10} /> Q&A
                                 </button>
                                 <div className="w-px h-3 bg-white/10" />
-                                <button 
+                                <button
                                     onClick={() => setMode('edit-node')}
                                     className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 transition-colors ${mode === 'edit-node' ? 'bg-blue-500/20 text-blue-300' : 'text-gray-500 hover:text-gray-300'}`}
                                 >
                                     <Edit size={10} /> Edit Node
                                 </button>
                                 <div className="w-px h-3 bg-white/10" />
-                                <button 
+                                <button
                                     onClick={() => setMode('action')}
                                     className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 transition-colors ${mode === 'action' ? 'bg-orange-500/20 text-orange-300' : 'text-gray-500 hover:text-gray-300'}`}
                                 >
@@ -284,11 +284,11 @@ IMPORTANT:
                                     {msg.content}
                                 </div>
                             </div>
-                            
+
                             {/* Action Proposal Preview in History (Optional, or just show pending) */}
                             {msg.actions && (
                                 <div className="ml-11 bg-orange-500/5 border border-orange-500/20 rounded p-2 text-[10px] text-orange-300 w-fit">
-                                    <div className="font-semibold mb-1 flex items-center gap-1"><Hammer size={10}/> Proposed Actions:</div>
+                                    <div className="font-semibold mb-1 flex items-center gap-1"><Hammer size={10} /> Proposed Actions:</div>
                                     <ul className="list-disc list-inside opacity-80">
                                         {msg.actions.map((act, i) => (
                                             <li key={i}>{act.type}</li>
@@ -299,7 +299,7 @@ IMPORTANT:
                         </div>
                     ))}
                     {isTyping && (
-                         <div className="flex gap-3">
+                        <div className="flex gap-3">
                             <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${getModeColor(mode)}`}>
                                 <Bot size={16} />
                             </div>
@@ -330,13 +330,13 @@ IMPORTANT:
                             ))}
                         </div>
                         <div className="flex gap-3">
-                            <button 
+                            <button
                                 onClick={handleRejectActions}
                                 className="flex-1 py-2 rounded border border-white/10 text-gray-400 hover:bg-white/5 text-xs font-medium transition-colors"
                             >
                                 Reject
                             </button>
-                            <button 
+                            <button
                                 onClick={handleAcceptActions}
                                 className="flex-1 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium transition-colors flex items-center justify-center gap-2"
                             >
@@ -355,11 +355,10 @@ IMPORTANT:
                                 <button
                                     key={node.id}
                                     onClick={() => toggleNodeSelection(node.id)}
-                                    className={`flex items-center gap-2 p-2.5 rounded text-left text-xs transition-colors ${
-                                        selectedNodeIds.includes(node.id)
-                                        ? 'bg-purple-500/30 text-purple-200 border border-purple-500/50 font-medium'
-                                        : 'bg-[#0D0D0D] text-gray-300 border border-white/10 hover:bg-white/10 hover:border-white/20'
-                                    }`}
+                                    className={`flex items-center gap-2 p-2.5 rounded text-left text-xs transition-colors ${selectedNodeIds.includes(node.id)
+                                            ? 'bg-purple-500/30 text-purple-200 border border-purple-500/50 font-medium'
+                                            : 'bg-[#0D0D0D] text-gray-300 border border-white/10 hover:bg-white/10 hover:border-white/20'
+                                        }`}
                                 >
                                     {selectedNodeIds.includes(node.id) ? <CheckSquare size={14} /> : <Square size={14} />}
                                     <span className="truncate">{node.data.label}</span>
@@ -384,11 +383,10 @@ IMPORTANT:
                             {/* Node Selector Button */}
                             <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className={`absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${
-                                    selectedNodeIds.length > 0
-                                    ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
-                                    : 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-gray-300'
-                                }`}
+                                className={`absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${selectedNodeIds.length > 0
+                                        ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
+                                        : 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-gray-300'
+                                    }`}
                                 title={selectedNodeIds.length > 0 ? `${selectedNodeIds.length} nodes focused` : "Select nodes for context"}
                             >
                                 {isDropdownOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}

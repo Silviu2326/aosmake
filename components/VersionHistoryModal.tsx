@@ -21,9 +21,9 @@ const getApiUrl = (endpoint: string) => {
     return `https://backendaos-production.up.railway.app/api/workflows/${endpoint}`;
 };
 
-export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({ 
-    isOpen, 
-    onClose, 
+export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
+    isOpen,
+    onClose,
     type,
     onRestore
 }) => {
@@ -58,7 +58,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
 
     const handleVersionClick = async (version: number) => {
         if (selectedVersion === version) return;
-        
+
         setSelectedVersion(version);
         try {
             const url = getApiUrl(`${type}/versions/${version}`);
@@ -111,11 +111,10 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                                     <button
                                         key={v.version}
                                         onClick={() => handleVersionClick(v.version)}
-                                        className={`flex flex-col items-start p-3 border-b border-white/5 transition-colors text-left ${
-                                            selectedVersion === v.version 
-                                                ? 'bg-blue-500/10 border-l-2 border-l-blue-500' 
+                                        className={`flex flex-col items-start p-3 border-b border-white/5 transition-colors text-left ${selectedVersion === v.version
+                                                ? 'bg-blue-500/10 border-l-2 border-l-blue-500'
                                                 : 'hover:bg-white/5 border-l-2 border-l-transparent'
-                                        }`}
+                                            }`}
                                     >
                                         <div className="flex items-center justify-between w-full mb-1">
                                             <span className={`text-xs font-medium ${selectedVersion === v.version ? 'text-blue-400' : 'text-gray-300'}`}>
@@ -142,7 +141,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                                         </div>
                                         <div>
                                             <h3 className="text-lg font-medium text-white">
-                                                Version {selectedVersion} 
+                                                Version {selectedVersion}
                                                 {versions.find(v => v.version === selectedVersion)?.label && (
                                                     <span className="ml-2 text-sm text-gray-400 font-normal">
                                                         ({versions.find(v => v.version === selectedVersion)?.label})
@@ -192,7 +191,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                                         <AlertTriangle size={14} />
                                         <span>Opening will replace current workspace</span>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={handleRestore}
                                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md text-xs font-medium transition-colors"
                                     >

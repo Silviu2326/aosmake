@@ -32,6 +32,7 @@ export interface NodeVariant {
   output?: any;
   status?: NodeStatus | 'idle' | 'running' | 'success' | 'error'; // Allow string literals or enum
   schema?: string | object;
+  outputMode?: 'structured' | 'free';
 }
 
 export interface NodeData {
@@ -56,6 +57,7 @@ export interface NodeData {
   variants?: NodeVariant[];
   activeVariantId?: string; // The variant currently being edited
   selectedVariantId?: string; // The "winning" variant selected during execution
+  outputMode?: 'structured' | 'free';
 }
 
 export interface Connection {

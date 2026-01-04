@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
-import ReactFlow, { 
-  Node, 
-  Edge, 
-  OnNodesChange, 
-  OnEdgesChange, 
-  OnConnect, 
-  Background, 
-  Controls, 
+import ReactFlow, {
+  Node,
+  Edge,
+  OnNodesChange,
+  OnEdgesChange,
+  OnConnect,
+  Background,
+  Controls,
   MiniMap,
   ConnectionMode,
   EdgeTypes
@@ -28,16 +28,18 @@ interface NodeGraphProps {
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   onNodeClick?: (event: React.MouseEvent, node: Node) => void;
+  onNodeContextMenu?: (event: React.MouseEvent, node: Node) => void;
   children?: React.ReactNode;
 }
 
-export const NodeGraph: React.FC<NodeGraphProps> = ({ 
-  nodes, 
-  edges, 
-  onNodesChange, 
-  onEdgesChange, 
+export const NodeGraph: React.FC<NodeGraphProps> = ({
+  nodes,
+  edges,
+  onNodesChange,
+  onEdgesChange,
   onConnect,
   onNodeClick,
+  onNodeContextMenu,
   children
 }) => {
   const edgeTypes = useMemo<EdgeTypes>(() => ({
@@ -59,6 +61,7 @@ export const NodeGraph: React.FC<NodeGraphProps> = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onNodeClick={onNodeClick}
+        onNodeContextMenu={onNodeContextMenu}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
@@ -68,10 +71,10 @@ export const NodeGraph: React.FC<NodeGraphProps> = ({
       >
         <Background color="#333" gap={20} size={1} />
         <Controls className="bg-surface border border-white/10 text-gray-400" />
-        <MiniMap 
-            nodeColor="#333" 
-            maskColor="rgba(0, 0, 0, 0.6)" 
-            className="bg-surface border border-white/10 rounded-lg overflow-hidden" 
+        <MiniMap
+          nodeColor="#333"
+          maskColor="rgba(0, 0, 0, 0.6)"
+          className="bg-surface border border-white/10 rounded-lg overflow-hidden"
         />
         {children}
       </ReactFlow>

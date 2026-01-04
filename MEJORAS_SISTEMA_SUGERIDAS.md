@@ -1,87 +1,96 @@
-# Propuesta de Mejoras: Sistema AOS (PreCrafter & Crafter)
+Dicho eso, para que v4.0 sea industrial de verdad (menos drift, menos trampas del juez, más convergencia), yo ajustaría estas piezas:
 
-Este documento detalla una serie de mejoras técnicas y funcionales sugeridas tras el análisis del código fuente actual y el roadmap existente. El objetivo es transformar el prototipo actual en un sistema de producción robusto, escalable y mantenible.
+1) Test Harness: de “1 test input” a “suite”
 
----
+Con un solo Test Input te arriesgas a optimizar para un caso y romper otros.
 
-## 1. Arquitectura y Calidad de Código (Refactoring)
+Suite: 5–20 casos por nodo (mínimo 3).
 
-El código actual de `PreCrafterPanel` y `CrafterPanel` comparte más del 80% de su lógica (React Flow, ejecución de nodos, gestión de estado local). Esto es insostenible a largo plazo.
+Regresión: que un hijo no pueda “ganar” si baja el score promedio o falla un caso clave.
 
-### 🔄 Unificación de Componentes (DRY)
-*   **Componente `WorkflowEditor` Genérico:** Crear un componente base `WorkflowEditor` que acepte props de configuración (`mode: 'precrafter' | 'crafter'`, `nodeTypes`, `initialNodes`). Esto centralizará la lógica de React Flow, el manejo de conexiones y el CRUD de nodos.
-*   **Hooks Personalizados:** Extraer la lógica de ejecución en hooks reutilizables:
-    *   `useWorkflowExecution`: Para manejar la cola, estados de carga y llamadas al backend.
-    *   `useWorkflowPersistence`: Para guardar/cargar, manejar versiones e historial.
-    *   `useWorkflowValidation`: Para validar el grafo (ciclos, nodos desconectados).
+Métrica: fitness = avg(fitness_cases) - penalty(failures).
 
-### 🗃️ Gestión de Estado Global
-*   **Migración a Zustand/Redux:** Actualmente, el estado de ejecución (`executionResults`) y dependencias vive dentro de los componentes. Al moverlo a un store global:
-    *   Facilita la comunicación entre `PreCrafter`, `SpecPanel` y `Crafter`.
-    *   Habilita la función de **"Time Travel"** (navegar por estados pasados de la ejecución).
-    *   Permite persistir el estado de la sesión si el navegador se cierra.
+2) Constraints: separa “hard” vs “soft”
 
-### 🛡️ Tipado Estricto (TypeScript)
-*   **Eliminar `any`:** Reemplazar los usos de `any` (especialmente en `executionResults` y payloads de API) por tipos compartidos (`SharedTypes`).
-*   **Contratos Frontend-Backend:** Usar herramientas como `tRPC` o generar tipos automáticamente desde el backend para asegurar que si cambia la API, el frontend se entere en tiempo de compilación.
+Ahora las constraints están en lenguaje natural y el juez decide. Bien para tono, mal para reglas duras.
 
----
+Hard constraints (programáticas): schema JSON, “exactamente 3 items/3 angles”, campos requeridos, longitudes, enums, etc.
 
-## 2. Integración Real (El "Puente" SpecPanel)
+Soft constraints (LLM-judge): sarcasmo, claridad, persuasión, etc.
 
-Actualmente, el `SpecPanel` es visualmente atractivo pero funcionalmente estático (mock). Debe convertirse en el cerebro de la integración.
+Regla de oro: lo que sea contable → validador (no juez).
 
-### 🌉 SpecPanel Dinámico
-*   **Data Binding Real:** El `SpecPanel` debe suscribirse al output del nodo final del PreCrafter. Cuando el PreCrafter termina, el SpecPanel debe validarlo automáticamente contra el esquema JSON definido.
-*   **Auto-Generación de Contratos:** Permitir definir el contrato de salida en el SpecPanel y que esto genere automáticamente la validación para el PreCrafter y los inputs requeridos para el Crafter.
-*   **Transformadores (Adapters):** Implementar la lógica real para la pestaña "Diff". Si el PreCrafter saca `v1` y el Crafter espera `v2`, permitir escribir una pequeña función de transformación en JS/TS en el panel.
+3) Fitness: mete “cost” y “stability” (o te explota el budget)
 
----
+Tu fórmula (Calidad*0.6) + (ConstraintsMet*0.4) está bien como base, pero añade:
 
-## 3. Experiencia de Usuario (UX/UI) Avanzada
+cost_penalty (tokens / longitud de prompt / latencia)
 
-Ampliando el roadmap existente con detalles de implementación específicos.
+stability_bonus (pasa 2 ejecuciones seguidas con el mismo input)
 
-### ⚡ Edición de Alta Velocidad
-*   **Monaco Editor Integrado:** Reemplazar los `textarea` de prompts por `monaco-editor`. Esto da:
-    *   Coloreado de sintaxis para JSON y Markdown.
-    *   **Autocompletado de Variables:** Al escribir `{{`, mostrar una lista desplegable con los outputs de nodos anteriores (leído del estado global).
-    *   Validación de JSON en tiempo real mientras se escribe.
+novelty_bonus (no clonar al padre)
 
-### 🕵️‍♂️ Observabilidad y Debugging
-*   **Visualización de Flujo de Datos:** Al hacer hover sobre una conexión (edge), mostrar un popover con el JSON exacto que pasó de un nodo a otro en la última ejecución.
-*   **Diff de Ejecuciones:** Seleccionar dos ejecuciones del historial y ver visualmente qué nodos cambiaron su salida (útil para regression testing de prompts).
+Ejemplo:
+fitness = quality*0.5 + hard_pass*0.35 + stability*0.1 + novelty*0.05 - cost*0.1
 
----
+4) Selección: “Top 2” solo → riesgo de colapso de diversidad
 
-## 4. Motor de Ejecución y Backend
+Top-2 elitismo puro converge rápido… y se estanca o se vuelve repetitivo.
 
-### 🚀 Robustez y Escalabilidad
-*   **Colas de Trabajo (BullMQ/Redis):** Mover la ejecución de nodos pesados (LLM) a un worker en background. El frontend solo debería encolar el trabajo y escuchar actualizaciones.
-*   **WebSockets / SSE:** Reemplazar el polling o espera activa de `fetch` por Server-Sent Events. Esto permite mostrar el texto generándose token a token (streaming), mejorando drásticamente la percepción de velocidad.
-*   **Caching Inteligente:** Si se re-ejecuta un flujo pero los inputs de los primeros 3 nodos no han cambiado, recuperar sus resultados de caché (Redis) en lugar de volver a gastar dinero en la API del LLM.
+Mejor:
 
-### 🔒 Seguridad y Configuración
-*   **Variables de Entorno:** Eliminar URLs hardcodeadas (`backendaos-production...`) y usar `.env`.
-*   **Sandbox para Código:** Para el futuro nodo de "Código" (JS/Python), usar entornos aislados (como `vm2` o contenedores Docker efímeros) para evitar que código malicioso afecte al servidor.
+Elitismo K=1 (el mejor pasa fijo)
 
----
+Tournament selection para el resto (elige 3 al azar, gana el mejor)
 
-## 5. Testing y Fiabilidad (QA)
+Diversity filter (si similitud > X, no entra)
 
-Actualmente no hay tests visibles. Para un sistema de producción, esto es crítico.
+5) Crossover: define “por bloques”
 
-### 🧪 Estrategia de Testing
-*   **Unit Tests (Vitest/Jest):** Para las utilidades de lógica (`nodeUtils.ts`) y los transformadores de datos.
-*   **Component Tests (React Testing Library):** Asegurar que los paneles renderizan y reaccionan bien a los cambios de estado.
-*   **E2E Tests (Playwright/Cypress):** Simular un flujo completo: Crear nodos -> Conectar -> Ejecutar -> Verificar Output.
-*   **Golden Datasets:** Crear un conjunto de inputs de prueba "sagrados". Cada vez que se modifica un prompt en el sistema, ejecutar automáticamente estos tests para asegurar que la calidad de los emails no se ha degradado (Regression Testing de Prompts).
+Ahora el crossover está descrito, pero la clave es hacerlo estructurado:
 
----
+Bloques típicos: Rules/Constraints, Output Schema, Examples, Tone, Failure Modes
 
-## Resumen de Prioridades (Quick Wins)
+Padre A aporta estructura, Padre B aporta tono/ejemplos, y el hijo se arma por secciones.
 
-1.  **Refactorizar `PreCrafter` y `Crafter`** para usar una base común y reducir deuda técnica.
-2.  **Conectar `SpecPanel`** con datos reales del PreCrafter (eliminar mocks).
-3.  **Implementar Variables de Entorno** para la API.
-4.  **Añadir Autocompletado** de variables en los prompts (mejora inmediata de UX).
+Guardas en el log: crossover_map (qué bloque vino de quién).
+
+6) Auto-Repair: ponle “no cambiar semántica” con verificación
+
+Decir “sin alterar contenido” es peligroso si no lo verificas.
+
+Repair prompt: “solo arregla comillas, comas, llaves, escapes”
+
+Tras repair: re-parse + schema + whitelist de keys
+
+Opcional: diff check “solo cambió puntuación/escapes”.
+
+7) Judge: hazlo auditable y menos subjetivo
+
+Un único judge LLM puede “inventarse” compliance.
+
+Judge output estructurado: {scores, passed_constraints[], failed_constraints[], evidence[]}
+
+Rúbrica fija (0–10 por criterio)
+
+Opcional: doble juez (2 llamadas baratas) y promedias / resolves discrepancias.
+
+8) Operadores de mutación (te dará control brutal)
+
+En vez de solo “Goal”, que el breeding declare un operator:
+
+ADD_CONSTRAINTS, ADD_EXAMPLES, REDUCE_AMBIGUITY, SHORTEN, ANTI_HALLUCINATION, etc.
+
+Luego puedes filtrar qué operadores funcionan mejor por tipo de nodo.
+
+9) Resultado y UX: lo que te faltará sí o sí
+
+Tu doc menciona score por color, perfecto. Yo añadiría explícitamente:
+
+Diff viewer (Padre vs Hijo por secciones)
+
+Compare 2 variantes lado a lado
+
+Botón “Promote to Master” / rollback
+
+Chips de métricas: schema✅ constraints✅ quality cost

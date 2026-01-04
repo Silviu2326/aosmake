@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Save, Plus, FileText, User, Maximize2 } from 'lucide-react';
+import { VariableHighlighter } from './VariableHighlighter';
 
 interface PromptEditorModalProps {
     isOpen: boolean;
@@ -11,19 +12,19 @@ interface PromptEditorModalProps {
     availableVariables?: { nodeId: string, nodeLabel: string, fields: string[] }[];
 }
 
-export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({ 
-    isOpen, 
-    onClose, 
-    onSave, 
-    initialSystemPrompt, 
-    initialUserPrompt, 
-    nodeLabel, 
-    availableVariables = [] 
+export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
+    isOpen,
+    onClose,
+    onSave,
+    initialSystemPrompt,
+    initialUserPrompt,
+    nodeLabel,
+    availableVariables = []
 }) => {
     const [systemPrompt, setSystemPrompt] = useState('');
     const [userPrompt, setUserPrompt] = useState('');
     const [activeField, setActiveField] = useState<'system' | 'user'>('user'); // Default to user prompt
-    
+
     // Refs to track selection position for each field
     const systemRef = useRef<HTMLTextAreaElement>(null);
     const userRef = useRef<HTMLTextAreaElement>(null);
@@ -44,18 +45,18 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
     const handleInsertVariable = (variable: string) => {
         const textarea = activeField === 'system' ? systemRef.current : userRef.current;
         const setFunction = activeField === 'system' ? setSystemPrompt : setUserPrompt;
-        
+
         if (!textarea) return;
-        
+
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         const text = textarea.value;
         const before = text.substring(0, start);
         const after = text.substring(end, text.length);
         const insertion = ` {{${variable}}} `; // Add spaces for better UX
-        
+
         setFunction(before + insertion + after);
-        
+
         // Restore focus and cursor position
         setTimeout(() => {
             textarea.focus();
@@ -93,7 +94,7 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                     {/* Main Content Area - Split View */}
                     <div className="flex-1 flex flex-col min-w-0 bg-[#0A0A0A]">
                         {/* System Prompt Section */}
-                        <div 
+                        <div
                             className={`flex-1 flex flex-col border-b border-white/5 transition-colors ${activeField === 'system' ? 'bg-[#0D0D0D]' : 'bg-[#0A0A0A] opacity-80 hover:opacity-100'}`}
                             onClick={() => setActiveField('system')}
                         >
@@ -105,19 +106,21 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                                 </div>
                                 <span className="text-[10px] text-gray-600">Defines the agent's persona and core rules</span>
                             </div>
-                            <textarea 
-                                ref={systemRef}
-                                value={systemPrompt}
-                                onChange={(e) => setSystemPrompt(e.target.value)}
-                                onFocus={() => setActiveField('system')}
-                                className="flex-1 w-full bg-transparent text-gray-300 font-mono text-sm p-4 resize-none focus:outline-none custom-scrollbar leading-relaxed"
-                                placeholder="You are a helpful assistant..."
-                                spellCheck={false}
-                            />
+                            <div className="flex-1 w-full h-full p-0 relative">
+                                <VariableHighlighter
+                                    ref={systemRef}
+                                    value={systemPrompt}
+                                    onChange={(e) => setSystemPrompt(e.target.value)}
+                                    onClick={() => setActiveField('system')}
+                                    onFocus={() => setActiveField('system')}
+                                    className="w-full h-full !border-0"
+                                    placeholder="You are a helpful assistant..."
+                                />
+                            </div>
                         </div>
 
                         {/* User Prompt Section */}
-                        <div 
+                        <div
                             className={`flex-1 flex flex-col transition-colors ${activeField === 'user' ? 'bg-[#0D0D0D]' : 'bg-[#0A0A0A] opacity-80 hover:opacity-100'}`}
                             onClick={() => setActiveField('user')}
                         >
@@ -129,15 +132,17 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                                 </div>
                                 <span className="text-[10px] text-gray-600">The specific task or query for this execution</span>
                             </div>
-                            <textarea 
-                                ref={userRef}
-                                value={userPrompt}
-                                onChange={(e) => setUserPrompt(e.target.value)}
-                                onFocus={() => setActiveField('user')}
-                                className="flex-1 w-full bg-transparent text-gray-300 font-mono text-sm p-4 resize-none focus:outline-none custom-scrollbar leading-relaxed"
-                                placeholder="Analyze the following data: {{variable}}..."
-                                spellCheck={false}
-                            />
+                            <div className="flex-1 w-full h-full p-0 relative">
+                                <VariableHighlighter
+                                    ref={userRef}
+                                    value={userPrompt}
+                                    onChange={(e) => setUserPrompt(e.target.value)}
+                                    onClick={() => setActiveField('user')}
+                                    onFocus={() => setActiveField('user')}
+                                    className="w-full h-full !border-0"
+                                    placeholder="Analyze the following data: {{variable}}..."
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -149,7 +154,7 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                                 Click to insert into the <span className={activeField === 'system' ? "text-purple-400" : "text-blue-400"}>active editor</span>
                             </p>
                         </div>
-                        
+
                         <div className="flex-1 overflow-y-auto p-3 space-y-6 custom-scrollbar">
                             {availableVariables.length > 0 ? (
                                 availableVariables.map(node => (
@@ -162,7 +167,7 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                                         </div>
                                         <div className="grid grid-cols-1 gap-1 pl-3">
                                             {node.fields.map(field => (
-                                                <button 
+                                                <button
                                                     key={field}
                                                     onClick={(e) => {
                                                         e.preventDefault();
@@ -177,21 +182,20 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                                                     <Plus size={10} className="text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
                                                 </button>
                                             ))}
-                                            {node.fields.length === 0 && (
-                                                <button 
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        handleInsertVariable(`${node.nodeId}.output`);
-                                                    }}
-                                                    className="group flex items-center justify-between px-2 py-1.5 rounded bg-black/20 border border-white/5 hover:bg-blue-500/10 hover:border-blue-500/30 transition-all text-left w-full"
-                                                >
-                                                    <span className="text-[10px] text-blue-300/80 font-mono truncate group-hover:text-blue-300 flex-1 mr-2">
-                                                        output (raw)
-                                                    </span>
-                                                    <Plus size={10} className="text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-                                                </button>
-                                            )}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    handleInsertVariable(`${node.nodeId}.output`);
+                                                }}
+                                                className="group flex items-center justify-between px-2 py-1.5 rounded bg-black/20 border border-white/5 hover:bg-purple-500/10 hover:border-purple-500/30 transition-all text-left w-full mt-1"
+                                                title="Insert complete JSON output"
+                                            >
+                                                <span className="text-[10px] text-purple-300/80 font-mono truncate group-hover:text-purple-300 flex-1 mr-2">
+                                                    output (raw)
+                                                </span>
+                                                <Plus size={10} className="text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                                            </button>
                                         </div>
                                     </div>
                                 ))
@@ -213,13 +217,13 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                         Pro Tip: Use <span className="font-mono text-gray-400">{`{{nodeId.field}}`}</span> syntax for dynamic values
                     </div>
                     <div className="flex gap-3">
-                        <button 
+                        <button
                             onClick={onClose}
                             className="px-4 py-2 rounded border border-white/10 text-xs font-medium text-gray-400 hover:bg-white/5 transition-colors"
                         >
                             Cancel
                         </button>
-                        <button 
+                        <button
                             onClick={handleSave}
                             className="px-6 py-2 rounded bg-purple-600 hover:bg-purple-500 text-xs font-semibold text-white transition-all shadow-lg shadow-purple-900/20 flex items-center gap-2"
                         >

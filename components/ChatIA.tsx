@@ -31,7 +31,7 @@ export const ChatIA: React.FC<ChatIAProps> = ({ isOpen, onClose }) => {
     }, [messages, isOpen]);
 
     const toggleContext = (id: string) => {
-        setSelectedContextIds(prev => 
+        setSelectedContextIds(prev =>
             prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
         );
     };
@@ -156,7 +156,7 @@ export const ChatIA: React.FC<ChatIAProps> = ({ isOpen, onClose }) => {
                         </div>
                     ))}
                     {isTyping && (
-                         <div className="flex gap-3">
+                        <div className="flex gap-3">
                             <div className="w-8 h-8 rounded-full bg-accent/10 flex-shrink-0 flex items-center justify-center text-accent">
                                 <Bot size={16} />
                             </div>
@@ -179,14 +179,13 @@ export const ChatIA: React.FC<ChatIAProps> = ({ isOpen, onClose }) => {
                                 <Database size={10} /> ATTACH CONTEXT
                             </div>
                             {executionContext.map(item => (
-                                <button 
+                                <button
                                     key={item.id}
                                     onClick={() => toggleContext(item.id)}
-                                    className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[10px] transition-colors ${
-                                        selectedContextIds.includes(item.id) 
-                                        ? 'bg-blue-500/20 border-blue-500/50 text-blue-400' 
-                                        : 'bg-black/20 border-white/10 text-gray-400 hover:border-white/30'
-                                    }`}
+                                    className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[10px] transition-colors ${selectedContextIds.includes(item.id)
+                                            ? 'bg-blue-500/20 border-blue-500/50 text-blue-400'
+                                            : 'bg-black/20 border-white/10 text-gray-400 hover:border-white/30'
+                                        }`}
                                 >
                                     {selectedContextIds.includes(item.id) ? <CheckSquare size={10} /> : <Square size={10} />}
                                     <span className={`w-1.5 h-1.5 rounded-full ${getStatusColor(item.status)}`} />
@@ -197,15 +196,15 @@ export const ChatIA: React.FC<ChatIAProps> = ({ isOpen, onClose }) => {
                     )}
 
                     <div className="p-4 relative">
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder="Type a message..." 
+                            placeholder="Type a message..."
                             className="w-full bg-[#0D0D0D] border border-white/10 rounded-full py-3 pl-4 pr-12 text-sm text-white focus:border-accent focus:outline-none placeholder-gray-600 transition-colors"
                         />
-                        <button 
+                        <button
                             onClick={handleSend}
                             disabled={!inputValue.trim()}
                             className="absolute right-6 top-1/2 -translate-y-1/2 p-2 rounded-full bg-accent text-white hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"

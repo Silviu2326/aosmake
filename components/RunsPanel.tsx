@@ -113,13 +113,13 @@ export const RunsPanel: React.FC = () => {
                 <div className="flex items-center gap-4">
                     <h2 className="text-lg font-semibold text-white">Runs</h2>
                     <div className="flex bg-white/5 rounded-lg p-0.5">
-                        <button 
+                        <button
                             onClick={() => setActiveTab('precrafter')}
                             className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'precrafter' ? 'bg-blue-500 text-white' : 'text-gray-400 hover:text-white'}`}
                         >
                             PreCrafter
                         </button>
-                        <button 
+                        <button
                             onClick={() => setActiveTab('crafter')}
                             className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'crafter' ? 'bg-green-600 text-white' : 'text-gray-400 hover:text-white'}`}
                         >
@@ -127,8 +127,8 @@ export const RunsPanel: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <button 
-                    onClick={fetchRuns} 
+                <button
+                    onClick={fetchRuns}
                     className="p-1.5 hover:bg-white/10 rounded text-gray-400 hover:text-white"
                     title="Refresh"
                 >
@@ -152,8 +152,8 @@ export const RunsPanel: React.FC = () => {
                             <div className="col-span-2 text-right"></div>
                         </div>
                         {runs.map((run) => (
-                            <div 
-                                key={run.id} 
+                            <div
+                                key={run.id}
                                 onClick={() => handleRunClick(run)}
                                 className="grid grid-cols-12 gap-4 px-6 py-3 border-b border-white/5 hover:bg-white/5 transition-colors items-center cursor-pointer group"
                             >
@@ -202,7 +202,7 @@ export const RunsPanel: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    
+
                     <div className="flex-1 overflow-y-auto p-6">
                         <div className="flex items-center justify-between mb-6">
                             <div>
