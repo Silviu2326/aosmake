@@ -14,8 +14,19 @@ import { RunConsole } from './components/RunConsole';
 import { View } from './types';
 import { Layout, GitBranch, FlaskConical, Play, FileJson, Database, Blocks, Settings } from 'lucide-react';
 import { useConsole } from './context/ConsoleContext';
+import { ChristmasProvider } from './context/ChristmasContext';
+import { ChristmasSnow } from './components/ChristmasSnow';
 
 const App: React.FC = () => {
+  return (
+    <ChristmasProvider>
+      <AppContent />
+      <ChristmasSnow />
+    </ChristmasProvider>
+  );
+};
+
+const AppContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.STUDIO);
   const { isOpen: isConsoleOpen, setIsOpen: setIsConsoleOpen } = useConsole();
 
