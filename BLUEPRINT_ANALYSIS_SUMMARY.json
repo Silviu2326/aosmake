@@ -1,0 +1,435 @@
+{
+  "blueprint_info": {
+    "name": "MegaScenario v3 (copy)",
+    "total_lines": 9433,
+    "file_size": "758.9KB",
+    "source": "Make.com"
+  },
+
+  "statistics": {
+    "total_modules": 18,
+    "module_types": {
+      "google-sheets": 1,
+      "gemini-ai": 12,
+      "perplexity-ai": 1,
+      "routers": 2,
+      "placeholders": 2
+    },
+    "filtered_modules": 6,
+    "total_routes": 4,
+    "max_nesting_depth": 2
+  },
+
+  "connections": {
+    "6927252": {
+      "service": "Google Sheets",
+      "account": "lucascaves11@gmail.com",
+      "used_by": [1]
+    },
+    "13301844": {
+      "service": "Gemini AI",
+      "used_by": [194, 205, 184, 189, 199, 196, 197, 216, 203, 211, 212, 221]
+    },
+    "13314140": {
+      "service": "Perplexity AI",
+      "used_by": [195]
+    }
+  },
+
+  "modules": [
+    {
+      "id": 1,
+      "type": "google-sheets:filterRows",
+      "name": null,
+      "depth": 0,
+      "position": {"x": 0, "y": 0},
+      "config": {
+        "spreadsheet_id": "1p6T6-2ViDV-IGcZSVPL4ExnFiugm5oCzfU1febD3A6g",
+        "spreadsheet_name": "T10_1_master_simSilviu",
+        "sheet_id": "LP/C_Input",
+        "range": "A1:CZ1",
+        "limit": 4,
+        "sort_order": "asc",
+        "filter": "Column A > 0"
+      },
+      "filter": null,
+      "references": []
+    },
+    {
+      "id": 194,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Internal Signals Extractor (3proPrev) 1",
+      "depth": 0,
+      "position": {"x": 308, "y": 7},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": "application/json",
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [1]
+    },
+    {
+      "id": 205,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Business Intel (3proPrev) 5",
+      "depth": 0,
+      "position": {"x": 600, "y": 4},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": "application/json",
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [1, 194]
+    },
+    {
+      "id": 208,
+      "type": "builtin:BasicRouter",
+      "name": "COMPANY B2B Router",
+      "depth": 0,
+      "position": {"x": 926, "y": 7},
+      "config": {
+        "routes": 2
+      },
+      "filter": {
+        "name": "COMPANY B2B",
+        "condition": "{{205.result.b2b_presence.status}} == YES"
+      },
+      "references": [205]
+    },
+    {
+      "id": 184,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Person Understanding (3proPrev) 2",
+      "depth": 1,
+      "position": {"x": 1260, "y": 10},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 2048,
+        "response_type": "application/json",
+        "thinking_budget": 256
+      },
+      "filter": {
+        "name": "COMPANY HIT",
+        "condition": "{{205.result.hit_filter.verdict}} == HIT"
+      },
+      "references": [1, 194, 205]
+    },
+    {
+      "id": 189,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Feasibility (3proPrev) 5",
+      "depth": 1,
+      "position": {"x": 1584, "y": 5},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": "application/json",
+        "thinking_budget": 512
+      },
+      "filter": {
+        "name": "PERSON FIT",
+        "condition": "{{184.result.`Decision-Maker`.decision_maker_fit}} == FIT"
+      },
+      "references": [1, 184, 194, 205]
+    },
+    {
+      "id": 225,
+      "type": "builtin:BasicRouter",
+      "name": "Research Router",
+      "depth": 1,
+      "position": {"x": 1886, "y": 9},
+      "config": {
+        "routes": 2
+      },
+      "filter": null,
+      "references": []
+    },
+    {
+      "id": 195,
+      "type": "perplexity-ai:createAChatCompletion",
+      "name": "Internal/External Signals 3",
+      "depth": 2,
+      "position": {"x": 2268, "y": -1},
+      "config": {
+        "model": "sonar",
+        "web_search_context": "medium"
+      },
+      "filter": {
+        "name": "Feasibility FIT",
+        "condition": "{{189.result.final_verdict.result}} == FIT"
+      },
+      "references": [1, 184, 189, 205]
+    },
+    {
+      "id": 199,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Base Angle (3proPrev) 1",
+      "depth": 2,
+      "position": {"x": 2558, "y": 7},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [184, 189, 194, 195, 205]
+    },
+    {
+      "id": 196,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Angle Synthesizer (3proPrev) 5",
+      "depth": 2,
+      "position": {"x": 2866, "y": 5},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [1, 184, 189, 194, 195, 205]
+    },
+    {
+      "id": 197,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Angle Checker (3proPrev) 3",
+      "depth": 2,
+      "position": {"x": 3166, "y": 5},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [184, 189, 196, 199]
+    },
+    {
+      "id": 216,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Crafter Architect (3proPrev) Lucas-1",
+      "depth": 2,
+      "position": {"x": 3526, "y": -1},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [1, 184, 189, 196, 197, 199, 205]
+    },
+    {
+      "id": 203,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Crafter Harmonizer (3proPrev) Lucas-2",
+      "depth": 2,
+      "position": {"x": 4069, "y": -10},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [1, 216]
+    },
+    {
+      "id": 211,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Crafter Architect (3proPrev) Ale-2",
+      "depth": 2,
+      "position": {"x": 4575, "y": -12},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [1, 184, 189, 196, 197, 199]
+    },
+    {
+      "id": 212,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Crafter Harmonizer (3proPrev) Ale-1",
+      "depth": 2,
+      "position": {"x": 5065, "y": -12},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [1, 211]
+    },
+    {
+      "id": 221,
+      "type": "gemini-ai:createACompletionGeminiPro",
+      "name": "Crafter Patch (3proPrev) 2",
+      "depth": 2,
+      "position": {"x": 5540, "y": -14},
+      "config": {
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "response_type": null,
+        "thinking_budget": 512
+      },
+      "filter": null,
+      "references": [184, 194, 203, 212]
+    }
+  ],
+
+  "workflow_stages": [
+    {
+      "stage": 1,
+      "name": "DATA SOURCE",
+      "modules": [1],
+      "description": "Fetch leads from Google Sheets with filtering (limit 4 records, column A > 0)"
+    },
+    {
+      "stage": 2,
+      "name": "INITIAL ANALYSIS",
+      "modules": [194, 205],
+      "description": "Extract internal signals from LinkedIn data and analyze business intelligence"
+    },
+    {
+      "stage": 3,
+      "name": "QUALIFICATION",
+      "modules": [208, 184, 189],
+      "description": "Filter B2B companies, evaluate decision-maker fit, and check feasibility"
+    },
+    {
+      "stage": 4,
+      "name": "RESEARCH",
+      "modules": [225, 195],
+      "description": "Web research for internal/external signals using Perplexity (FIT leads only)"
+    },
+    {
+      "stage": 5,
+      "name": "ANGLE GENERATION",
+      "modules": [199, 196, 197],
+      "description": "Create base messaging angles, synthesize them, and validate with checker"
+    },
+    {
+      "stage": 6,
+      "name": "EMAIL CRAFTING",
+      "modules": [216, 203, 211, 212, 221],
+      "description": "Generate two email variations (Lucas + Ale paths) and apply final patch"
+    }
+  ],
+
+  "routers": [
+    {
+      "id": 208,
+      "name": "COMPANY B2B Router",
+      "filter": "{{205.result.b2b_presence.status}} == YES",
+      "routes": [
+        {
+          "route_id": 1,
+          "condition": "B2B = YES",
+          "flow": [184, 189, 225]
+        },
+        {
+          "route_id": 2,
+          "condition": "STORAGE",
+          "flow": ["placeholder"]
+        }
+      ]
+    },
+    {
+      "id": 225,
+      "name": "Research Router",
+      "filter": null,
+      "routes": [
+        {
+          "route_id": 1,
+          "condition": "Main path",
+          "flow": [195, 199, 196, 197, 216, 203, 211, 212, 221]
+        },
+        {
+          "route_id": 2,
+          "condition": "Empty path",
+          "flow": []
+        }
+      ]
+    }
+  ],
+
+  "filters": [
+    {
+      "module_id": 208,
+      "filter_name": "COMPANY B2B",
+      "condition": "{{205.result.b2b_presence.status}} text:equal YES",
+      "purpose": "Only process B2B companies"
+    },
+    {
+      "module_id": 184,
+      "filter_name": "COMPANY HIT",
+      "condition": "{{205.result.hit_filter.verdict}} text:equal HIT",
+      "purpose": "Only process companies marked as HIT (not STORAGE)"
+    },
+    {
+      "module_id": 189,
+      "filter_name": "PERSON FIT",
+      "condition": "{{184.result.`Decision-Maker`.decision_maker_fit}} text:equal FIT",
+      "purpose": "Only process leads where decision-maker is FIT"
+    },
+    {
+      "module_id": 195,
+      "filter_name": "Feasibility FIT",
+      "condition": "{{189.result.final_verdict.result}} text:equal FIT",
+      "purpose": "Only do web research for feasibility-approved leads"
+    }
+  ],
+
+  "data_flow_chains": {
+    "main_qualification": {
+      "path": "1 -> 194 -> 205 -> 208 -> 184 -> 189",
+      "description": "Lead qualification pipeline from Sheets through AI analysis to feasibility check"
+    },
+    "angle_development": {
+      "path": "189 -> 225 -> 195 -> 199 -> 196 -> 197",
+      "description": "Research and angle generation for FIT leads"
+    },
+    "email_lucas": {
+      "path": "197 -> 216 -> 203",
+      "description": "Lucas email variation (Architect -> Harmonizer)"
+    },
+    "email_ale": {
+      "path": "197 -> 211 -> 212",
+      "description": "Ale email variation (Architect -> Harmonizer)"
+    },
+    "final_patch": {
+      "path": "203 + 212 -> 221",
+      "description": "Final patch combining both email variations"
+    }
+  },
+
+  "key_insights": {
+    "purpose": "Automated outbound email generation system for B2B lead qualification and personalized outreach",
+    "ai_providers": ["Gemini AI (primary)", "Perplexity AI (web research)"],
+    "filtering_strategy": "Multi-stage qualification: B2B -> HIT -> Person FIT -> Feasibility FIT",
+    "email_strategy": "Dual-path email generation (Lucas + Ale variations) with final harmonization patch",
+    "data_source": "Google Sheets with LinkedIn lead data (company + person info)",
+    "output": "Personalized outreach emails based on signals, angles, and feasibility analysis"
+  }
+}

@@ -1,0 +1,394 @@
+{
+    "routing": {
+        "type": "react-router-dom",
+        "routes": [
+            {
+                "path": "/",
+                "pageId": "redirect_leads",
+                "layout": "default",
+                "redirect": "/leads"
+            },
+            {
+                "path": "/leads",
+                "pageId": "leads",
+                "layout": "default"
+            },
+            {
+                "path": "/leads/:id",
+                "pageId": "lead-detail",
+                "layout": "default"
+            },
+            {
+                "path": "/import",
+                "pageId": "import",
+                "layout": "default"
+            },
+            {
+                "path": "/flows",
+                "pageId": "flows",
+                "layout": "default"
+            },
+            {
+                "path": "/runs",
+                "pageId": "runs",
+                "layout": "default"
+            },
+            {
+                "path": "/sandbox",
+                "pageId": "sandbox",
+                "layout": "default"
+            }
+        ]
+    },
+    "layouts": [
+        {
+            "id": "default",
+            "regions": [
+                "Sidebar",
+                "Header",
+                "Main"
+            ],
+            "notes": "Sidebar on the left, Header on top, Main content area. Responsive behaviors: Sidebar collapses on mobile."
+        }
+    ],
+    "componentTree": [
+        {
+            "pageId": "leads",
+            "components": [
+                {
+                    "name": "Layout",
+                    "type": "layout",
+                    "props": [],
+                    "children": [
+                        "LeadTable",
+                        "LeadFilters",
+                        "BulkActionBar"
+                    ]
+                },
+                {
+                    "name": "LeadTable",
+                    "type": "ui",
+                    "props": [
+                        "leads",
+                        "selectedIds",
+                        "onSelect"
+                    ],
+                    "events": [
+                        "onRowClick",
+                        "onSort"
+                    ]
+                },
+                {
+                    "name": "LeadFilters",
+                    "type": "ui",
+                    "props": [
+                        "filters",
+                        "counts"
+                    ],
+                    "events": [
+                        "onChange",
+                        "onClear"
+                    ]
+                },
+                {
+                    "name": "BulkActionBar",
+                    "type": "ui",
+                    "props": [
+                        "selectedCount"
+                    ],
+                    "events": [
+                        "onVerify",
+                        "onRunFlow",
+                        "onDelete",
+                        "onExport"
+                    ]
+                }
+            ]
+        },
+        {
+            "pageId": "lead-detail",
+            "components": [
+                {
+                    "name": "LeadHeader",
+                    "type": "ui",
+                    "props": [
+                        "lead"
+                    ],
+                    "events": [
+                        "onEdit",
+                        "onDelete"
+                    ]
+                },
+                {
+                    "name": "IdentityCard",
+                    "type": "ui",
+                    "props": [
+                        "lead"
+                    ],
+                    "events": []
+                },
+                {
+                    "name": "CompanyCard",
+                    "type": "ui",
+                    "props": [
+                        "lead"
+                    ],
+                    "events": []
+                },
+                {
+                    "name": "ActivityTimeline",
+                    "type": "ui",
+                    "props": [
+                        "activities"
+                    ],
+                    "events": [
+                        "onFilter"
+                    ]
+                },
+                {
+                    "name": "TagsSection",
+                    "type": "ui",
+                    "props": [
+                        "tags"
+                    ],
+                    "events": [
+                        "onAdd",
+                        "onRemove"
+                    ]
+                }
+            ]
+        },
+        {
+            "pageId": "import",
+            "components": [
+                {
+                    "name": "ImportWizard",
+                    "type": "smart",
+                    "props": [],
+                    "state": [
+                        "currentStep",
+                        "sessionData"
+                    ],
+                    "children": [
+                        "StepIndicator",
+                        "FileUploader",
+                        "ColumnMapper",
+                        "NormalizationOptions",
+                        "DuplicateResolver",
+                        "ImportSummary"
+                    ]
+                }
+            ]
+        },
+        {
+            "pageId": "flows",
+            "components": [
+                {
+                    "name": "FlowFilters",
+                    "type": "ui",
+                    "props": [
+                        "activeFilter",
+                        "searchQuery"
+                    ],
+                    "events": [
+                        "onFilterChange",
+                        "onSearchChange"
+                    ]
+                },
+                {
+                    "name": "FlowGrid",
+                    "type": "ui",
+                    "props": [
+                        "flows"
+                    ],
+                    "children": [
+                        "FlowCard"
+                    ]
+                },
+                {
+                    "name": "FlowEditor",
+                    "type": "smart",
+                    "props": [
+                        "flow"
+                    ],
+                    "state": [
+                        "nodes",
+                        "edges",
+                        "selectedNode"
+                    ],
+                    "notes": "Uses React Flow"
+                }
+            ]
+        },
+        {
+            "pageId": "runs",
+            "components": [
+                {
+                    "name": "RunsHeader",
+                    "type": "ui",
+                    "props": [
+                        "activeType",
+                        "activeStatus"
+                    ],
+                    "events": [
+                        "onTypeChange",
+                        "onStatusChange"
+                    ]
+                },
+                {
+                    "name": "RunsTable",
+                    "type": "ui",
+                    "props": [
+                        "runs"
+                    ],
+                    "events": [
+                        "onRunClick"
+                    ]
+                },
+                {
+                    "name": "RunDetailPanel",
+                    "type": "ui",
+                    "props": [
+                        "run"
+                    ],
+                    "children": [
+                        "NodeResultCard"
+                    ]
+                }
+            ]
+        },
+        {
+            "pageId": "sandbox",
+            "components": [
+                {
+                    "name": "SandboxHeader",
+                    "type": "ui",
+                    "props": [
+                        "flows",
+                        "selectedFlowId"
+                    ],
+                    "events": [
+                        "onFlowSelect",
+                        "onRunTest"
+                    ]
+                },
+                {
+                    "name": "FlowVisualization",
+                    "type": "ui",
+                    "props": [
+                        "flow",
+                        "nodeStatuses"
+                    ],
+                    "notes": "Read-only React Flow"
+                },
+                {
+                    "name": "InputPanel",
+                    "type": "ui",
+                    "props": [
+                        "mode",
+                        "value"
+                    ],
+                    "children": [
+                        "LeadSelector",
+                        "JsonEditor"
+                    ]
+                },
+                {
+                    "name": "OutputPanel",
+                    "type": "ui",
+                    "props": [
+                        "steps"
+                    ],
+                    "children": [
+                        "StepCard"
+                    ]
+                }
+            ]
+        }
+    ],
+    "stateModel": {
+        "approach": "zustand",
+        "stores": [
+            {
+                "name": "useAppStore",
+                "slices": [
+                    "leads",
+                    "flows",
+                    "runs",
+                    "import"
+                ],
+                "description": "Global state for domain entities"
+            },
+            {
+                "name": "useUIStore",
+                "slices": [
+                    "theme",
+                    "sidebarOpen",
+                    "toasts"
+                ],
+                "description": "UI state"
+            }
+        ]
+    },
+    "apiModel": {
+        "endpoints": [
+            {
+                "id": "getLeads",
+                "method": "GET",
+                "path": "/leads",
+                "usedByPages": [
+                    "leads"
+                ]
+            },
+            {
+                "id": "getLead",
+                "method": "GET",
+                "path": "/leads/:id",
+                "usedByPages": [
+                    "lead-detail",
+                    "sandbox"
+                ]
+            },
+            {
+                "id": "getFlows",
+                "method": "GET",
+                "path": "/workflows",
+                "usedByPages": [
+                    "flows",
+                    "sandbox",
+                    "lead-detail"
+                ]
+            },
+            {
+                "id": "getRuns",
+                "method": "GET",
+                "path": "/workflows/runs",
+                "usedByPages": [
+                    "runs"
+                ]
+            },
+            {
+                "id": "runFlow",
+                "method": "POST",
+                "path": "/workflows/run",
+                "usedByPages": [
+                    "lead-detail",
+                    "leads"
+                ]
+            },
+            {
+                "id": "runNode",
+                "method": "POST",
+                "path": "/workflows/run-node",
+                "usedByPages": [
+                    "sandbox"
+                ]
+            }
+        ]
+    },
+    "designConstraints": {
+        "tone": "Premium, Modern, High Contrast, Dark Mode focused",
+        "spacing": "Tailwind standard (4, 8, 16px...)",
+        "typography": "Inter or standard sans"
+    }
+}

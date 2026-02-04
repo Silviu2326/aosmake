@@ -1,0 +1,128 @@
+{
+    "strategy": "small-batches",
+    "batches": [
+        {
+            "id": "batch-1",
+            "goal": "Bootstrap routing, layout, and global state. Ensure app renders with placeholder pages.",
+            "files": [
+                "src/stores/useAppStore.ts",
+                "src/components/layout/Sidebar.tsx",
+                "src/components/layout/Header.tsx",
+                "src/components/layout/Layout.tsx",
+                "src/pages/LeadsPage.tsx",
+                "src/pages/LeadDetailPage.tsx",
+                "src/pages/FlowsPage.tsx",
+                "src/pages/RunsPage.tsx",
+                "src/pages/SandboxPage.tsx",
+                "src/pages/ImportPage.tsx",
+                "src/App.tsx"
+            ],
+            "dependsOn": []
+        },
+        {
+            "id": "batch-2",
+            "goal": "Implement shared Design System UI components used across the app.",
+            "files": [
+                "src/components/ui/Button.tsx",
+                "src/components/ui/Input.tsx",
+                "src/components/ui/Card.tsx",
+                "src/components/ui/Badge.tsx",
+                "src/components/ui/Table.tsx",
+                "src/components/ui/Modal.tsx",
+                "src/lib/utils.ts"
+            ],
+            "dependsOn": [
+                "batch-1"
+            ]
+        },
+        {
+            "id": "batch-3",
+            "goal": "Implement Leads Management (List view) components and logic.",
+            "files": [
+                "src/components/leads/EmailStatusBadge.tsx",
+                "src/components/leads/LeadFilters.tsx",
+                "src/components/leads/BulkActionBar.tsx",
+                "src/components/leads/LeadTable.tsx",
+                "src/pages/LeadsPage.tsx"
+            ],
+            "dependsOn": [
+                "batch-2"
+            ]
+        },
+        {
+            "id": "batch-4",
+            "goal": "Implement Lead Detail view components.",
+            "files": [
+                "src/components/leads/LeadHeader.tsx",
+                "src/components/leads/IdentityCard.tsx",
+                "src/components/leads/CompanyCard.tsx",
+                "src/components/leads/ActivityTimeline.tsx",
+                "src/components/leads/TagsSection.tsx",
+                "src/pages/LeadDetailPage.tsx"
+            ],
+            "dependsOn": [
+                "batch-3"
+            ]
+        },
+        {
+            "id": "batch-5",
+            "goal": "Implement Flows Library (List view).",
+            "files": [
+                "src/components/flows/FlowStatusBadge.tsx",
+                "src/components/flows/FlowCard.tsx",
+                "src/components/flows/FlowGrid.tsx",
+                "src/components/flows/FlowFilters.tsx",
+                "src/pages/FlowsPage.tsx"
+            ],
+            "dependsOn": [
+                "batch-2"
+            ]
+        },
+        {
+            "id": "batch-6",
+            "goal": "Implement Runs Queue and Details.",
+            "files": [
+                "src/components/runs/RunStatusBadge.tsx",
+                "src/components/runs/RunsHeader.tsx",
+                "src/components/runs/RunsTable.tsx",
+                "src/components/runs/NodeResultCard.tsx",
+                "src/components/runs/RunDetailPanel.tsx",
+                "src/pages/RunsPage.tsx"
+            ],
+            "dependsOn": [
+                "batch-2"
+            ]
+        },
+        {
+            "id": "batch-7",
+            "goal": "Implement Sandbox Environment foundation.",
+            "files": [
+                "src/components/sandbox/SandboxHeader.tsx",
+                "src/components/sandbox/FlowVisualization.tsx",
+                "src/components/sandbox/InputPanel.tsx",
+                "src/components/sandbox/OutputPanel.tsx",
+                "src/pages/SandboxPage.tsx"
+            ],
+            "dependsOn": [
+                "batch-6"
+            ]
+        },
+        {
+            "id": "batch-8",
+            "goal": "Implement Import Wizard.",
+            "files": [
+                "src/components/import/StepIndicator.tsx",
+                "src/components/import/FileUploader.tsx",
+                "src/components/import/ColumnMapper.tsx",
+                "src/components/import/NormalizationOptions.tsx",
+                "src/components/import/DuplicateResolver.tsx",
+                "src/components/import/ImportSummary.tsx",
+                "src/components/import/ImportWizard.tsx",
+                "src/pages/ImportPage.tsx"
+            ],
+            "dependsOn": [
+                "batch-2"
+            ]
+        }
+    ]
+}

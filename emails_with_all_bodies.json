@@ -1,0 +1,3697 @@
+{
+  "total_emails_procesados": 944,
+  "emails_con_4_bodies": 369,
+  "porcentaje": 39.09,
+  "emails": [
+    {
+      "email": "bruce@dingman.com",
+      "firstName": "Bruce",
+      "lastName": "Dingman",
+      "companyName": "Dingman Company",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "gs@ariteam.com",
+      "firstName": "Gino",
+      "lastName": "Scialdone",
+      "companyName": "American Recruiters",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "btison@williamstison.com",
+      "firstName": "Brig",
+      "lastName": "Tison",
+      "companyName": "Williams Tison",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "paul.burnett@burnetts.com",
+      "firstName": "Paul",
+      "lastName": "Burnett",
+      "companyName": "Burnett's Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "brent@qualstaffresources.com",
+      "firstName": "Brent",
+      "lastName": "Robertson",
+      "companyName": "QualStaff Resources",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jweber@webco.cc",
+      "firstName": "Jim",
+      "lastName": "Weber",
+      "companyName": "Weber & Company",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lenadams@acgresources.com",
+      "firstName": "Len",
+      "lastName": "Adams",
+      "companyName": "ACG Resources â€“ Adams Consulting Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mahdi@crewconnectors.com",
+      "firstName": "Mahdi",
+      "lastName": "Hosseini",
+      "companyName": "Crew Connectors",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rschwab@proalt.com",
+      "firstName": "Rodney",
+      "lastName": "Schwab",
+      "companyName": "Professional Alternatives",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "astephens@rimrp.com",
+      "firstName": "Anthony",
+      "lastName": "Stephens",
+      "companyName": "RIM Recruitment Professionals",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "frankc@ariteam.com",
+      "firstName": "Frank",
+      "lastName": "Carieri",
+      "companyName": "Dingman Company",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kdanziger@kollersearch.com",
+      "firstName": "Karen",
+      "lastName": "Danziger",
+      "companyName": "Koller Search Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tim.tolan@thetolangroup.com",
+      "firstName": "Tim",
+      "lastName": "Tolan",
+      "companyName": "The Tolan Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "davidallen@fortishealthcaresolutions.com",
+      "firstName": "David",
+      "lastName": "Allen",
+      "companyName": "Fortis Healthcare Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rick@burnettspecialists.com",
+      "firstName": "Rick",
+      "lastName": "Burnett",
+      "companyName": "Burnett Specialists Staffing | Recruiting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jmiller@hkaa.com",
+      "firstName": "Jeff",
+      "lastName": "Miller",
+      "companyName": "HKA Enterprises",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rwalls@kbic.com",
+      "firstName": "Rick",
+      "lastName": "Walls",
+      "companyName": "Kaye/Bassman International",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "elom@automotivepersonnel.careers",
+      "firstName": "Elom",
+      "lastName": "Vanlare",
+      "companyName": "Automotive Personnel, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rsinay@davalyncorp.com",
+      "firstName": "Rick",
+      "lastName": "Sinay",
+      "companyName": "Davalyn Corporation",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jdavis@superbtechinc.com",
+      "firstName": "Jan",
+      "lastName": "Davis",
+      "companyName": "SuperbTech, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ed@bohan-bradstreet.com",
+      "firstName": "Ed",
+      "lastName": "Bradstreet",
+      "companyName": "Bohan & Bradstreet",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "james@hirewell.com",
+      "firstName": "Jim",
+      "lastName": "McGuffin",
+      "companyName": "Hirewell",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "maxh@yscouts.com",
+      "firstName": "Max",
+      "lastName": "Hansen",
+      "companyName": "Y Scouts",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "gvisbal@odmpsi.com",
+      "firstName": "Giovanny",
+      "lastName": "Visbal",
+      "companyName": "ODM Performance Solutions, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ryan@planetgreensearch.com",
+      "firstName": "Ryan",
+      "lastName": "Eberhard",
+      "companyName": "Planet Green Search, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ahargrove@2020-4.com",
+      "firstName": "Alan",
+      "lastName": "Hargrove",
+      "companyName": "20/20 Foresight Executive Talent Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mmauriello@choiceco.com",
+      "firstName": "Mark",
+      "lastName": "Mauriello",
+      "companyName": "Choice Staffing,Inc",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "shannon@preferredpersonnel.com",
+      "firstName": "Shannon",
+      "lastName": "Stamey",
+      "companyName": "Preferred Personnel Solutions, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jim@theemacgroup.com",
+      "firstName": "Jim",
+      "lastName": "McGrath",
+      "companyName": "The EMAC Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jchaponick@macrecruiters.com",
+      "firstName": "Jeff",
+      "lastName": "Chaponick",
+      "companyName": "MAC Executive Recruiters",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "thugley@genesisresources.com",
+      "firstName": "Trey",
+      "lastName": "Hugley",
+      "companyName": "Genesis Resources",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jbretstein@wegmanpartners.com",
+      "firstName": "Josh",
+      "lastName": "Bretstein",
+      "companyName": "Wegman Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "gpreiser@revenuegc.com",
+      "firstName": "Gregory",
+      "lastName": "Preiser",
+      "companyName": "RGC Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ilana@analyticrecruiting.com",
+      "firstName": "Ilana",
+      "lastName": "Raz",
+      "companyName": "Analytic Recruiting Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mmckim@finishlinestaffing.com",
+      "firstName": "Mark",
+      "lastName": "McKim",
+      "companyName": "Finish Line Staffing Services",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rciardiello@mlaglobal.com",
+      "firstName": "Ron",
+      "lastName": "Ciardiello",
+      "companyName": "Major, Lindsey & Africa",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "amy@codasearch.com",
+      "firstName": "Amy",
+      "lastName": "Healey",
+      "companyName": "Coda Searchâ”‚Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "abloom@stevensonsearch.com",
+      "firstName": "Adam",
+      "lastName": "Bloom",
+      "companyName": "Stevenson Search Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jani@jc2technologies.com",
+      "firstName": "Jani",
+      "lastName": "Clemons",
+      "companyName": "JC2 Technologies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "daniel@volksresources.com",
+      "firstName": "Daniel",
+      "lastName": "Livelli",
+      "companyName": "Volks Resources",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "fk@jkconsultants.com",
+      "firstName": "Fred",
+      "lastName": "Khachi",
+      "companyName": "JK Consultants",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jean.callahan@laexecutivesearch.com",
+      "firstName": "Jean",
+      "lastName": "Callahan",
+      "companyName": "Latin America Executive Search Consultants",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "nicole@money2020.com",
+      "firstName": "Nicole",
+      "lastName": "Meyer",
+      "companyName": "Money20/20",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jeff@raymondsearchgroup.com",
+      "firstName": "Jeff",
+      "lastName": "Raymond",
+      "companyName": "Raymond Search Group (acquired by Direct Recruiters, Inc.)",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tangello@thehorizongroup.com",
+      "firstName": "Thomas",
+      "lastName": "Angello",
+      "companyName": "The Horizon Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kevinlecompte@lmaxwell.com",
+      "firstName": "Kevin",
+      "lastName": "LeCompte",
+      "companyName": "L. Maxwell",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "randy@straussgroup.com",
+      "firstName": "Randy",
+      "lastName": "Strauss",
+      "companyName": "StraussGroup - Executive Search Consultants",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jlucas@reputablerecruiting.com",
+      "firstName": "Jay",
+      "lastName": "Lucas",
+      "companyName": "Reputable Recruiting, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mchase@chaseandassoc.com",
+      "firstName": "Michael",
+      "lastName": "Chase",
+      "companyName": "Chase & Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sergio@metalrecruiters.com",
+      "firstName": "Sergio",
+      "lastName": "Franco",
+      "companyName": "National Search Group, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tom@rightprostaffing.com",
+      "firstName": "Tom",
+      "lastName": "Mix",
+      "companyName": "RightPro Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "yamendra@genntetechnologies.com",
+      "firstName": "Yamendra",
+      "lastName": "Singh",
+      "companyName": "GENNTE Technologies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jmonforte@tempositions.com",
+      "firstName": "Justin",
+      "lastName": "Monforte",
+      "companyName": "The TemPositions Group of Companies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kay@collierlegal.com",
+      "firstName": "Kay",
+      "lastName": "Egger",
+      "companyName": "Collier Legal Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "j.cimetti@conexusmedstaff.com",
+      "firstName": "Joe",
+      "lastName": "Cimetti",
+      "companyName": "Conexus MedStaff",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ariella@communityrecruiting.com",
+      "firstName": "Ariella",
+      "lastName": "Haber",
+      "companyName": "Community Recruiting ~ Leadership Consultants",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "don@d3search.com",
+      "firstName": "Don",
+      "lastName": "Moser",
+      "companyName": "D3 Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "walker.oconnor@ropella.com",
+      "firstName": "Walker",
+      "lastName": "O'Connor",
+      "companyName": "Ropella 360",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "danderson@edispecialists.com",
+      "firstName": "Dean",
+      "lastName": "Anderson",
+      "companyName": "EDI Staffing, an EDI Specialists Company",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bfisher@brettfishergroup.com",
+      "firstName": "Brett",
+      "lastName": "Fisher",
+      "companyName": "Brett Fisher Group (Fisher Search Group)",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "pcleary@trisearch.com",
+      "firstName": "Peter",
+      "lastName": "Cleary",
+      "companyName": "TriSearch",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bshoumaker@rimrp.com",
+      "firstName": "Brian",
+      "lastName": "Shoumaker",
+      "companyName": "RIM Recruitment Professionals",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dmcclung@thomastaylorpartners.co",
+      "firstName": "Dusty",
+      "lastName": "McClung",
+      "companyName": "Thomas & Taylor Search Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jpinedo@definitive-staffing.com",
+      "firstName": "James",
+      "lastName": "Pinedo",
+      "companyName": "Definitive Staffing Solutions, Inc",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "nwiseman@stevensonsearch.com",
+      "firstName": "Nicholas",
+      "lastName": "Wiseman",
+      "companyName": "Stevenson Search Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "roliver@tempositions.com",
+      "firstName": "Roger",
+      "lastName": "Oliver",
+      "companyName": "The TemPositions Group of Companies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ian.crosby@metric-search.com",
+      "firstName": "Ian",
+      "lastName": "Crosby",
+      "companyName": "Metric",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bill@swishad.com",
+      "firstName": "Bill",
+      "lastName": "Davidson",
+      "companyName": "Swish Advertising LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tiffany@go2dynamic.com",
+      "firstName": "Tiffany",
+      "lastName": "S",
+      "companyName": "Dynamic Office & Accounting Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sglabach@optionsgroup.com",
+      "firstName": "Shawn",
+      "lastName": "Glabach",
+      "companyName": "Options Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mshore@stevendouglas.com",
+      "firstName": "Matt",
+      "lastName": "Shore",
+      "companyName": "StevenDouglas",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sophia.yang@forestown.com",
+      "firstName": "Sophia",
+      "lastName": "Yang",
+      "companyName": "Forestown Global",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "katyt@rwr.com",
+      "firstName": "Katy",
+      "lastName": "Trudeau",
+      "companyName": "Richard, Wayne & Roberts",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rsklar@rsaexecsearch.com",
+      "firstName": "Ruth",
+      "lastName": "Sklar",
+      "companyName": "RSA Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "karen.cichocki@emergingblue.com",
+      "firstName": "Karen",
+      "lastName": "Cichocki",
+      "companyName": "EMERGING BLUE",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ashish.tyagi@brilliancecyber.com",
+      "firstName": "Ashish",
+      "lastName": "Tyagi",
+      "companyName": "Brilliance Cyber Systems",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "opapo@centrahealthcare.com",
+      "firstName": "Omri",
+      "lastName": "Papo",
+      "companyName": "Centra Healthcare Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lisas@ren-network.com",
+      "firstName": "Lisa",
+      "lastName": "Sacchetti",
+      "companyName": "The Renaissance Network, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bmayhew@prg-usa.com",
+      "firstName": "Bryan",
+      "lastName": "Mayhew",
+      "companyName": "Peyton Resource Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bsobel@brixton.net",
+      "firstName": "Brendan",
+      "lastName": "Sobel",
+      "companyName": "The Brixton Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jessicab@jrberrysearchgroup.com",
+      "firstName": "Jessica",
+      "lastName": "Berry",
+      "companyName": "J.R. Berry Search Group, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kevin@goodcitizen.com",
+      "firstName": "Kevin",
+      "lastName": "Bryant",
+      "companyName": "GoodCitizen",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mmccollum@e57partners.com",
+      "firstName": "Michael",
+      "lastName": "McCollum",
+      "companyName": "East 57th Street Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sbryant@bryantgrp.com",
+      "firstName": "Sally",
+      "lastName": "Bryant",
+      "companyName": "BRYANT GROUP (Advancing Great Leadership)",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "chris@gambitny.com",
+      "firstName": "Chris",
+      "lastName": "Lalli",
+      "companyName": "Gambit Technologies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "janet.clark@hire-technology.com",
+      "firstName": "Janet",
+      "lastName": "Clark",
+      "companyName": "Hire Technology",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jennifer@bayshorestaffing.com",
+      "firstName": "Jennifer",
+      "lastName": "Keane",
+      "companyName": "Bay Shore Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ebil@afflatusinc.com",
+      "firstName": "Ebil",
+      "lastName": "Nierhoff",
+      "companyName": "Afflatus LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ahemming@thehiredguns.com",
+      "firstName": "Allison",
+      "lastName": "Hemming",
+      "companyName": "The Hired Guns",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bskinner@careergroupinc.com",
+      "firstName": "Brady",
+      "lastName": "Skinner",
+      "companyName": "Career Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jasonl@speconthejob.com",
+      "firstName": "Jason",
+      "lastName": "Lamonica",
+      "companyName": "Spec On The Job, Staffing and Recruiting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lfoster@freemanleonard.com",
+      "firstName": "Lisa",
+      "lastName": "Foster",
+      "companyName": "Freeman+Leonard",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "pierrebrandt@peaktechnical.com",
+      "firstName": "Pierre",
+      "lastName": "Brandt",
+      "companyName": "PEAK Technical Staffing USA",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "katie.macias@tech-observer.com",
+      "firstName": "Katie",
+      "lastName": "Macias",
+      "companyName": "Tech Observer",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kathy.dawson@dawsondawsoninc.com",
+      "firstName": "Kathy",
+      "lastName": "Dawson",
+      "companyName": "Dawson & Dawson, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tmedley@simplybiotech.com",
+      "firstName": "Travis",
+      "lastName": "Medley",
+      "companyName": "Simply Biotech",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "plabie@royalpersonnel.com",
+      "firstName": "Paul",
+      "lastName": "Labie",
+      "companyName": "Royal Personnel Services, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cash@firstoptionws.com",
+      "firstName": "Cash",
+      "lastName": "Cary",
+      "companyName": "FirstOption Workforce Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "aco.alvarez@micegroups.com",
+      "firstName": "Aco",
+      "lastName": "Alvarez",
+      "companyName": "The Mice Groups, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jmancusi@humanedge.com",
+      "firstName": "Jody",
+      "lastName": "Mancusi",
+      "companyName": "HumanEdge",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "liz.richmond@trustpoint.one",
+      "firstName": "Liz",
+      "lastName": "Richmond",
+      "companyName": "Trustpoint.One",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jchan@ghjadvisors.com",
+      "firstName": "Jonathan",
+      "lastName": "Chan",
+      "companyName": "GHJ Search and Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "webb@selecsource.com",
+      "firstName": "David",
+      "lastName": "Webb",
+      "companyName": "SelecSource",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rduarte@rtdtalent.com",
+      "firstName": "Raul",
+      "lastName": "Duarte",
+      "companyName": "RTD Talent Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "paul.ladson@nlstaff.com",
+      "firstName": "Paul",
+      "lastName": "Ladson",
+      "companyName": "Next Level",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "belliott@walkerelliott.com",
+      "firstName": "Betsy",
+      "lastName": "Elliott",
+      "companyName": "Walker Elliott",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sperlman@syfter.com",
+      "firstName": "Steven",
+      "lastName": "Perlman",
+      "companyName": "Syfter",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "heather.trzaska@premiernursing.com",
+      "firstName": "Heather",
+      "lastName": "Trzaska",
+      "companyName": "Premier Nursing Services, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "helmut.ortega@jobsource.com",
+      "firstName": "Helmut",
+      "lastName": "Ortega",
+      "companyName": "Premier Nursing Services, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jeremy@istaff.com",
+      "firstName": "Jeremy",
+      "lastName": "McNeil",
+      "companyName": "iStaff",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "brian@sci.bio",
+      "firstName": "Brian",
+      "lastName": "Riehle",
+      "companyName": "Sci.bio Recruiting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kevin@estrinlegalstaffing.com",
+      "firstName": "Kevin",
+      "lastName": "Hooks",
+      "companyName": "Estrin Legal",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "k.pellerin@firstproinc.com",
+      "firstName": "Kevin",
+      "lastName": "Pellerin",
+      "companyName": "firstPRO, Inc",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dan@accountantsone.com",
+      "firstName": "Dan",
+      "lastName": "Erling",
+      "companyName": "Manning Personnel Group, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "danielle@hunter-sf.com",
+      "firstName": "Danielle",
+      "lastName": "Becks",
+      "companyName": "Hunter SF",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jhamilton@hirepartnership.com",
+      "firstName": "Jeanine",
+      "lastName": "Hamilton",
+      "companyName": "Hire Partnership",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "pbohner@marymont.com",
+      "firstName": "Peter",
+      "lastName": "Bohner",
+      "companyName": "The Marymont Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kburch@questpro.com",
+      "firstName": "Kevin",
+      "lastName": "Burch",
+      "companyName": "Questpro",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "amello@kbwfinancial.com",
+      "firstName": "Ashley",
+      "lastName": "M",
+      "companyName": "KBW Financial Staffing & Recruiting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jennifer@swingsearch.com",
+      "firstName": "Jennifer",
+      "lastName": "Loftus",
+      "companyName": "SwingSearch",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "marc@sfp8.com",
+      "firstName": "Marc",
+      "lastName": "Kirschenbaum",
+      "companyName": "Shulman Fleming & Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "trisha.kana@threepds.com",
+      "firstName": "Trisha",
+      "lastName": "Kana",
+      "companyName": "ThreePDS Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "neil@kenzer.com",
+      "firstName": "Neil",
+      "lastName": "Schor",
+      "companyName": "Kenzer Group, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "emily@newcotalent.com",
+      "firstName": "Emily",
+      "lastName": "Thawley",
+      "companyName": "Newco Talent",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rory.dennis@texasmgmt.com",
+      "firstName": "Rory",
+      "lastName": "Dennis",
+      "companyName": "TMD Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kathleen.steffey@navigarecruiting.com",
+      "firstName": "Kathleen",
+      "lastName": "Steffey",
+      "companyName": "Naviga Recruiting & Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ckoppa@ledgent.com",
+      "firstName": "Chris",
+      "lastName": "Koppa",
+      "companyName": "Roth Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "amarvin@tpgnyc.com",
+      "firstName": "Alex",
+      "lastName": "Marvin",
+      "companyName": "The Phoenix Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bob.mansfield@mansfieldassoc.com",
+      "firstName": "Bob",
+      "lastName": "Mansfield",
+      "companyName": "Mansfield & Associates, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "amanda@talent-sdk.com",
+      "firstName": "Amanda",
+      "lastName": "Clauss",
+      "companyName": "Talent SDK",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "n.ellison@firstpro360.com",
+      "firstName": "Neil",
+      "lastName": "Ellison",
+      "companyName": "firstPRO 360",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jaeson.babb@alliancerr.com",
+      "firstName": "Jaeson",
+      "lastName": "Babb",
+      "companyName": "Alliance Recruiting Resources",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "robertk@geckohospitality.com",
+      "firstName": "Robert",
+      "lastName": "Krzak",
+      "companyName": "Gecko Hospitality (Corporate)",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "samason@rightstaffinc.com",
+      "firstName": "Shelley",
+      "lastName": "Amason",
+      "companyName": "RightStaff Inc",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bill@willis-consulting.com",
+      "firstName": "Bill",
+      "lastName": "Willis",
+      "companyName": "Willis Consulting, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "poconnor@kennison.com",
+      "firstName": "Peter",
+      "lastName": "O'Connor",
+      "companyName": "Kennison & Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kristen@huffmanassociates.com",
+      "firstName": "Kristen",
+      "lastName": "G.",
+      "companyName": "Huffman Associates Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mike@veteransemployment.net",
+      "firstName": "Michael",
+      "lastName": "Urcelay",
+      "companyName": "Veterans Employment",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "valerie@daversa.com",
+      "firstName": "Valerie",
+      "lastName": "Jabbonsky",
+      "companyName": "Daversa",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "arothbard@labur.com",
+      "firstName": "Aaron",
+      "lastName": "Rothbard",
+      "companyName": "LABUR",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "joanne.rauch@crfletcher.com",
+      "firstName": "Joanne",
+      "lastName": "Rauch",
+      "companyName": "C.R. Fletcher Associates, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "madriz.augusto@partnershipemployment.com",
+      "firstName": "Augusto",
+      "lastName": "Madriz",
+      "companyName": "Partnership Employment",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "gene@herbertmines.com",
+      "firstName": "Gene",
+      "lastName": "Manheim",
+      "companyName": "Herbert Mines Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "doug@redstonepartners.com",
+      "firstName": "Douglas",
+      "lastName": "Rothstein",
+      "companyName": "Redstone Partners LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cdearing@evettestaffing.com",
+      "firstName": "Carol",
+      "lastName": "Dearing",
+      "companyName": "aquesst",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sdinhofer@twgco.com",
+      "firstName": "Scott",
+      "lastName": "Dinhofer",
+      "companyName": "The Weatherly Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "matt@arrowstaffing.com",
+      "firstName": "Matt",
+      "lastName": "Thalmayer",
+      "companyName": "Arrow Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "chad.macy@thehtgroup.com",
+      "firstName": "Chad",
+      "lastName": "Macy",
+      "companyName": "The HT Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bryan@maridensearch.com",
+      "firstName": "Bryan",
+      "lastName": "Cascarano",
+      "companyName": "Mariden Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "brian.tarsi@dtgconsulting.com",
+      "firstName": "Brian",
+      "lastName": "Tarsi",
+      "companyName": "DTG Consulting Solutions, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sdonchey@vanguardgroupstaffing.com",
+      "firstName": "Stacy",
+      "lastName": "Donchey",
+      "companyName": "Vanguard Group Staffing, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "chris@recruitmilitary.com",
+      "firstName": "Chris",
+      "lastName": "York",
+      "companyName": "RecruitMilitary",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dan@corsicateam.com",
+      "firstName": "Dan",
+      "lastName": "Veitkus",
+      "companyName": "Corsica Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jpetrucelli@modernexec.com",
+      "firstName": "Jenna",
+      "lastName": "Petruccelli",
+      "companyName": "Modern Executive Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sross@mjdirectplacementsrvs.com",
+      "firstName": "Shelley",
+      "lastName": "Ross",
+      "companyName": "MJ Direct Placement Services",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "stuart.mitchell@hamptonnorth.com",
+      "firstName": "Stuart",
+      "lastName": "Mitchell",
+      "companyName": "Hampton North",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bg@andersonyoungassoc.com",
+      "firstName": "Barry",
+      "lastName": "Geister",
+      "companyName": "Anderson Young Associates, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "r.zion@aquesst.com",
+      "firstName": "Rebecca",
+      "lastName": "Zion",
+      "companyName": "aquesst",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "scott@esquire-recruiting.com",
+      "firstName": "Scott",
+      "lastName": "Fischer",
+      "companyName": "Esquire Recruiting, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jennifer@jpowersinc.com",
+      "firstName": "Jennifer",
+      "lastName": "Powers",
+      "companyName": "J. Powers Recruiting, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sjetpuri@cpoftexas.com",
+      "firstName": "Shahid",
+      "lastName": "Jetpuri",
+      "companyName": "Core Personnel Staffing Services",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jim@poteresearch.com",
+      "firstName": "Jim",
+      "lastName": "Marhoefer",
+      "companyName": "Potere Search (PS)",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rick@cmlegalsearch.com",
+      "firstName": "Rick",
+      "lastName": "Covarrubias",
+      "companyName": "C&M Legal Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "preet@pacificstaffing.com",
+      "firstName": "Preet",
+      "lastName": "Kuar",
+      "companyName": "Pacific Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ldana@healthsourcegroup.com",
+      "firstName": "Lori",
+      "lastName": "Dana",
+      "companyName": "Health Source Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "scott@mtkstaff.com",
+      "firstName": "Scott",
+      "lastName": "Mitek",
+      "companyName": "MTK Resources",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "janderson@sparksgroupinc.com",
+      "firstName": "Jennifer",
+      "lastName": "Anderson",
+      "companyName": "Sparks Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "john@prohire.com",
+      "firstName": "John",
+      "lastName": "Livacich",
+      "companyName": "ProHire",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ankur.srivastava@rgtalent.com",
+      "firstName": "Ankur",
+      "lastName": "Srivastava",
+      "companyName": "RG Talent Inc",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jasonm@er-inc.com",
+      "firstName": "Jason",
+      "lastName": "McAuliffe",
+      "companyName": "Energy Recruiters",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cc@norc.org",
+      "firstName": "Christian",
+      "lastName": "Camp",
+      "companyName": "Energy Recruiters",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lcaputo@summersholland.com",
+      "firstName": "Lori",
+      "lastName": "Caputo",
+      "companyName": "The Summers Holland Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sbell@barkergilmore.com",
+      "firstName": "Stephen",
+      "lastName": "Bell",
+      "companyName": "BarkerGilmore LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rthomas@gexsearch.com",
+      "firstName": "Robin",
+      "lastName": "Thomas",
+      "companyName": "GEx Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kgallagher@c2staffingsolutions.com",
+      "firstName": "Karen",
+      "lastName": "Gallagher",
+      "companyName": "C2 Staffing Solutions, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cindy.yared@spotontalent.com",
+      "firstName": "Cindy",
+      "lastName": "Yared",
+      "companyName": "Spot On Talent",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mfuller@elitesourcesolutions.com",
+      "firstName": "Mike",
+      "lastName": "Fuller",
+      "companyName": "Elite Source",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "pam@citistaffing.com",
+      "firstName": "Pam",
+      "lastName": "Brocious",
+      "companyName": "CitiStaffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bob@careerpointstaffing.com",
+      "firstName": "Bob",
+      "lastName": "Giangrasso",
+      "companyName": "CareerPoint Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "pdisch@islandstaffing.us",
+      "firstName": "Patty",
+      "lastName": "Disch",
+      "companyName": "Island Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "matt.gallant@clinovo.com",
+      "firstName": "Matt",
+      "lastName": "Gallant",
+      "companyName": "Clinovo",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "margo.costello@riverway.jobs",
+      "firstName": "Margo",
+      "lastName": "Costello",
+      "companyName": "Riverway Business Services",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "koneill@oneillconsulting.com",
+      "firstName": "Kevin",
+      "lastName": "O'Neill",
+      "companyName": "O'Neill Consulting, an Acertitude company",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dan@nehcr.com",
+      "firstName": "Daniel",
+      "lastName": "Kailher",
+      "companyName": "Northeast Healthcare Recruitment, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jon.guidi@hcrnetwork.com",
+      "firstName": "Jon",
+      "lastName": "Guidi",
+      "companyName": "HealthCare Recruiters International",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "brian@identifiedtalent.com",
+      "firstName": "Brian",
+      "lastName": "Martin",
+      "companyName": "Identified Talent Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "daisyc@konnectresources.com",
+      "firstName": "Daisy",
+      "lastName": "C",
+      "companyName": "Konnect Resources, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jeff@hireclout.com",
+      "firstName": "Jeffrey",
+      "lastName": "Mitchell",
+      "companyName": "HIRECLOUT",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mark@rscsolutions.com",
+      "firstName": "Mark",
+      "lastName": "Porter",
+      "companyName": "RSC Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dsmith@rainesinternational.com",
+      "firstName": "Dan",
+      "lastName": "Smith",
+      "companyName": "Raines International",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tyler@celeritystaffing.com",
+      "firstName": "Tyler",
+      "lastName": "Emerick",
+      "companyName": "Celerity Staffing Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "breanna@accordancesearchgroup.com",
+      "firstName": "Breanna",
+      "lastName": "Toole",
+      "companyName": "Accordance Search Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "nathan@game7staffing.com",
+      "firstName": "Nathan",
+      "lastName": "Alderman",
+      "companyName": "Game Seven Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "nadine.merizier@hofmannusa.com",
+      "firstName": "Nadine",
+      "lastName": "Merizier",
+      "companyName": "I.K. Hofmann USA, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "nick.canfora@ssg-g.com",
+      "firstName": "Nick",
+      "lastName": "Canfora",
+      "companyName": "Sierra Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "srobbins@hrworks.com",
+      "firstName": "Sara",
+      "lastName": "Robbins",
+      "companyName": "HRworks",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jsmith@proceduresolutionsmgmt.com",
+      "firstName": "Jennifer",
+      "lastName": "Smith",
+      "companyName": "Procedure Solutions Management, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kai.lenon@exarcainc.com",
+      "firstName": "Kai",
+      "lastName": "L",
+      "companyName": "Exarca Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "douglas.leach@tryfacta.com",
+      "firstName": "Douglas",
+      "lastName": "Leach",
+      "companyName": "Tryfacta, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kbeavers@ledgent.com",
+      "firstName": "Keith",
+      "lastName": "Beavers",
+      "companyName": "Ledgent",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "eric.tremblay@prolucent.com",
+      "firstName": "Eric",
+      "lastName": "Tremblay",
+      "companyName": "Prolucent",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mtillia@alliancewf.com",
+      "firstName": "Meg",
+      "lastName": "Tillia",
+      "companyName": "Alliance Workforce Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "vikas@troobell.com",
+      "firstName": "Vikas",
+      "lastName": "Kumar",
+      "companyName": "trooBell Technologies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "alisha@ka-recruiting.com",
+      "firstName": "Alisha",
+      "lastName": "Dynan",
+      "companyName": "KA Recruiting, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "icarton@humancapitalllc.com",
+      "firstName": "Ian",
+      "lastName": "Carton",
+      "companyName": "Human Capital Consultants, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kford@cwpartners.com",
+      "firstName": "Kyle",
+      "lastName": "Ford",
+      "companyName": "CW Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "wil@np-hc.com",
+      "firstName": "Wil",
+      "lastName": "N",
+      "companyName": "Nealy Pierce, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jmcelmeel@brookechase.com",
+      "firstName": "Joseph",
+      "lastName": "McElmeel",
+      "companyName": "Brooke Chase Associates, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jsievers@acclivityhealthcare.com",
+      "firstName": "Jennifer",
+      "lastName": "Sievers",
+      "companyName": "Acclivity Healthcare",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "awilhelm@cohen-partners.com",
+      "firstName": "Amanda",
+      "lastName": "Wilhelm",
+      "companyName": "Cohen Partners Strategic Military Placement",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jlasman@lindauerglobal.com",
+      "firstName": "Jill",
+      "lastName": "Lasman",
+      "companyName": "Lindauer",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "matt.lozar@fpcsav.com",
+      "firstName": "Matt",
+      "lastName": "Lozar",
+      "companyName": "FPC of Savannah",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mcatapano@carltonnational.com",
+      "firstName": "Michael",
+      "lastName": "Catapano",
+      "companyName": "Carlton National Resources",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "vstern@talentohc.com",
+      "firstName": "Vanessa",
+      "lastName": "Stern",
+      "companyName": "TalentoHC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dmeza@futuresgroupit.com",
+      "firstName": "Deo",
+      "lastName": "Meza",
+      "companyName": "Futures Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "artkatz@dunwoodygroup.com",
+      "firstName": "Art",
+      "lastName": "Katz",
+      "companyName": "The Dunwoody Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "caio.mitre@daversa.com",
+      "firstName": "Caio",
+      "lastName": "Mitre",
+      "companyName": "Daversa",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "aroberts@goodwinrecruiting.com",
+      "firstName": "Antoine",
+      "lastName": "Roberts",
+      "companyName": "Goodwin Recruiting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "linzenichols@realrepp.com",
+      "firstName": "Linze",
+      "lastName": "Nichols",
+      "companyName": "RealREPP",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ilosner@provenrecruiting.com",
+      "firstName": "Ingram",
+      "lastName": "Losner",
+      "companyName": "Proven Recruiting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ssatanovsky@optionsgroup.com",
+      "firstName": "Simon",
+      "lastName": "Satanovsky",
+      "companyName": "Options Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "colin.lortz@hueman.com",
+      "firstName": "Colin",
+      "lastName": "Lortz",
+      "companyName": "Hueman People Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jbaylis@extendmyteam.com",
+      "firstName": "Jeff",
+      "lastName": "Baylis",
+      "companyName": "ExtendMyTeam",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ssosa@kirbypartners.com",
+      "firstName": "Sherly",
+      "lastName": "Sosa",
+      "companyName": "Kirby Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "j.johnson@execusource.com",
+      "firstName": "Justin",
+      "lastName": "Johnson",
+      "companyName": "ExecuSource",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "christine.merrow@irvinetechcorp.com",
+      "firstName": "Christine",
+      "lastName": "Merrow",
+      "companyName": "Irvine Technology Corporation",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "susan1@morancompany.com",
+      "firstName": "Susan",
+      "lastName": "Barton",
+      "companyName": "The Moran Company Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "judy@parkwoodintl.com",
+      "firstName": "Judy",
+      "lastName": "Daugherty",
+      "companyName": "Parkwood International",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "haileyholbert@josephchris.com",
+      "firstName": "Hailey",
+      "lastName": "Holbert",
+      "companyName": "Joseph Chris Partners Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "camille.jocoy@rinvio.com",
+      "firstName": "Camille",
+      "lastName": "Jocoy",
+      "companyName": "Rinvio",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kvaneik@tristaff.com",
+      "firstName": "Karen",
+      "lastName": "Van Eik",
+      "companyName": "TriStaff Group of Companies, Division of Amtec",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jhanges@qgsearch.com",
+      "firstName": "Jason",
+      "lastName": "Hanges",
+      "companyName": "Quest Group Executive Search and Staffing Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "brenard@mysourcenow.com",
+      "firstName": "Brianna",
+      "lastName": "Renard",
+      "companyName": "SourceNow",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "keri@radartalentsolutions.com",
+      "firstName": "Keri",
+      "lastName": "Gonzalez",
+      "companyName": "Radar Talent Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "caitlin@the-piazza.net",
+      "firstName": "Caitlin",
+      "lastName": "Piazza",
+      "companyName": "Piazza Premier Preschool Staffing Agency",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "victoria@hiregy.com",
+      "firstName": "Victoria",
+      "lastName": "Helton",
+      "companyName": "Hiregy",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "pranay@dataqinc.com",
+      "firstName": "Pranay",
+      "lastName": "Pendyala",
+      "companyName": "Dataquad Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sgalvez@ad-vance.com",
+      "firstName": "Stephanie",
+      "lastName": "Galvez",
+      "companyName": "Ad-VANCE Talent Solutions, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rmiranda@ihcrecruiting.com",
+      "firstName": "Robert",
+      "lastName": "Miranda",
+      "companyName": "Inspire Healthcare",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dsuzy@elitestaffingpartners.com",
+      "firstName": "Suzy",
+      "lastName": "Davis",
+      "companyName": "Elite Staffing Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kevin@metroproof.com",
+      "firstName": "Kevin",
+      "lastName": "Ruhl",
+      "companyName": "Metroproof",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sdipietro@allied247.com",
+      "firstName": "Shannon",
+      "lastName": "DiPietro",
+      "companyName": "Allied 24/7",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "reichenberg@peakorg.com",
+      "firstName": "Richard",
+      "lastName": "Eichenberg",
+      "companyName": "The Peak Organization",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kristie.hill@riverwalksearch.com",
+      "firstName": "Kristie",
+      "lastName": "Hill",
+      "companyName": "River Walk Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jenna.caneva@swoonstaffing.com",
+      "firstName": "Jenna",
+      "lastName": "Caneva",
+      "companyName": "Swoon",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "casey@rosesagency.com",
+      "firstName": "Casey",
+      "lastName": "Corrigan",
+      "companyName": "Rose's Agency",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "monica@ropella.com",
+      "firstName": "Monica",
+      "lastName": "Hatch",
+      "companyName": "Ropella 360",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "harissa@xforia.com",
+      "firstName": "Harissa",
+      "lastName": "Karthik",
+      "companyName": "Xforia Global Talent & Technology Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bruno@bruno.com",
+      "firstName": "Bruno",
+      "lastName": "Fleuridort",
+      "companyName": "Bruno",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "craig@craiglindell.com",
+      "firstName": "Craig",
+      "lastName": "Lindell",
+      "companyName": "Craig Lindell & Associates LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mshapiro@peopleconnectstaffing.com",
+      "firstName": "Max",
+      "lastName": "Shapiro",
+      "companyName": "PeopleConnect Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "justin@nextbridgesearch.com",
+      "firstName": "Justin",
+      "lastName": "Kane",
+      "companyName": "NextBridge Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "abrady@thealexandergroup.com",
+      "firstName": "Amanda",
+      "lastName": "Brady",
+      "companyName": "The Alexander Group, Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "matt.may@coregroupresources.com",
+      "firstName": "Matthew",
+      "lastName": "May",
+      "companyName": "Core Group Resources",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "eileen@able.jobs",
+      "firstName": "Eileen",
+      "lastName": "Sheehan",
+      "companyName": "ABLE Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "joy.christensen@expresspros.com",
+      "firstName": "Joy",
+      "lastName": "Christensen",
+      "companyName": "Specialized Recruiting Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cummingsj@jmsearch.com",
+      "firstName": "Jamey",
+      "lastName": "Cummings",
+      "companyName": "JM Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ryanw@thetrainingassociates.com",
+      "firstName": "Ryan",
+      "lastName": "Webster",
+      "companyName": "TTA (The Training Associates)",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "trussell@thetolangroup.com",
+      "firstName": "Tim",
+      "lastName": "Russell",
+      "companyName": "The Tolan Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ross@680partners.com",
+      "firstName": "Ross",
+      "lastName": "Freeman",
+      "companyName": "680 Partners, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "paulaweiner@buildwinteam.com",
+      "firstName": "Paula",
+      "lastName": "Weiner",
+      "companyName": "Weiner & Associates, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lbowen@trnstaffing.com",
+      "firstName": "Laura",
+      "lastName": "Bowen",
+      "companyName": "The Reserves Network",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kzanatta@geniusroad.com",
+      "firstName": "Kimberly",
+      "lastName": "Zanatta",
+      "companyName": "Genius Road",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sofia.gonzalez@etchouston.com",
+      "firstName": "Sofia",
+      "lastName": "Gonzalez",
+      "companyName": "Employment & Training Centers, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "david@arnoldpartners.com",
+      "firstName": "Dave",
+      "lastName": "Arnold",
+      "companyName": "Arnold Partners, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "neil@neilfinkassociates.com",
+      "firstName": "Neil",
+      "lastName": "Fink",
+      "companyName": "Neil Fink Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cjohn@salesforce.com",
+      "firstName": "John",
+      "lastName": "Calamia",
+      "companyName": "Sales Community",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jacob@divinelightaz.com",
+      "firstName": "Jake",
+      "lastName": "Danley",
+      "companyName": "Divine Light Consulting, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kenneth@interiortalent.com",
+      "firstName": "Kenneth",
+      "lastName": "Roberts",
+      "companyName": "Interior Talent",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ggonzalez@gosecosearch.com",
+      "firstName": "Gabriel",
+      "lastName": "Gonzalez-Saavedra",
+      "companyName": "GOSECO International Executive SearchÂ®",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dana@kirkpalmer.com",
+      "firstName": "Dana",
+      "lastName": "Levine",
+      "companyName": "Kirk Palmer Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "gastonw@fullspecstaff.com",
+      "firstName": "Gaston",
+      "lastName": "Wilder",
+      "companyName": "Full Spectrum Search Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "melissa.pacheco@chameleoncollective.com",
+      "firstName": "Melissa",
+      "lastName": "Pacheco",
+      "companyName": "Chameleon Collective",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tkeyserling@meridiangrouppartners.com",
+      "firstName": "Theo",
+      "lastName": "Keyserling",
+      "companyName": "Meridian Group Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jkarnowski@ultimatestaffing.com",
+      "firstName": "Joni",
+      "lastName": "Karnowski",
+      "companyName": "Ultimate Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rassul@datatalentadvisors.com",
+      "firstName": "Rassul",
+      "lastName": "Fazelat",
+      "companyName": "Data Talent Advisors",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "gregg@retailithunter.com",
+      "firstName": "Gregg",
+      "lastName": "Jerolman",
+      "companyName": "G.M. Jerolman and Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lisal@starhr.com",
+      "firstName": "Lisa",
+      "lastName": "Lichty",
+      "companyName": "Star Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "suzanne@blakerianconsulting.com",
+      "firstName": "Suzanne",
+      "lastName": "Justice",
+      "companyName": "Blake Rian Consulting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lorenzo@stardomconsult.com",
+      "firstName": "Lorenzo",
+      "lastName": "Ramirez",
+      "companyName": "Stardom",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mark@5thelement.group",
+      "firstName": "Mark",
+      "lastName": "Sadovnick",
+      "companyName": "5th Element Group PBC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dawnd@gaiahumancapital.com",
+      "firstName": "Dawn",
+      "lastName": "Dzurilla",
+      "companyName": "Gaia Human Capital Consultants",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "m.kavanagh@hightrail.com",
+      "firstName": "Morgan",
+      "lastName": "Kavanagh",
+      "companyName": "High Trail",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sean@conexusrecruiting.com",
+      "firstName": "Sean",
+      "lastName": "Gill",
+      "companyName": "Conexus",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "vrusso@emersonunited.com",
+      "firstName": "Vincent",
+      "lastName": "Russo",
+      "companyName": "Emerson United Inc- Strategic Search and Recruitment",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ajunger@careergroupcompanies.com",
+      "firstName": "Anabel",
+      "lastName": "Junger",
+      "companyName": "Career Group Companies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jlyle@lyle-alexander.com",
+      "firstName": "John",
+      "lastName": "Lyle",
+      "companyName": "Lyle Alexander Consulting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "b.brewer@stantonchase.com",
+      "firstName": "William",
+      "lastName": "Brewer",
+      "companyName": "Stanton Chase: Executive Search & Leadership Consultants",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bhammond@carltonstaffing.com",
+      "firstName": "Beth",
+      "lastName": "Hammond",
+      "companyName": "Carlton Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dougf@epicstrategies.com",
+      "firstName": "Doug",
+      "lastName": "Franklin",
+      "companyName": "Epic Business Strategies",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kristen@mavericksearchpartners.com",
+      "firstName": "Kristen",
+      "lastName": "Webber",
+      "companyName": "Maverick Search Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kmorales@captivatetalent.com",
+      "firstName": "Kendra",
+      "lastName": "Morales",
+      "companyName": "Captivate Talent",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dcoleman@ghjadvisors.com",
+      "firstName": "Derrick",
+      "lastName": "Coleman",
+      "companyName": "GHJ",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "carybilstein@peregrinesearchsolutions.com",
+      "firstName": "Cary",
+      "lastName": "Bilstein",
+      "companyName": "Peregrine Search Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "david.beuerlein@trueplatform.com",
+      "firstName": "David",
+      "lastName": "Beuerlein",
+      "companyName": "True Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "hollanderj@hortoninternational.com",
+      "firstName": "Joshua",
+      "lastName": "Hollander",
+      "companyName": "Horton International",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "june@junezuyco.com",
+      "firstName": "June",
+      "lastName": "Schaufus",
+      "companyName": "June Zuyco Industries",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jferrie@nrsglobalpartners.com",
+      "firstName": "John",
+      "lastName": "Ferrie",
+      "companyName": "NRS Global Partners, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "shakilur@theronsolutions.com",
+      "firstName": "Shakilur",
+      "lastName": "Rahman",
+      "companyName": "Theron Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tim@wheelersp.com",
+      "firstName": "Timothy",
+      "lastName": "Wheeler",
+      "companyName": "Wheeler Staffing Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "andres@integrativerecruiting.com",
+      "firstName": "Andres",
+      "lastName": "Arruza",
+      "companyName": "Integrative Recruiting",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ppress@noorstaffing.com",
+      "firstName": "Philip",
+      "lastName": "Press",
+      "companyName": "Noor Staffing Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "brian@bennettsearchgroup.com",
+      "firstName": "Brian",
+      "lastName": "Bennett",
+      "companyName": "Bennett Search Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "julie@hirewell.com",
+      "firstName": "Julie",
+      "lastName": "Demps",
+      "companyName": "Hirewell",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "gavinp@individualitygroup.com",
+      "firstName": "Gavin",
+      "lastName": "Peavoy",
+      "companyName": "IGL",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "dj@jobstackinc.com",
+      "firstName": "Daniel",
+      "lastName": "Jones",
+      "companyName": "JobStack, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "todd.savage@russellreynolds.com",
+      "firstName": "Todd",
+      "lastName": "Savage",
+      "companyName": "Russell Reynolds Associates",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mrussell@theworkinme.com",
+      "firstName": "Myron",
+      "lastName": "Russell",
+      "companyName": "The Work In Me, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rory@fabricstaffing.com",
+      "firstName": "Rory",
+      "lastName": "Bebbington",
+      "companyName": "Fabric Staffing",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jill@jkexec.com",
+      "firstName": "Jill",
+      "lastName": "Knittel",
+      "companyName": "JK Executive Strategies, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "marko@nowhiringu.com",
+      "firstName": "Marko",
+      "lastName": "Evans",
+      "companyName": "Now Hiring You, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "sbraun@searchconsultants.org",
+      "firstName": "Steve",
+      "lastName": "Braun",
+      "companyName": "Search Consultants International",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "mandy@constellationsearch.net",
+      "firstName": "Mandy",
+      "lastName": "Lott",
+      "companyName": "Constellation Search Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "marcel@talenthuntgroup.com",
+      "firstName": "Marcel",
+      "lastName": "D",
+      "companyName": "Talent Hunt Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "amy@azastaffing.com",
+      "firstName": "Amy",
+      "lastName": "Zimmerman",
+      "companyName": "not me",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "clasater@proalt.com",
+      "firstName": "Clint",
+      "lastName": "Lasater",
+      "companyName": "Professional Alternatives",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kellen@msicompany.com",
+      "firstName": "Kellen",
+      "lastName": "Partner",
+      "companyName": "MSI Company",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jhudson@legacyexecutivesearch.com",
+      "firstName": "Jason",
+      "lastName": "Hudson",
+      "companyName": "Legacy Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "silvia.flores@alderkoten.com",
+      "firstName": "Silvia",
+      "lastName": "Flores",
+      "companyName": "Alder Koten | IMD",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "knguyen@mindlance.com",
+      "firstName": "Khang",
+      "lastName": "Nguyen",
+      "companyName": "Mindlance",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rich.little@letitshinenow.com",
+      "firstName": "Rich",
+      "lastName": "Little",
+      "companyName": "Spotlight Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "j.kennedy@firstproinc.com",
+      "firstName": "Jared",
+      "lastName": "Kennedy",
+      "companyName": "firstPRO, Inc",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bbowden@consiliumstaffing.com",
+      "firstName": "Billy",
+      "lastName": "Bowden",
+      "companyName": "Consilium",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "laura.cole@exegistics.com",
+      "firstName": "Laura",
+      "lastName": "Cole",
+      "companyName": "Exegistics",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jasonb@lloydstaffing.com",
+      "firstName": "Jason",
+      "lastName": "Banks",
+      "companyName": "Lloyd",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jamila@dmpsearch.com",
+      "firstName": "Jamila",
+      "lastName": "Sampson",
+      "companyName": "DMP Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rolando@skyridgesearch.com",
+      "firstName": "Rolando",
+      "lastName": "Gonzaga",
+      "companyName": "Skyridge Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "chrisp@planetgreensearch.com",
+      "firstName": "Chris",
+      "lastName": "Pendergast",
+      "companyName": "Planet Green Search, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "addiewetzels@yer.com",
+      "firstName": "Addie",
+      "lastName": "Wetzels",
+      "companyName": "YER HR Solutions",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "shirley.jones@blazerworks.com",
+      "firstName": "Shirley",
+      "lastName": "Jones",
+      "companyName": "BlazerWorks",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tyler.moore@primarysp.com",
+      "firstName": "Tyler",
+      "lastName": "Moore",
+      "companyName": "Primary Search Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ccardew@digitalprospectors.com",
+      "firstName": "Connor",
+      "lastName": "Cardew",
+      "companyName": "Digital Prospectors",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lisa.proctor@sanfordrose.com",
+      "firstName": "Lisa",
+      "lastName": "Proctor",
+      "companyName": "Sanford Rose Associates - Lake Lanier Islands",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "robertbouchard@tier4group.com",
+      "firstName": "Robert",
+      "lastName": "Bouchard",
+      "companyName": "Tier4 Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "nick@cxcinc.com",
+      "firstName": "Nick",
+      "lastName": "Alonso",
+      "companyName": "CAREERXCHANGEÂ®, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "leon.rhodes@hofmannusa.com",
+      "firstName": "Leon",
+      "lastName": "Rhodes",
+      "companyName": "I.K. Hofmann USA, Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cbailey@lmaxwell.com",
+      "firstName": "Courtney",
+      "lastName": "Bailey",
+      "companyName": "L. Maxwell",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "simon@connecthealthstaff.com",
+      "firstName": "Simon",
+      "lastName": "Deruyver",
+      "companyName": "ConnectHealth",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "tracy@broadviewtalent.com",
+      "firstName": "Tracy",
+      "lastName": "McMillan",
+      "companyName": "BroadView Talent Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "alan@accelpeople.com",
+      "firstName": "Alan",
+      "lastName": "Cullen",
+      "companyName": "AccelPeople",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "drue@orthospinesearch.com",
+      "firstName": "Drue",
+      "lastName": "Deangelis",
+      "companyName": "The DeAngelis Group - Executive Search Firm",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cjackson@apicalresourcegroup.com",
+      "firstName": "Chris",
+      "lastName": "Jackson",
+      "companyName": "Apical Resource Group LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "drhodes@atechplacement.com",
+      "firstName": "Darryl",
+      "lastName": "Rhodes",
+      "companyName": "Advanced Tech Placement",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bryant.whelan@insightglobal.com",
+      "firstName": "Bryant",
+      "lastName": "Whelan",
+      "companyName": "Insight Global",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kbanks@goringo.com",
+      "firstName": "Keith",
+      "lastName": "Banks",
+      "companyName": "Ringo VMS",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "rameet@rpo.ai",
+      "firstName": "Rameet",
+      "lastName": "Singh",
+      "companyName": "RPO AI",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "katie.esteves@truitypartners.com",
+      "firstName": "Katie",
+      "lastName": "Esteves",
+      "companyName": "Truity Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kgelfand@kmghealthcare.com",
+      "firstName": "Ken",
+      "lastName": "Gelfand",
+      "companyName": "Truity Partners",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "liam@hireminds.com",
+      "firstName": "Liam",
+      "lastName": "Vance",
+      "companyName": "HireMinds",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jchamplin@choiceco.com",
+      "firstName": "Jim",
+      "lastName": "Champlin",
+      "companyName": "Choice Staffing,Inc",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "takako@1powerconsulting.com",
+      "firstName": "Takako",
+      "lastName": "Fujiwara",
+      "companyName": "ONEPOWER Consulting LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "david.gonzalez@clapself.com",
+      "firstName": "David",
+      "lastName": "Gonzalez",
+      "companyName": "Clapself",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jeremy.jenson@encoresearch.com",
+      "firstName": "Jeremy",
+      "lastName": "Jenson",
+      "companyName": "Encore Search Partners, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "william.grubbs@employbridge.com",
+      "firstName": "William",
+      "lastName": "Grubbs",
+      "companyName": "Employbridge",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "felicity.h@thefindpartners.com",
+      "firstName": "Felicity",
+      "lastName": "Hassan",
+      "companyName": "TheFind",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "ktudhope@advantexps.com",
+      "firstName": "Ken",
+      "lastName": "Tudhope",
+      "companyName": "Advantex Professional Services",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "johnmadrigal@jcoworkforcesolutions.com",
+      "firstName": "John",
+      "lastName": "Madrigal",
+      "companyName": "JCO Workforce Solutions, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "alexb@usastaffingnetwork.com",
+      "firstName": "Alex",
+      "lastName": "Bakker",
+      "companyName": "USA Staffing Network",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "kschaer@westendworkforce.com",
+      "firstName": "Kristin",
+      "lastName": "Schaer",
+      "companyName": "West End Workforce",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "edonaldson@talentry.net",
+      "firstName": "Evan",
+      "lastName": "Donaldson",
+      "companyName": "Talentry, LLC",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "bjohnson@abrjobs.com",
+      "firstName": "Brad",
+      "lastName": "Johnson",
+      "companyName": "ABR Employment Services",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "cstone@deliveringleadership.com",
+      "firstName": "Carrie",
+      "lastName": "Stone",
+      "companyName": "cStone & Associates Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "jkondrup@northboundsearch.com",
+      "firstName": "Jay",
+      "lastName": "Kondrup",
+      "companyName": "Northbound Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "lisarobinson@onboardinc.org",
+      "firstName": "Lisa",
+      "lastName": "Robinson",
+      "companyName": "OnBoard Inc.",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "liz@hawkinspersonnel.com",
+      "firstName": "Liz",
+      "lastName": "Hawkins",
+      "companyName": "Hawkins Personnel Group WBENC, HUB Certified Certified",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "nferber@suncaptech.com",
+      "firstName": "Nicholas",
+      "lastName": "Ferber",
+      "companyName": "Suncap Technology",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "abenson@bensonsearch.com",
+      "firstName": "Alice",
+      "lastName": "Benson",
+      "companyName": "Benson Executive Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "craig.patterson@thehtgroup.com",
+      "firstName": "Craig",
+      "lastName": "Patterson",
+      "companyName": "The HT Group",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    },
+    {
+      "email": "beth@talentinsightsearch.com",
+      "firstName": "Beth",
+      "lastName": "Flohr",
+      "companyName": "Talent Insight Search",
+      "hasBody1": true,
+      "hasBody2": true,
+      "hasBody3": true,
+      "hasBody4": true
+    }
+  ]
+}

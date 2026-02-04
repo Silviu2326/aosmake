@@ -1,0 +1,333 @@
+{
+    "appName": "AOS Studio",
+    "stack": {
+        "framework": "React 18",
+        "router": "react-router-dom 6.x",
+        "styling": "Tailwind CSS 3.x",
+        "language": "TypeScript 5.x"
+    },
+    "pages": [
+        {
+            "id": "leads",
+            "route": "/leads",
+            "title": "LeadsPage",
+            "goal": "Manage lead database with filters and bulk actions",
+            "sections": [
+                "Layout",
+                "Filters",
+                "LeadTable",
+                "BulkActionBar",
+                "Pagination"
+            ],
+            "components": [
+                "LeadTable",
+                "LeadFilters",
+                "BulkActionBar",
+                "EmailStatusBadge",
+                "Pagination"
+            ],
+            "dataNeeds": [
+                "fetchLeads",
+                "executeBulkAction"
+            ],
+            "actions": [
+                "filter",
+                "select",
+                "verify_email",
+                "run_flow",
+                "delete",
+                "export",
+                "add_lead"
+            ]
+        },
+        {
+            "id": "lead-detail",
+            "route": "/leads/:id",
+            "title": "LeadDetailPage",
+            "goal": "Detailed view of a lead with activity timeline and quick actions",
+            "sections": [
+                "Header",
+                "Identity",
+                "Company",
+                "ActivityTimeline",
+                "Tags"
+            ],
+            "components": [
+                "LeadHeader",
+                "IdentityCard",
+                "CompanyCard",
+                "ActivityTimeline",
+                "TagsSection",
+                "FlowSelector"
+            ],
+            "dataNeeds": [
+                "fetchLead",
+                "fetchActivities",
+                "fetchFlows"
+            ],
+            "actions": [
+                "verify_email",
+                "run_flow",
+                "edit_lead",
+                "delete_lead",
+                "add_tag",
+                "remove_tag"
+            ]
+        },
+        {
+            "id": "import",
+            "route": "/import",
+            "title": "LeadImportPage",
+            "goal": "Wizard to import leads from CSV",
+            "sections": [
+                "Upload",
+                "Mapping",
+                "Normalization",
+                "Duplicates",
+                "Summary"
+            ],
+            "components": [
+                "ImportWizard",
+                "StepIndicator",
+                "FileUploader",
+                "ColumnMapper",
+                "NormalizationOptions",
+                "DuplicateResolver",
+                "ImportSummary"
+            ],
+            "dataNeeds": [
+                "uploadCSV",
+                "mapColumns",
+                "executeImport"
+            ],
+            "actions": [
+                "upload",
+                "map",
+                "normalize",
+                "resolve_duplicates",
+                "confirm_import"
+            ]
+        },
+        {
+            "id": "flows",
+            "route": "/flows",
+            "title": "FlowsPage",
+            "goal": "Library of automation flows",
+            "sections": [
+                "FlowGrid",
+                "Filters"
+            ],
+            "components": [
+                "FlowGrid",
+                "FlowCard",
+                "FlowStatusBadge",
+                "FlowMiniature",
+                "FlowFilters",
+                "FlowEditor"
+            ],
+            "dataNeeds": [
+                "fetchFlows",
+                "saveFlow",
+                "duplicateFlow",
+                "archiveFlow"
+            ],
+            "actions": [
+                "create",
+                "edit",
+                "duplicate",
+                "archive",
+                "test",
+                "filter",
+                "search"
+            ]
+        },
+        {
+            "id": "runs",
+            "route": "/runs",
+            "title": "RunsPage",
+            "goal": "Execution queue and logs",
+            "sections": [
+                "List",
+                "DetailPanel"
+            ],
+            "components": [
+                "RunsHeader",
+                "RunsTable",
+                "RunStatusBadge",
+                "RunDetailPanel",
+                "NodeResultCard"
+            ],
+            "dataNeeds": [
+                "fetchRuns",
+                "fetchRunDetails"
+            ],
+            "actions": [
+                "filter_type",
+                "filter_status",
+                "refresh",
+                "view_details",
+                "download_json"
+            ]
+        },
+        {
+            "id": "sandbox",
+            "route": "/sandbox",
+            "title": "SandboxPage",
+            "goal": "Test flows with mock data",
+            "sections": [
+                "Header",
+                "FlowViz",
+                "Input",
+                "Output"
+            ],
+            "components": [
+                "SandboxHeader",
+                "FlowVisualization",
+                "InputPanel",
+                "LeadSelector",
+                "JsonEditor",
+                "OutputPanel",
+                "StepCard"
+            ],
+            "dataNeeds": [
+                "fetchFlow",
+                "fetchLead",
+                "runNode"
+            ],
+            "actions": [
+                "select_flow",
+                "set_input",
+                "run_test",
+                "view_output"
+            ]
+        }
+    ],
+    "entities": [
+        {
+            "name": "Lead",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "firstName",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "lastName",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "company",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "emailStatus",
+                    "type": "EmailStatus",
+                    "required": true
+                },
+                {
+                    "name": "source",
+                    "type": "LeadSource",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "Flow",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "status",
+                    "type": "FlowStatus",
+                    "required": true
+                },
+                {
+                    "name": "nodes",
+                    "type": "FlowNode[]",
+                    "required": true
+                },
+                {
+                    "name": "edges",
+                    "type": "FlowEdge[]",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "Run",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "status",
+                    "type": "RunStatus",
+                    "required": true
+                },
+                {
+                    "name": "results",
+                    "type": "Record<string, NodeResult>",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "ImportSession",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "name": "status",
+                    "type": "ImportStatus",
+                    "required": true
+                },
+                {
+                    "name": "processedRows",
+                    "type": "number",
+                    "required": true
+                }
+            ]
+        }
+    ],
+    "globalRequirements": {
+        "auth": false,
+        "roles": [],
+        "responsive": true,
+        "a11y": "standard (ARIA, keyboard support)",
+        "i18n": false
+    },
+    "nonFunctional": {
+        "performance": "Skeleton loading, Pagination",
+        "seo": "Basic title tags",
+        "errorHandling": "Global AppError store, Toasts"
+    },
+    "unknowns": [
+        "Authentication mechanism details",
+        "Backend API explicit schema beyond examples"
+    ]
+}

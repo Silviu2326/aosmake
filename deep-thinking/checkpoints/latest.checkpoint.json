@@ -1,0 +1,15 @@
+{
+    "phase": 7,
+    "iteration": 1,
+    "status": "done",
+    "final": true,
+    "artifacts": [
+        "state/spec.extracted.json",
+        "state/ui.plan.json",
+        "state/ui.tokens.json",
+        "state/build.queue.json",
+        "state/qa.report.json",
+        "state/review.report.json"
+    ],
+    "lastError": null
+}

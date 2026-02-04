@@ -1,0 +1,36 @@
+{
+    "errors": [
+        {
+            "type": "ts",
+            "file": "src/components/leads/TagsSection.tsx",
+            "message": "Type '\"secondary\"' is not assignable to type '\"default\" | \"success\" | \"warning\" | \"error\" | \"info\" | \"outline\" | undefined'.",
+            "fixHint": "Change variant to 'default' or 'outline'."
+        },
+        {
+            "type": "ts",
+            "file": "src/components/flows/FlowCard.tsx",
+            "message": "Interface 'UIFlow' incorrectly extends interface 'Flow'. Property 'status' type 'FlowStatus' is not assignable to '\"active\" | \"draft\" | \"archived\"'.",
+            "fixHint": "Use Omit<Flow, 'status'> to override the status property."
+        },
+        {
+            "type": "ts",
+            "file": "src/components/runs/RunStatusBadge.tsx",
+            "message": "Property 'className' does not exist on type '{ variant: \"success\"; icon: LucideIcon; label: string; }'.",
+            "fixHint": "Add optional className to all config entries or define an explicit interface for the config values."
+        },
+        {
+            "type": "ts",
+            "file": "src/pages/PreCrafterPanel.tsx",
+            "message": "Legacy code error: Property 'json' does not exist on type 'Partial<NodeData>'.",
+            "fixHint": "Legacy file not modified in this session. update type definition."
+        },
+        {
+            "type": "ts",
+            "file": "src/pages/RunsPanel.tsx",
+            "message": "Legacy code error: Property 'input' does not exist on type 'object'.",
+            "fixHint": "Legacy file not modified in this session."
+        }
+    ],
+    "warnings": [],
+    "status": "fail"
+}

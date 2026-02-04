@@ -1,0 +1,661 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "type": "custom",
+      "position": { "x": 0, "y": 0 },
+      "data": {
+        "id": "1",
+        "type": "DATA_SOURCE",
+        "label": "Google Sheets Filter",
+        "status": "idle",
+        "inputs": [],
+        "outputs": ["lead_data"],
+        "model": "google-sheets",
+        "systemPrompt": "Data Source: Google Sheets",
+        "userPrompt": "Fetch leads from T10_1_master_simSilviu spreadsheet, sheet LP/C_Input, filter Column A > 0, limit 4 records",
+        "x": 0,
+        "y": 0,
+        "schema": {
+          "spreadsheet_id": "1p6T6-2ViDV-IGcZSVPL4ExnFiugm5oCzfU1febD3A6g",
+          "sheet": "LP/C_Input",
+          "range": "A1:CZ1",
+          "filter": "A > 0",
+          "limit": 4
+        }
+      }
+    },
+    {
+      "id": "194",
+      "type": "custom",
+      "position": { "x": 308, "y": 7 },
+      "data": {
+        "id": "194",
+        "type": "LLM",
+        "label": "Internal Signals Extractor",
+        "status": "idle",
+        "inputs": ["lead_data"],
+        "outputs": ["internal_signals"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are an expert at extracting internal signals from LinkedIn lead data. Analyze the provided person and company information to identify key internal signals that could be used for personalized outreach.",
+        "userPrompt": "Extract internal signals from: {{1.lead_data}}\n\nProvide a structured JSON output with:\n- job_signals: signals from the person's job title and role\n- company_signals: signals from company description and industry\n- growth_signals: signals related to company growth\n- tech_stack_signals: any technology-related signals\n- pain_points: potential pain points identified",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "job_signals": { "type": "array" },
+            "company_signals": { "type": "array" },
+            "growth_signals": { "type": "array" },
+            "tech_stack_signals": { "type": "array" },
+            "pain_points": { "type": "array" }
+          }
+        },
+        "tokens": "4096",
+        "x": 308,
+        "y": 7
+      }
+    },
+    {
+      "id": "205",
+      "type": "custom",
+      "position": { "x": 600, "y": 4 },
+      "data": {
+        "id": "205",
+        "type": "LLM",
+        "label": "Business Intel Analyzer",
+        "status": "idle",
+        "inputs": ["lead_data", "internal_signals"],
+        "outputs": ["business_intel"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are a business intelligence analyst. Analyze the lead data and internal signals to determine:\n1. B2B presence status (YES/NO)\n2. Hit filter verdict (HIT/STORAGE)\n3. Overall company assessment",
+        "userPrompt": "Analyze:\nLead Data: {{1.lead_data}}\nInternal Signals: {{194.internal_signals}}\n\nProvide JSON output with:\n{\n  \"b2b_presence\": { \"status\": \"YES\" or \"NO\", \"reasoning\": \"...\" },\n  \"hit_filter\": { \"verdict\": \"HIT\" or \"STORAGE\", \"reasoning\": \"...\" },\n  \"company_assessment\": \"...\"\n}",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "b2b_presence": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string", "enum": ["YES", "NO"] },
+                "reasoning": { "type": "string" }
+              }
+            },
+            "hit_filter": {
+              "type": "object",
+              "properties": {
+                "verdict": { "type": "string", "enum": ["HIT", "STORAGE"] },
+                "reasoning": { "type": "string" }
+              }
+            },
+            "company_assessment": { "type": "string" }
+          }
+        },
+        "tokens": "4096",
+        "x": 600,
+        "y": 4
+      }
+    },
+    {
+      "id": "184",
+      "type": "custom",
+      "position": { "x": 1260, "y": 10 },
+      "data": {
+        "id": "184",
+        "type": "LLM",
+        "label": "Person Understanding",
+        "status": "idle",
+        "inputs": ["lead_data", "internal_signals", "business_intel"],
+        "outputs": ["person_profile"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are an expert at understanding people and decision-makers. Analyze the person's profile to determine if they are a FIT decision-maker for B2B outreach.",
+        "userPrompt": "Analyze decision-maker:\nLead: {{1.lead_data}}\nSignals: {{194.internal_signals}}\nBusiness Intel: {{205.business_intel}}\n\nProvide JSON:\n{\n  \"Decision-Maker\": {\n    \"decision_maker_fit\": \"FIT\" or \"NO_FIT\",\n    \"seniority_level\": \"...\",\n    \"decision_power\": \"HIGH/MEDIUM/LOW\",\n    \"reasoning\": \"...\"\n  }\n}",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "Decision-Maker": {
+              "type": "object",
+              "properties": {
+                "decision_maker_fit": { "type": "string", "enum": ["FIT", "NO_FIT"] },
+                "seniority_level": { "type": "string" },
+                "decision_power": { "type": "string", "enum": ["HIGH", "MEDIUM", "LOW"] },
+                "reasoning": { "type": "string" }
+              }
+            }
+          }
+        },
+        "tokens": "2048",
+        "x": 1260,
+        "y": 10
+      }
+    },
+    {
+      "id": "189",
+      "type": "custom",
+      "position": { "x": 1584, "y": 5 },
+      "data": {
+        "id": "189",
+        "type": "LLM",
+        "label": "Feasibility Analyzer",
+        "status": "idle",
+        "inputs": ["lead_data", "person_profile", "internal_signals", "business_intel"],
+        "outputs": ["feasibility"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are a feasibility analyst. Determine if this lead is feasible for outreach based on all available information.",
+        "userPrompt": "Evaluate feasibility:\nLead: {{1.lead_data}}\nPerson: {{184.person_profile}}\nSignals: {{194.internal_signals}}\nBusiness Intel: {{205.business_intel}}\n\nProvide JSON:\n{\n  \"final_verdict\": {\n    \"result\": \"FIT\" or \"NO_FIT\",\n    \"confidence\": 0-100,\n    \"reasoning\": \"...\",\n    \"red_flags\": [],\n    \"green_flags\": []\n  }\n}",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "final_verdict": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["FIT", "NO_FIT"] },
+                "confidence": { "type": "number", "minimum": 0, "maximum": 100 },
+                "reasoning": { "type": "string" },
+                "red_flags": { "type": "array" },
+                "green_flags": { "type": "array" }
+              }
+            }
+          }
+        },
+        "tokens": "4096",
+        "x": 1584,
+        "y": 5
+      }
+    },
+    {
+      "id": "195",
+      "type": "custom",
+      "position": { "x": 2268, "y": -1 },
+      "data": {
+        "id": "195",
+        "type": "PERPLEXITY",
+        "label": "External Research (Perplexity)",
+        "status": "idle",
+        "inputs": ["lead_data", "person_profile", "feasibility", "business_intel"],
+        "outputs": ["external_signals"],
+        "model": "sonar",
+        "recency": "week",
+        "citations": true,
+        "systemPrompt": "You are a research assistant using web search. Find external signals about this company and person that could be relevant for personalized outreach.",
+        "userPrompt": "Research:\nCompany: {{1.lead_data.company_name}}\nPerson: {{1.lead_data.person_name}}\nRole: {{1.lead_data.job_title}}\n\nFind:\n1. Recent company news and announcements\n2. Industry trends affecting this company\n3. Technology adoptions or changes\n4. Growth indicators\n5. Any relevant person mentions\n\nProvide structured findings with citations.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "company_news": { "type": "array" },
+            "industry_trends": { "type": "array" },
+            "tech_changes": { "type": "array" },
+            "growth_indicators": { "type": "array" },
+            "person_mentions": { "type": "array" },
+            "citations": { "type": "array" }
+          }
+        },
+        "x": 2268,
+        "y": -1
+      }
+    },
+    {
+      "id": "199",
+      "type": "custom",
+      "position": { "x": 2558, "y": 7 },
+      "data": {
+        "id": "199",
+        "type": "LLM",
+        "label": "Base Angle Generator",
+        "status": "idle",
+        "inputs": ["person_profile", "feasibility", "internal_signals", "external_signals", "business_intel"],
+        "outputs": ["base_angles"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are a messaging strategist. Create 3 different base angles for outreach based on all available intelligence.",
+        "userPrompt": "Create messaging angles using:\nPerson: {{184.person_profile}}\nFeasibility: {{189.feasibility}}\nInternal Signals: {{194.internal_signals}}\nExternal Research: {{195.external_signals}}\nBusiness Intel: {{205.business_intel}}\n\nGenerate 3 distinct angles:\n1. Pain-point focused\n2. Opportunity-focused\n3. Trend/timing-focused\n\nFor each angle provide:\n- angle_name\n- core_message\n- key_hooks\n- supporting_evidence",
+        "tokens": "4096",
+        "x": 2558,
+        "y": 7
+      }
+    },
+    {
+      "id": "196",
+      "type": "custom",
+      "position": { "x": 2866, "y": 5 },
+      "data": {
+        "id": "196",
+        "type": "LLM",
+        "label": "Angle Synthesizer",
+        "status": "idle",
+        "inputs": ["lead_data", "person_profile", "feasibility", "internal_signals", "external_signals", "business_intel"],
+        "outputs": ["synthesized_angles"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are a synthesis expert. Combine and refine the base angles into the most compelling messaging strategy.",
+        "userPrompt": "Synthesize angles from all data:\nLead: {{1.lead_data}}\nPerson: {{184.person_profile}}\nFeasibility: {{189.feasibility}}\nInternal Signals: {{194.internal_signals}}\nExternal Research: {{195.external_signals}}\nBusiness Intel: {{205.business_intel}}\n\nCreate a unified messaging strategy with:\n- primary_angle\n- secondary_angle\n- tertiary_angle\n- key_personalization_points\n- credibility_builders",
+        "tokens": "4096",
+        "x": 2866,
+        "y": 5
+      }
+    },
+    {
+      "id": "197",
+      "type": "custom",
+      "position": { "x": 3166, "y": 5 },
+      "data": {
+        "id": "197",
+        "type": "LLM",
+        "label": "Angle Checker",
+        "status": "idle",
+        "inputs": ["person_profile", "feasibility", "synthesized_angles", "base_angles"],
+        "outputs": ["validated_angles"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are a quality checker. Validate that the messaging angles are accurate, relevant, and compelling.",
+        "userPrompt": "Validate angles:\nPerson: {{184.person_profile}}\nFeasibility: {{189.feasibility}}\nSynthesized: {{196.synthesized_angles}}\nBase: {{199.base_angles}}\n\nCheck:\n1. Factual accuracy\n2. Relevance to decision-maker\n3. Compelling nature\n4. Differentiation\n5. Credibility\n\nProvide:\n{\n  \"validation_passed\": true/false,\n  \"issues_found\": [],\n  \"improvements\": [],\n  \"final_angles\": {...}\n}",
+        "tokens": "4096",
+        "x": 3166,
+        "y": 5
+      }
+    },
+    {
+      "id": "216",
+      "type": "custom",
+      "position": { "x": 3526, "y": -1 },
+      "data": {
+        "id": "216",
+        "type": "LLM",
+        "label": "Crafter Architect (Lucas-1)",
+        "status": "idle",
+        "inputs": ["lead_data", "person_profile", "feasibility", "synthesized_angles", "validated_angles", "base_angles", "business_intel"],
+        "outputs": ["lucas_draft_1"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are Lucas, an expert email architect. Create a compelling B2B outreach email draft following your distinctive style: direct, value-focused, and professionally conversational.",
+        "userPrompt": "Create email (Lucas style):\nLead: {{1.lead_data}}\nPerson: {{184.person_profile}}\nFeasibility: {{189.feasibility}}\nAngles: {{196.synthesized_angles}}\nValidated: {{197.validated_angles}}\nBase: {{199.base_angles}}\nBusiness Intel: {{205.business_intel}}\n\nEmail should:\n- Be 120-150 words\n- Have a personalized opening\n- Focus on value proposition\n- Include one strong call-to-action\n- Sound professionally conversational\n- Use the validated angles\n\nProvide:\n{\n  \"subject_line\": \"...\",\n  \"email_body\": \"...\",\n  \"cta\": \"...\"\n}",
+        "tokens": "4096",
+        "x": 3526,
+        "y": -1
+      }
+    },
+    {
+      "id": "203",
+      "type": "custom",
+      "position": { "x": 4069, "y": -10 },
+      "data": {
+        "id": "203",
+        "type": "LLM",
+        "label": "Crafter Harmonizer (Lucas-2)",
+        "status": "idle",
+        "inputs": ["lead_data", "lucas_draft_1"],
+        "outputs": ["lucas_final"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are a harmonizer. Polish and refine the Lucas email draft to ensure it flows perfectly while maintaining the core message and style.",
+        "userPrompt": "Harmonize Lucas email:\nLead: {{1.lead_data}}\nDraft: {{216.lucas_draft_1}}\n\nRefine:\n1. Ensure smooth flow\n2. Perfect grammar and punctuation\n3. Optimize word choice\n4. Maintain Lucas style\n5. Keep it concise\n\nProvide final polished version:\n{\n  \"subject_line\": \"...\",\n  \"email_body\": \"...\",\n  \"cta\": \"...\",\n  \"changes_made\": []\n}",
+        "tokens": "4096",
+        "x": 4069,
+        "y": -10
+      }
+    },
+    {
+      "id": "211",
+      "type": "custom",
+      "position": { "x": 4575, "y": -12 },
+      "data": {
+        "id": "211",
+        "type": "LLM",
+        "label": "Crafter Architect (Ale-2)",
+        "status": "idle",
+        "inputs": ["lead_data", "person_profile", "feasibility", "synthesized_angles", "validated_angles", "base_angles"],
+        "outputs": ["ale_draft_1"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are Ale, an expert email architect. Create a compelling B2B outreach email draft following your distinctive style: storytelling-focused, empathetic, and relationship-building.",
+        "userPrompt": "Create email (Ale style):\nLead: {{1.lead_data}}\nPerson: {{184.person_profile}}\nFeasibility: {{189.feasibility}}\nAngles: {{196.synthesized_angles}}\nValidated: {{197.validated_angles}}\nBase: {{199.base_angles}}\n\nEmail should:\n- Be 120-150 words\n- Open with a relatable insight or observation\n- Build connection through storytelling\n- Naturally lead to value proposition\n- Have a soft, consultative call-to-action\n- Feel warm and human\n\nProvide:\n{\n  \"subject_line\": \"...\",\n  \"email_body\": \"...\",\n  \"cta\": \"...\"\n}",
+        "tokens": "4096",
+        "x": 4575,
+        "y": -12
+      }
+    },
+    {
+      "id": "212",
+      "type": "custom",
+      "position": { "x": 5065, "y": -12 },
+      "data": {
+        "id": "212",
+        "type": "LLM",
+        "label": "Crafter Harmonizer (Ale-1)",
+        "status": "idle",
+        "inputs": ["lead_data", "ale_draft_1"],
+        "outputs": ["ale_final"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are a harmonizer. Polish and refine the Ale email draft to ensure it flows perfectly while maintaining the storytelling and empathetic style.",
+        "userPrompt": "Harmonize Ale email:\nLead: {{1.lead_data}}\nDraft: {{211.ale_draft_1}}\n\nRefine:\n1. Ensure narrative flow\n2. Perfect grammar and punctuation\n3. Optimize emotional connection\n4. Maintain Ale's warm style\n5. Keep it authentic\n\nProvide final polished version:\n{\n  \"subject_line\": \"...\",\n  \"email_body\": \"...\",\n  \"cta\": \"...\",\n  \"changes_made\": []\n}",
+        "tokens": "4096",
+        "x": 5065,
+        "y": -12
+      }
+    },
+    {
+      "id": "221",
+      "type": "custom",
+      "position": { "x": 5540, "y": -14 },
+      "data": {
+        "id": "221",
+        "type": "LLM",
+        "label": "Crafter Patch (Final)",
+        "status": "idle",
+        "inputs": ["person_profile", "internal_signals", "lucas_final", "ale_final"],
+        "outputs": ["final_output"],
+        "model": "gemini-3-pro-preview",
+        "temperature": 0.2,
+        "systemPrompt": "You are the final quality assurance agent. Apply a final patch to ensure both email variations are perfect and ready for sending.",
+        "userPrompt": "Final QA patch:\nPerson: {{184.person_profile}}\nInternal Signals: {{194.internal_signals}}\nLucas Email: {{203.lucas_final}}\nAle Email: {{212.ale_final}}\n\nPerform final checks:\n1. Verify personalization accuracy\n2. Check for any placeholders or errors\n3. Ensure CTA clarity\n4. Validate tone appropriateness\n5. Final grammar check\n\nProvide:\n{\n  \"lucas_email\": {\n    \"subject\": \"...\",\n    \"body\": \"...\",\n    \"cta\": \"...\",\n    \"ready_to_send\": true/false\n  },\n  \"ale_email\": {\n    \"subject\": \"...\",\n    \"body\": \"...\",\n    \"cta\": \"...\",\n    \"ready_to_send\": true/false\n  },\n  \"recommendation\": \"Which variant to use and why\",\n  \"ab_test_suggestion\": \"...\"\n}",
+        "tokens": "4096",
+        "x": 5540,
+        "y": -14
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1-194",
+      "source": "1",
+      "target": "194",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-205",
+      "source": "1",
+      "target": "205",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e194-205",
+      "source": "194",
+      "target": "205",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e205-184",
+      "source": "205",
+      "target": "184",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-184",
+      "source": "1",
+      "target": "184",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e194-184",
+      "source": "194",
+      "target": "184",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-189",
+      "source": "184",
+      "target": "189",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-189",
+      "source": "1",
+      "target": "189",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e194-189",
+      "source": "194",
+      "target": "189",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e205-189",
+      "source": "205",
+      "target": "189",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e189-195",
+      "source": "189",
+      "target": "195",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-195",
+      "source": "1",
+      "target": "195",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-195",
+      "source": "184",
+      "target": "195",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e205-195",
+      "source": "205",
+      "target": "195",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e195-199",
+      "source": "195",
+      "target": "199",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-199",
+      "source": "184",
+      "target": "199",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e189-199",
+      "source": "189",
+      "target": "199",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e194-199",
+      "source": "194",
+      "target": "199",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e205-199",
+      "source": "205",
+      "target": "199",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e195-196",
+      "source": "195",
+      "target": "196",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-196",
+      "source": "1",
+      "target": "196",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-196",
+      "source": "184",
+      "target": "196",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e189-196",
+      "source": "189",
+      "target": "196",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e194-196",
+      "source": "194",
+      "target": "196",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e205-196",
+      "source": "205",
+      "target": "196",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e196-197",
+      "source": "196",
+      "target": "197",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e199-197",
+      "source": "199",
+      "target": "197",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-197",
+      "source": "184",
+      "target": "197",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e189-197",
+      "source": "189",
+      "target": "197",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e197-216",
+      "source": "197",
+      "target": "216",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-216",
+      "source": "1",
+      "target": "216",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-216",
+      "source": "184",
+      "target": "216",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e189-216",
+      "source": "189",
+      "target": "216",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e196-216",
+      "source": "196",
+      "target": "216",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e199-216",
+      "source": "199",
+      "target": "216",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e205-216",
+      "source": "205",
+      "target": "216",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e216-203",
+      "source": "216",
+      "target": "203",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-203",
+      "source": "1",
+      "target": "203",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e197-211",
+      "source": "197",
+      "target": "211",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-211",
+      "source": "1",
+      "target": "211",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-211",
+      "source": "184",
+      "target": "211",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e189-211",
+      "source": "189",
+      "target": "211",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e196-211",
+      "source": "196",
+      "target": "211",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e199-211",
+      "source": "199",
+      "target": "211",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e211-212",
+      "source": "211",
+      "target": "212",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e1-212",
+      "source": "1",
+      "target": "212",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e203-221",
+      "source": "203",
+      "target": "221",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e212-221",
+      "source": "212",
+      "target": "221",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e184-221",
+      "source": "184",
+      "target": "221",
+      "type": "dataPeek"
+    },
+    {
+      "id": "e194-221",
+      "source": "194",
+      "target": "221",
+      "type": "dataPeek"
+    }
+  ]
+}
