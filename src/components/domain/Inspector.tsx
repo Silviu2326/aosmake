@@ -1,12 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { NodeData, NodeVariant, TestCase } from '../../types';
+import { NodeData, NodeVariant, TestCase, NodeVersion } from '../../types';
 import { Edge } from 'reactflow';
-import { X, Play, Save, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Sparkles, Maximize2, Download, Loader2, XCircle, AlignLeft } from 'lucide-react';
+import { X, Play, Save, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Sparkles, Maximize2, Download, Loader2, XCircle, AlignLeft, History } from 'lucide-react';
 import { getNodeFields } from '../../utils/nodeUtils';
 import { VariationGeneratorModal } from '../ui/VariationGeneratorModal';
 import { PromptEditorModal } from '../ui/PromptEditorModal';
 import { MutationModal } from '../ui/MutationModal';
 import { VariableHighlighter } from '../ui/VariableHighlighter';
+import { NodeVersionModal } from '../ui/NodeVersionModal';
 
 interface InspectorProps {
     node?: NodeData;
@@ -32,6 +33,7 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
     const [isAiVarModalOpen, setIsAiVarModalOpen] = useState(false);
     const [isMutationModalOpen, setIsMutationModalOpen] = useState(false);
     const [isPromptEditorOpen, setIsPromptEditorOpen] = useState(false);
+    const [isVersionModalOpen, setIsVersionModalOpen] = useState(false);
 
     // Tests state
     const [testCases, setTestCases] = useState<TestCase[]>([]);
@@ -202,6 +204,75 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
         updateActiveData({ userPrompt: newValue });
     };
 
+    // Node Version Management
+    const handleCreateVersion = (name: string, description?: string) => {
+        const newVersion: NodeVersion = {
+            id: `version_${Date.now()}`,
+            name,
+            description,
+            timestamp: new Date().toISOString(),
+            label: node.label,
+            type: node.type,
+            model: node.model,
+            systemPrompt: node.systemPrompt,
+            userPrompt: node.userPrompt,
+            temperature: node.temperature,
+            recency: node.recency,
+            citations: node.citations,
+            schema: node.schema,
+            outputMode: node.outputMode,
+            json: node.json,
+            csv: node.csv,
+            csvMappings: node.csvMappings,
+            filterCondition: node.filterCondition,
+            apiKey: node.apiKey,
+            statusFilter: node.statusFilter,
+            limit: node.limit,
+            updateField: node.updateField,
+            customField: node.customField,
+            markAsSent: node.markAsSent
+        };
+
+        const currentVersions = node.nodeVersions || [];
+        onNodeUpdate(node.id, { nodeVersions: [...currentVersions, newVersion] });
+    };
+
+    const handleRestoreVersion = (version: NodeVersion) => {
+        if (!confirm(`¿Restaurar la versión "${version.name}"? Esto sobrescribirá la configuración actual.`)) {
+            return;
+        }
+
+        onNodeUpdate(node.id, {
+            label: version.label,
+            model: version.model,
+            systemPrompt: version.systemPrompt,
+            userPrompt: version.userPrompt,
+            temperature: version.temperature,
+            recency: version.recency,
+            citations: version.citations,
+            schema: version.schema,
+            outputMode: version.outputMode,
+            json: version.json,
+            csv: version.csv,
+            csvMappings: version.csvMappings,
+            filterCondition: version.filterCondition,
+            apiKey: version.apiKey,
+            statusFilter: version.statusFilter,
+            limit: version.limit,
+            updateField: version.updateField,
+            customField: version.customField,
+            markAsSent: version.markAsSent
+        });
+
+        setIsVersionModalOpen(false);
+    };
+
+    const handleDeleteVersion = (versionId: string) => {
+        const currentVersions = node.nodeVersions || [];
+        const updatedVersions = currentVersions.filter(v => v.id !== versionId);
+        onNodeUpdate(node.id, { nodeVersions: updatedVersions });
+    };
+
     return (
         <div className="flex flex-col h-full bg-surface text-sm">
             {/* Header */}
@@ -213,6 +284,16 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                     className="font-semibold text-white bg-transparent border-none focus:ring-0 focus:outline-none w-full max-w-[200px]"
                 />
                 <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setIsVersionModalOpen(true)}
+                        className="flex items-center gap-1 px-2 py-1 rounded bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 text-xs transition-colors"
+                        title="Gestionar versiones"
+                    >
+                        <History size={12} />
+                        {(node.nodeVersions?.length || 0) > 0 && (
+                            <span className="px-1 text-[10px] bg-blue-500/20 rounded">{node.nodeVersions?.length}</span>
+                        )}
+                    </button>
                     {isLLMNode && variants.length > 0 && (
                         <button
                             onClick={() => setIsAiVarModalOpen(true)}
@@ -853,6 +934,15 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                 initialUserPrompt={userPrompt}
                 nodeLabel={node.label}
                 availableVariables={[]}
+            />
+
+            <NodeVersionModal
+                isOpen={isVersionModalOpen}
+                onClose={() => setIsVersionModalOpen(false)}
+                node={node}
+                onCreateVersion={handleCreateVersion}
+                onRestoreVersion={handleRestoreVersion}
+                onDeleteVersion={handleDeleteVersion}
             />
         </div>
     );

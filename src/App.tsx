@@ -9,6 +9,7 @@ import { SandboxPage } from './pages/SandboxPage';
 import { ImportPage } from './pages/ImportPage';
 import { PreCrafterPanel } from './pages/PreCrafterPanel';
 import { DashboardPage } from './pages/DashboardPage';
+import { StatisticsPage } from './pages/StatisticsPage';
 import { SettingsPage } from './pages/SettingsPage';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/sandbox" element={<SandboxPage />} />
           <Route path="/precrafter" element={<PreCrafterPanel />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/statistics" element={<StatisticsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
 
           {/* Fallback */}

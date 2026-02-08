@@ -13,12 +13,15 @@ import { MultiNodeTestModal } from '../components/ui/MultiNodeTestModal';
 import { ApiConfigModal } from '../components/ui/ApiConfigModal';
 import { getNodeFields, parseCsvHeaders } from '../utils/nodeUtils';
 import { AgentPopup } from '../components/global/AgentPopup';
-import { Play, Copy, GitBranch, Search, Maximize2, Plus, Save, RotateCcw, Bot, Upload, Download, Layout, History, BoxSelect, Snowflake, Gift, Bell, Star, PartyPopper, Music, Heart, Zap, Cloud, Moon, DollarSign, Coins, Wallet, TrendingUp, Diamond, Briefcase, Dna, Trash2, FlaskConical, Settings } from 'lucide-react';
+import { Play, Copy, GitBranch, Search, Maximize2, Plus, Save, RotateCcw, Bot, Upload, Download, Layout, History, BoxSelect, Snowflake, Gift, Bell, Star, PartyPopper, Music, Heart, Zap, Cloud, Moon, DollarSign, Coins, Wallet, TrendingUp, Diamond, Briefcase, Dna, Trash2, FlaskConical, Settings, Variable, BookOpen } from 'lucide-react';
 import { VersionHistoryModal } from '../components/ui/VersionHistoryModal';
 import dagre from 'dagre';
 import { useOnSelectionChange } from 'reactflow';
 import { MutationModal } from '../components/ui/MutationModal';
 import { RunConfigModal } from '../components/ui/RunConfigModal';
+import { WorkflowVariablesModal } from '../components/ui/WorkflowVariablesModal';
+import { WorkflowInputModal } from '../components/ui/WorkflowInputModal';
+import { DocumentationModal } from '../components/ui/DocumentationModal';
 
 const API_URL = 'https://backendaos-production.up.railway.app/api/workflows/precrafter';
 
@@ -86,13 +89,32 @@ export const PreCrafterPanel: React.FC = () => {
     const [isAgentOpen, setIsAgentOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const [isRunConfigOpen, setIsRunConfigOpen] = useState(false);
+    const [isWorkflowVariablesOpen, setIsWorkflowVariablesOpen] = useState(false);
+    const [isWorkflowInputOpen, setIsWorkflowInputOpen] = useState(false);
+    const [isDocumentationOpen, setIsDocumentationOpen] = useState(false);
     const [lastSaved, setLastSaved] = useState<string | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [executionResults, setExecutionResults] = useState<Record<string, any>>({});
     const [contextMenu, setContextMenu] = useState<{ id: string; top: number; left: number } | null>(null);
+    const [workflowVariables, setWorkflowVariables] = useState<any[]>([]);
+    const [agentInitialMessage, setAgentInitialMessage] = useState<string>('');
+
+    // Search functionality
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<string[]>([]);
+    const [currentSearchIndex, setCurrentSearchIndex] = useState(0);
+    const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+
+    // Command Palette
+    const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+    const [commandQuery, setCommandQuery] = useState('');
+    const [filteredCommands, setFilteredCommands] = useState<any[]>([]);
+    const [selectedCommandIndex, setSelectedCommandIndex] = useState(0);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const commandInputRef = useRef<HTMLInputElement>(null);
 
     // Helper component to handle selection inside ReactFlow context
     const SelectionListener = ({ onChange }: { onChange: (ids: string[]) => void }) => {
@@ -231,26 +253,51 @@ export const PreCrafterPanel: React.FC = () => {
         })));
     }, [isChristmasMode, isMoneyMode, setNodes]);
 
-    // Compute nodes with filter connection data for rendering
+    // Compute nodes with filter connection data and search highlights for rendering
     const nodesWithFilterData = useMemo(() => {
         return nodes.map((n) => {
+            const isSearchResult = searchResults.includes(n.id);
+            const isCurrentSearchResult = searchResults[currentSearchIndex] === n.id;
+
+            // Base node with search highlighting
+            const nodeWithSearch = {
+                ...n,
+                data: {
+                    ...n.data,
+                    isSearchResult,
+                    isCurrentSearchResult
+                },
+                // Add visual emphasis for search results
+                style: {
+                    ...n.style,
+                    ...(isCurrentSearchResult && {
+                        boxShadow: '0 0 0 2px #a855f7, 0 0 20px rgba(168, 85, 247, 0.3)',
+                    }),
+                    ...(isSearchResult && !isCurrentSearchResult && {
+                        boxShadow: '0 0 0 1px #a855f7',
+                    })
+                }
+            };
+
+            // Add filter-specific data
             if (n.data.type === 'FILTER') {
                 const hasTrueConnection = edges.some(e => e.source === n.id && e.sourceHandle === 'true');
                 const hasFalseConnection = edges.some(e => e.source === n.id && e.sourceHandle === 'false');
 
                 return {
-                    ...n,
+                    ...nodeWithSearch,
                     data: {
-                        ...n.data,
+                        ...nodeWithSearch.data,
                         hasTrueConnection,
                         hasFalseConnection,
                         onAddNode: handleAddNodeFromFilter
                     }
                 };
             }
-            return n;
+
+            return nodeWithSearch;
         });
-    }, [nodes, edges, handleAddNodeFromFilter]);
+    }, [nodes, edges, handleAddNodeFromFilter, searchResults, currentSearchIndex]);
 
     const handleExport = () => {
         const scenario = { nodes, edges };
@@ -327,6 +374,205 @@ export const PreCrafterPanel: React.FC = () => {
             })
         );
     }, [executionResults, setEdges]);
+
+    // Search functionality - Filter nodes based on search query
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            setSearchResults([]);
+            setShowSearchDropdown(false);
+            setCurrentSearchIndex(0);
+            return;
+        }
+
+        const query = searchQuery.toLowerCase();
+        const matchingNodes = nodes
+            .filter(n => {
+                const label = (n.data.label || '').toLowerCase();
+                const type = (n.data.type || '').toLowerCase();
+                const id = n.id.toLowerCase();
+                return label.includes(query) || type.includes(query) || id.includes(query);
+            })
+            .map(n => n.id);
+
+        setSearchResults(matchingNodes);
+        setShowSearchDropdown(matchingNodes.length > 0);
+        setCurrentSearchIndex(0);
+
+        // Highlight first result
+        if (matchingNodes.length > 0) {
+            setSelectedNodeId(matchingNodes[0]);
+        }
+    }, [searchQuery, nodes]);
+
+    // Navigate through search results
+    const navigateSearchResults = useCallback((direction: 'next' | 'prev') => {
+        if (searchResults.length === 0) return;
+
+        let newIndex = currentSearchIndex;
+        if (direction === 'next') {
+            newIndex = (currentSearchIndex + 1) % searchResults.length;
+        } else {
+            newIndex = currentSearchIndex === 0 ? searchResults.length - 1 : currentSearchIndex - 1;
+        }
+
+        setCurrentSearchIndex(newIndex);
+        setSelectedNodeId(searchResults[newIndex]);
+    }, [searchResults, currentSearchIndex]);
+
+    // Keyboard shortcut for search (Cmd+K / Ctrl+K)
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Cmd+K or Ctrl+K to focus search
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInputRef.current?.focus();
+                searchInputRef.current?.select();
+            }
+
+            // Enter to navigate to next result when search is focused
+            if (e.key === 'Enter' && document.activeElement === searchInputRef.current) {
+                e.preventDefault();
+                navigateSearchResults(e.shiftKey ? 'prev' : 'next');
+            }
+
+            // Escape to clear search
+            if (e.key === 'Escape' && document.activeElement === searchInputRef.current) {
+                setSearchQuery('');
+                searchInputRef.current?.blur();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [navigateSearchResults]);
+
+    // Close search dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (searchInputRef.current && !searchInputRef.current.contains(e.target as Node)) {
+                setShowSearchDropdown(false);
+            }
+        };
+
+        if (showSearchDropdown) {
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => document.removeEventListener('mousedown', handleClickOutside);
+        }
+    }, [showSearchDropdown]);
+
+    // Command Palette - Define available commands
+    const commands = useMemo(() => [
+        { id: 'add-llm', label: 'Add LLM Node', icon: Plus, action: () => { setIsAddModalOpen(true); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
+        { id: 'add-filter', label: 'Add Filter Node', icon: GitBranch, action: () => { confirmAddNode('', '', 'Filter', 'FILTER'); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
+        { id: 'add-json', label: 'Add JSON Node', icon: Plus, action: () => { confirmAddNode('', '', 'JSON', 'JSON'); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
+        { id: 'add-csv-input', label: 'Add CSV Input Node', icon: Plus, action: () => { confirmAddNode('', '', 'CSV Input', 'CSV_INPUT'); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
+        { id: 'run-workflow', label: 'Run Workflow', icon: Play, action: () => { setIsRunConfigOpen(true); setIsCommandPaletteOpen(false); }, category: 'Actions', shortcut: 'Cmd+Enter' },
+        { id: 'test-nodes', label: 'Test Nodes', icon: FlaskConical, action: () => { setIsMultiTestOpen(true); setIsCommandPaletteOpen(false); }, category: 'Actions' },
+        { id: 'save-workflow', label: 'Save Workflow', icon: Save, action: () => { saveWorkflow(); setIsCommandPaletteOpen(false); }, category: 'Actions', shortcut: 'Cmd+S' },
+        { id: 'workflow-documentation', label: 'Document Workflow', icon: BookOpen, action: () => { setIsDocumentationOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
+        { id: 'workflow-variables', label: 'Configure Workflow Variables', icon: Variable, action: () => { setIsWorkflowVariablesOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
+        { id: 'export-json', label: 'Export to JSON', icon: Download, action: () => { handleExport(); setIsCommandPaletteOpen(false); }, category: 'File' },
+        { id: 'import-json', label: 'Import from JSON', icon: Upload, action: () => { fileInputRef.current?.click(); setIsCommandPaletteOpen(false); }, category: 'File' },
+        { id: 'layout-horizontal', label: 'Auto Layout (Horizontal)', icon: Layout, action: () => { onLayout('LR'); setIsCommandPaletteOpen(false); }, category: 'Layout' },
+        { id: 'layout-vertical', label: 'Auto Layout (Vertical)', icon: Layout, action: () => { onLayout('TB'); setIsCommandPaletteOpen(false); }, category: 'Layout' },
+        { id: 'group-nodes', label: 'Group Selected Nodes', icon: BoxSelect, action: () => { handleGroupNodes(); setIsCommandPaletteOpen(false); }, category: 'Layout' },
+        { id: 'open-agent', label: 'Open AI Agent', icon: Bot, action: () => { setIsAgentOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
+        { id: 'open-history', label: 'Version History', icon: History, action: () => { setIsHistoryOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
+        { id: 'clone-workflow', label: 'Clone Workflow', icon: GitBranch, action: () => { handleClone(); setIsCommandPaletteOpen(false); }, category: 'Tools' },
+        { id: 'api-config', label: 'API Configuration', icon: Settings, action: () => { setIsApiConfigOpen(true); setIsCommandPaletteOpen(false); }, category: 'Settings' },
+    ], []);
+
+    // Filter commands based on query
+    useEffect(() => {
+        if (!commandQuery.trim()) {
+            setFilteredCommands(commands);
+            setSelectedCommandIndex(0);
+            return;
+        }
+
+        const query = commandQuery.toLowerCase();
+        const matches = commands.filter(cmd => {
+            const labelMatch = cmd.label.toLowerCase().includes(query);
+            const categoryMatch = cmd.category.toLowerCase().includes(query);
+            return labelMatch || categoryMatch;
+        });
+
+        setFilteredCommands(matches);
+        setSelectedCommandIndex(0);
+    }, [commandQuery, commands]);
+
+    // Command Palette keyboard shortcuts
+    useEffect(() => {
+        const handleCommandPaletteKeys = (e: KeyboardEvent) => {
+            // Cmd+Shift+P or Cmd+P to open command palette
+            if ((e.metaKey || e.ctrlKey) && (e.key === 'p' || (e.shiftKey && e.key === 'P'))) {
+                e.preventDefault();
+                setIsCommandPaletteOpen(true);
+                setCommandQuery('');
+                setTimeout(() => commandInputRef.current?.focus(), 100);
+            }
+
+            if (!isCommandPaletteOpen) return;
+
+            // Navigate commands
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                setSelectedCommandIndex(prev => (prev + 1) % filteredCommands.length);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                setSelectedCommandIndex(prev => prev === 0 ? filteredCommands.length - 1 : prev - 1);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (filteredCommands[selectedCommandIndex]) {
+                    filteredCommands[selectedCommandIndex].action();
+                }
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                setIsCommandPaletteOpen(false);
+                setCommandQuery('');
+            }
+        };
+
+        window.addEventListener('keydown', handleCommandPaletteKeys);
+        return () => window.removeEventListener('keydown', handleCommandPaletteKeys);
+    }, [isCommandPaletteOpen, filteredCommands, selectedCommandIndex]);
+
+    // Global keyboard shortcuts for node operations
+    useEffect(() => {
+        const handleGlobalShortcuts = (e: KeyboardEvent) => {
+            // Don't trigger if user is typing in an input
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+            // Cmd+D to duplicate selected node
+            if ((e.metaKey || e.ctrlKey) && e.key === 'd' && selectedNodeId) {
+                e.preventDefault();
+                handleDuplicateNode(selectedNodeId);
+            }
+
+            // Delete or Backspace to delete selected node
+            if ((e.key === 'Delete' || e.key === 'Backspace') && selectedNodeId) {
+                e.preventDefault();
+                handleDeleteNode(selectedNodeId);
+            }
+
+            // Cmd+S to save
+            if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+                e.preventDefault();
+                saveWorkflow();
+            }
+
+            // Cmd+Enter to run workflow
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (!isRunning) {
+                    setIsRunConfigOpen(true);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleGlobalShortcuts);
+        return () => window.removeEventListener('keydown', handleGlobalShortcuts);
+    }, [selectedNodeId, isRunning]);
 
     // Helper for frontend substitution for logs
     const replaceVariables = (text: string, ctx: Record<string, string>) => {
@@ -606,8 +852,12 @@ export const PreCrafterPanel: React.FC = () => {
         return rows;
     };
 
-    const startExecution = async () => {
+    const startExecutionWithVariables = async (variableValues: Record<string, string> = {}) => {
         clearLogs();
+
+        // Add workflow variables to the dependency context
+        dependencyState.current.results = { ...variableValues };
+
         // 1. Reset Status
         setNodes((nds) => nds.map(n => ({
             ...n,
@@ -665,6 +915,16 @@ export const PreCrafterPanel: React.FC = () => {
         setExecutionQueue(initialQueue);
         setIsRunning(true);
         setStartTime(new Date().toISOString());
+    };
+
+    const startExecution = () => {
+        // If workflow variables are defined, open input modal first
+        if (workflowVariables.length > 0) {
+            setIsWorkflowInputOpen(true);
+        } else {
+            // Execute directly without variables
+            startExecutionWithVariables({});
+        }
     };
 
     // Load workflow from backend on mount
@@ -897,6 +1157,33 @@ export const PreCrafterPanel: React.FC = () => {
         );
     };
 
+    const handleDuplicateNode = (id: string) => {
+        const nodeToDuplicate = nodes.find(n => n.id === id);
+        if (!nodeToDuplicate) return;
+
+        const newNodeId = `node_${Date.now()}`;
+        const newNode: Node = {
+            ...nodeToDuplicate,
+            id: newNodeId,
+            position: {
+                x: nodeToDuplicate.position.x + 30,
+                y: nodeToDuplicate.position.y + 30
+            },
+            data: {
+                ...nodeToDuplicate.data,
+                label: `${nodeToDuplicate.data.label} (Copy)`,
+                status: NodeStatus.IDLE,
+                outputData: undefined,
+                selectedVariantId: undefined
+            }
+        };
+
+        setNodes(nds => [...nds, newNode]);
+        setSelectedNodeId(newNodeId);
+        setContextMenu(null);
+        addLog({ nodeId: 'system', nodeLabel: 'System', status: 'info', message: `Node duplicated: ${nodeToDuplicate.data.label}` });
+    };
+
     const handleDeleteNode = (id: string) => {
         setNodes((nds) => nds.filter((node) => node.id !== id));
         setEdges((eds) => eds.filter((edge) => edge.source !== id && edge.target !== id));
@@ -904,6 +1191,63 @@ export const PreCrafterPanel: React.FC = () => {
             setSelectedNodeId(undefined);
         }
         setContextMenu(null);
+    };
+
+    const handleSaveDocumentation = (nodeId: string, documentation: string) => {
+        setNodes((nds) => nds.map(node => {
+            if (node.id === nodeId) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        documentation
+                    }
+                };
+            }
+            return node;
+        }));
+
+        addLog({
+            nodeId: 'system',
+            nodeLabel: 'System',
+            status: 'success',
+            message: `Documentación actualizada para: ${nodes.find(n => n.id === nodeId)?.data.label}`
+        });
+    };
+
+    const handleGenerateDocumentationWithAI = () => {
+        setIsDocumentationOpen(false);
+
+        const aiPrompt = `📚 GENERACIÓN AUTOMÁTICA DE DOCUMENTACIÓN
+
+Por favor, analiza cada nodo del workflow y genera documentación clara y concisa para cada uno.
+
+Para cada nodo, incluye:
+1. **Propósito**: Qué hace este nodo en el contexto del workflow
+2. **Input esperado**: Qué información recibe (variables, datos de nodos anteriores)
+3. **Output generado**: Qué produce y cómo se usa en nodos posteriores
+4. **Función en el flujo**: Cómo contribuye al objetivo general del workflow
+
+IMPORTANTE:
+- Genera documentación en español
+- Sé conciso pero informativo (2-4 oraciones por nodo)
+- Usa lenguaje claro y profesional
+- Menciona las variables que usa el nodo si es relevante
+- Describe el papel del nodo en el contexto del flujo completo
+
+Actualiza el campo 'documentation' de cada nodo con la descripción generada.`;
+
+        setAgentInitialMessage(aiPrompt);
+
+        setTimeout(() => {
+            setIsAgentOpen(true);
+            addLog({
+                nodeId: 'system',
+                nodeLabel: 'System',
+                status: 'info',
+                message: 'Generando documentación automática con IA...'
+            });
+        }, 300);
     };
 
     const handleApplyActions = (actions: any[]) => {
@@ -1021,14 +1365,15 @@ export const PreCrafterPanel: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right: Actions Toolbar */}
-                <div className="flex items-center gap-3">
+                {/* Right: Actions Toolbar - Reorganized */}
+                <div className="flex items-center gap-2">
 
-                    {/* Primary Action Group */}
-                    <div className="flex items-center p-1 bg-white/5 rounded-lg border border-white/5">
+                    {/* ACTIONS GROUP - Primary operations */}
+                    <div className="flex items-center p-1 bg-white/5 rounded-lg border border-white/5 shadow-sm">
                         <button
                             onClick={() => setIsAddModalOpen(true)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-white/10 text-gray-300 hover:text-white transition-all text-xs font-medium"
+                            title="Add new node (Cmd+N)"
                         >
                             <Plus size={14} className="text-purple-400" />
                             Add Node
@@ -1037,7 +1382,8 @@ export const PreCrafterPanel: React.FC = () => {
                         <button
                             onClick={() => setIsRunConfigOpen(true)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-green-500/20 text-gray-300 hover:text-green-400 transition-all text-xs font-medium"
-                            title="Run Workflow"
+                            title="Run Workflow (Cmd+Enter)"
+                            disabled={isRunning}
                         >
                             <Play size={14} className={isRunning ? "animate-pulse" : ""} />
                             Run
@@ -1045,73 +1391,85 @@ export const PreCrafterPanel: React.FC = () => {
                         <button
                             onClick={() => setIsMultiTestOpen(true)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-purple-500/20 text-gray-300 hover:text-purple-400 transition-all text-xs font-medium"
-                            title="Test de nodos selectivos"
+                            title="Test selected nodes"
                         >
                             <FlaskConical size={14} />
                             Test
                         </button>
                     </div>
 
-                    {/* Secondary Actions Group */}
-                    <div className="flex items-center gap-1">
+                    {/* TOOLS GROUP - Workflow utilities */}
+                    <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/5">
+                        <button
+                            onClick={() => setIsDocumentationOpen(true)}
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-blue-400 transition-colors"
+                            title="Documentar Workflow"
+                        >
+                            <BookOpen size={16} />
+                        </button>
+                        <button
+                            onClick={() => setIsWorkflowVariablesOpen(true)}
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-purple-400 transition-colors"
+                            title="Configurar Variables del Workflow"
+                        >
+                            <Variable size={16} />
+                        </button>
                         <button
                             onClick={() => setIsAgentOpen(true)}
-                            className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-purple-400 transition-colors border border-transparent hover:border-white/5"
-                            title="AI Agent"
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-purple-400 transition-colors"
+                            title="AI Agent Assistant"
                         >
-                            <Bot size={18} />
+                            <Bot size={16} />
                         </button>
-
-                        <div className="w-px h-6 bg-white/5 mx-2" />
-
-                        <button
-                            onClick={() => setIsApiConfigOpen(true)}
-                            className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
-                            title="API Configuration"
-                        >
-                            <Settings size={18} />
-                        </button>
-
                         <button
                             onClick={() => saveWorkflow()}
-                            className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
-                            title="Save"
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            title="Save Workflow (Cmd+S)"
                         >
-                            <Save size={18} />
+                            <Save size={16} />
                         </button>
-
                         <button
                             onClick={() => setIsHistoryOpen(true)}
-                            className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
-                            title="History"
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            title="Version History"
                         >
-                            <History size={18} />
+                            <History size={16} />
                         </button>
-
                         <button
                             onClick={handleClone}
-                            className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
-                            title="Clone"
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            title="Clone Workflow"
                         >
-                            <GitBranch size={18} />
+                            <GitBranch size={16} />
                         </button>
                     </div>
 
-                    {/* File Ops Group */}
-                    <div className="flex items-center gap-1 border-l border-white/5 pl-3">
+                    {/* FILE GROUP - Import/Export */}
+                    <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/5">
                         <button
                             onClick={handleExport}
-                            className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
-                            title="Export JSON"
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            title="Export to JSON"
                         >
-                            <Download size={18} />
+                            <Download size={16} />
                         </button>
                         <button
                             onClick={() => fileInputRef.current?.click()}
-                            className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
-                            title="Import JSON"
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            title="Import from JSON"
                         >
-                            <Upload size={18} />
+                            <Upload size={16} />
+                        </button>
+                    </div>
+
+                    {/* SETTINGS GROUP - Configuration */}
+                    <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/5">
+                        <button
+                            onClick={() => setIsApiConfigOpen(true)}
+                            className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            title="API Configuration"
+                        >
+                            <Settings size={16} />
                         </button>
                     </div>
 
@@ -1127,18 +1485,81 @@ export const PreCrafterPanel: React.FC = () => {
 
             {/* Toolbar */}
             <div className="absolute top-16 left-4 right-4 z-10 flex justify-between pointer-events-none">
-                <div className="pointer-events-auto flex items-center bg-surface border border-white/10 rounded-md shadow-lg p-1">
-                    <Search size={14} className="ml-2 text-gray-500" />
-                    <input
-                        type="text"
-                        placeholder="Search node (Cmd+K)"
-                        className="bg-transparent border-none text-xs text-white placeholder-gray-600 focus:ring-0 w-32 ml-1"
-                    />
+                {/* Enhanced Search with Results */}
+                <div className="pointer-events-auto relative">
+                    <div className="flex items-center bg-surface border border-white/10 rounded-md shadow-lg p-1.5 gap-1">
+                        <Search size={14} className="text-gray-500 flex-shrink-0" />
+                        <input
+                            ref={searchInputRef}
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search nodes (Cmd+K)"
+                            className="bg-transparent border-none text-xs text-white placeholder-gray-600 focus:ring-0 focus:outline-none w-40"
+                        />
+                        {searchQuery && (
+                            <button
+                                onClick={() => setSearchQuery('')}
+                                className="text-gray-500 hover:text-white transition-colors"
+                                title="Clear search"
+                            >
+                                <RotateCcw size={12} />
+                            </button>
+                        )}
+                        {searchResults.length > 0 && (
+                            <div className="flex items-center gap-1 text-[10px] text-gray-400 border-l border-white/10 pl-2">
+                                <span>{currentSearchIndex + 1}/{searchResults.length}</span>
+                                <button
+                                    onClick={() => navigateSearchResults('prev')}
+                                    className="hover:text-white"
+                                    title="Previous (Shift+Enter)"
+                                >
+                                    ↑
+                                </button>
+                                <button
+                                    onClick={() => navigateSearchResults('next')}
+                                    className="hover:text-white"
+                                    title="Next (Enter)"
+                                >
+                                    ↓
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Search Results Dropdown */}
+                    {showSearchDropdown && searchResults.length > 0 && (
+                        <div className="absolute top-full left-0 mt-1 w-64 bg-[#1e1e1e] border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto z-50">
+                            {searchResults.map((nodeId, index) => {
+                                const node = nodes.find(n => n.id === nodeId);
+                                if (!node) return null;
+
+                                return (
+                                    <button
+                                        key={nodeId}
+                                        onClick={() => {
+                                            setSelectedNodeId(nodeId);
+                                            setCurrentSearchIndex(index);
+                                        }}
+                                        className={`w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors border-l-2 ${
+                                            index === currentSearchIndex ? 'border-purple-400 bg-white/5' : 'border-transparent'
+                                        }`}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-white font-medium truncate">{node.data.label}</span>
+                                            <span className="text-gray-500 text-[10px] ml-2 flex-shrink-0">{node.data.type}</span>
+                                        </div>
+                                        <div className="text-gray-600 text-[10px] truncate mt-0.5">{nodeId}</div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
                 <div className="pointer-events-auto flex gap-1 bg-surface border border-white/10 rounded-md shadow-lg p-1">
                     <button
                         className={`p-1 rounded transition-colors ${selectedNodes.length > 1 ? 'hover:bg-white/10 text-purple-400' : 'text-gray-600 cursor-not-allowed'}`}
-                        title="Group Selected Nodes"
+                        title={selectedNodes.length > 1 ? "Group selected nodes together" : "Select 2+ nodes to group"}
                         onClick={handleGroupNodes}
                         disabled={selectedNodes.length < 2}
                     >
@@ -1146,12 +1567,21 @@ export const PreCrafterPanel: React.FC = () => {
                     </button>
                     <button
                         className="p-1 hover:bg-white/10 rounded"
-                        title="Auto Layout"
+                        title="Auto-layout graph (arranges nodes automatically)"
                         onClick={() => onLayout('LR')}
                     >
                         <Layout size={14} className="text-gray-400" />
                     </button>
-                    <button className="p-1 hover:bg-white/10 rounded"><Maximize2 size={14} className="text-gray-400" /></button>
+                    <button
+                        className="p-1 hover:bg-white/10 rounded"
+                        title="Fit view to canvas (zoom to fit all nodes)"
+                        onClick={() => {
+                            // This would need ReactFlow's fitView function
+                            // For now it's just a placeholder
+                        }}
+                    >
+                        <Maximize2 size={14} className="text-gray-400" />
+                    </button>
                 </div>
             </div>
 
@@ -1169,20 +1599,71 @@ export const PreCrafterPanel: React.FC = () => {
                     <SelectionListener onChange={setSelectedNodes} />
                 </NodeGraph>
 
-                {/* Context Menu */}
+                {/* Enhanced Context Menu */}
                 {contextMenu && (
                     <div
-                        className="fixed z-50 bg-[#1e1e1e] border border-white/10 rounded-lg shadow-xl py-1 w-48 animate-in fade-in zoom-in-95 duration-100"
+                        className="fixed z-50 bg-[#1e1e1e] border border-white/10 rounded-lg shadow-xl py-1.5 w-56 animate-in fade-in zoom-in-95 duration-100"
                         style={{ top: contextMenu.top, left: contextMenu.left }}
                     >
+                        {/* Edit Node */}
                         <button
-                            className="w-full text-left px-3 py-2 text-red-400 hover:bg-white/5 text-xs flex items-center gap-2 transition-colors"
+                            className="w-full text-left px-3 py-2 text-gray-300 hover:bg-white/5 text-xs flex items-center gap-2 transition-colors"
+                            onClick={() => {
+                                setSelectedNodeId(contextMenu.id);
+                                setContextMenu(null);
+                            }}
+                        >
+                            <Settings size={14} />
+                            <span className="flex-1">Edit Node</span>
+                        </button>
+
+                        {/* Duplicate */}
+                        <button
+                            className="w-full text-left px-3 py-2 text-gray-300 hover:bg-white/5 text-xs flex items-center gap-2 transition-colors"
+                            onClick={() => handleDuplicateNode(contextMenu.id)}
+                        >
+                            <Copy size={14} />
+                            <span className="flex-1">Duplicate</span>
+                            <span className="text-gray-500 text-[10px]">⌘D</span>
+                        </button>
+
+                        {/* Add Node After */}
+                        <button
+                            className="w-full text-left px-3 py-2 text-gray-300 hover:bg-white/5 text-xs flex items-center gap-2 transition-colors"
+                            onClick={() => {
+                                confirmAddNode(contextMenu.id, '', 'New Node', 'LLM');
+                                setContextMenu(null);
+                            }}
+                        >
+                            <Plus size={14} />
+                            <span className="flex-1">Add Node After</span>
+                        </button>
+
+                        {/* Add Variant */}
+                        <button
+                            className="w-full text-left px-3 py-2 text-gray-300 hover:bg-white/5 text-xs flex items-center gap-2 transition-colors"
+                            onClick={() => {
+                                setSelectedNodeId(contextMenu.id);
+                                setIsMutationModalOpen(true);
+                                setContextMenu(null);
+                            }}
+                        >
+                            <Dna size={14} />
+                            <span className="flex-1">Add Variant</span>
+                        </button>
+
+                        {/* Divider */}
+                        <div className="h-px bg-white/10 my-1.5" />
+
+                        {/* Delete */}
+                        <button
+                            className="w-full text-left px-3 py-2 text-red-400 hover:bg-red-500/10 text-xs flex items-center gap-2 transition-colors"
                             onClick={() => handleDeleteNode(contextMenu.id)}
                         >
                             <Trash2 size={14} />
-                            Delete Node
+                            <span className="flex-1">Delete Node</span>
+                            <span className="text-red-500/50 text-[10px]">Del</span>
                         </button>
-                        {/* Add more options here later */}
                     </div>
                 )}
 
@@ -1300,10 +1781,14 @@ export const PreCrafterPanel: React.FC = () => {
 
                 <AgentPopup
                     isOpen={isAgentOpen}
-                    onClose={() => setIsAgentOpen(false)}
+                    onClose={() => {
+                        setIsAgentOpen(false);
+                        setAgentInitialMessage(''); // Clear initial message when closing
+                    }}
                     nodes={nodes}
                     edges={edges}
                     onApplyActions={handleApplyActions}
+                    initialMessage={agentInitialMessage}
                 />
 
                 {isHistoryOpen && (
@@ -1332,9 +1817,196 @@ export const PreCrafterPanel: React.FC = () => {
                     onConfirm={(workers) => {
                         // TODO: Use workers count for parallel execution if needed
                         console.log('Running with workers:', workers);
+                        setIsRunConfigOpen(false);
                         startExecution();
                     }}
                 />
+
+                <WorkflowVariablesModal
+                    isOpen={isWorkflowVariablesOpen}
+                    onClose={() => setIsWorkflowVariablesOpen(false)}
+                    onSave={(variables, applyWithAI) => {
+                        setWorkflowVariables(variables);
+                        addLog({
+                            nodeId: 'system',
+                            nodeLabel: 'System',
+                            status: 'success',
+                            message: `Variables configuradas: ${variables.map(v => v.name).join(', ')}`
+                        });
+
+                        // If applyWithAI is true, generate the initial message and open agent
+                        if (applyWithAI && variables.length > 0 && nodes.length > 0) {
+                            // Generate the AI prompt
+                            const variablesList = variables.map(v =>
+                                `- {{${v.name}}}: ${v.label}${v.description ? ` - ${v.description}` : ''}`
+                            ).join('\n');
+
+                            const aiPrompt = `🎯 CONFIGURACIÓN DE VARIABLES DEL WORKFLOW
+
+He definido las siguientes variables personalizadas para este workflow:
+
+${variablesList}
+
+📋 TU MISIÓN COMO MANUS:
+Actúa como un asistente inteligente y modifica los prompts de los nodos del workflow para incorporar estas variables de forma estratégica y quirúrgica.
+
+⚠️ REGLAS CRÍTICAS:
+1. NO agregues variables a TODOS los nodos - solo a los que realmente las necesiten según su propósito
+2. Mantén la función y estructura original de cada nodo intacta
+3. Usa la sintaxis {{nombre_variable}} para referenciar las variables
+4. Si un nodo tiene un propósito específico que no requiere estas variables, déjalo SIN MODIFICAR
+5. Sé preciso: cambia ÚNICAMENTE lo necesario para integrar las variables
+
+💡 CONTEXTO:
+- El workflow tiene ${nodes.length} nodos en total
+- Las variables representan información sobre leads/clientes que variará en cada ejecución
+- El objetivo es personalizar los prompts para que usen esta información dinámica
+
+🔧 ACCIÓN REQUERIDA:
+Analiza cada nodo del workflow, identifica cuáles se beneficiarían de usar estas variables, y modifica solo sus prompts (systemPrompt y/o userPrompt) para incorporarlas de forma natural y efectiva.`;
+
+
+                            setAgentInitialMessage(aiPrompt);
+
+                            // Open agent after a short delay
+                            setTimeout(() => {
+                                setIsAgentOpen(true);
+                                addLog({
+                                    nodeId: 'system',
+                                    nodeLabel: 'System',
+                                    status: 'info',
+                                    message: 'Abriendo AI Agent para adaptar los prompts de forma inteligente...'
+                                });
+                            }, 300);
+                        }
+                    }}
+                    initialVariables={workflowVariables}
+                    workflowVariables={workflowVariables}
+                    hasNodes={nodes.length > 0}
+                />
+
+                <WorkflowInputModal
+                    isOpen={isWorkflowInputOpen}
+                    onClose={() => setIsWorkflowInputOpen(false)}
+                    onSubmit={(values) => {
+                        addLog({
+                            nodeId: 'system',
+                            nodeLabel: 'System',
+                            status: 'info',
+                            message: `Ejecutando con variables: ${Object.keys(values).join(', ')}`
+                        });
+                        startExecutionWithVariables(values);
+                    }}
+                    variables={workflowVariables}
+                />
+
+                <DocumentationModal
+                    isOpen={isDocumentationOpen}
+                    onClose={() => setIsDocumentationOpen(false)}
+                    nodes={nodes}
+                    onSaveDocumentation={handleSaveDocumentation}
+                    onGenerateWithAI={handleGenerateDocumentationWithAI}
+                />
+
+                {/* Command Palette Modal */}
+                {isCommandPaletteOpen && (
+                    <>
+                        {/* Backdrop */}
+                        <div
+                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] animate-in fade-in duration-150"
+                            onClick={() => setIsCommandPaletteOpen(false)}
+                        />
+
+                        {/* Command Palette */}
+                        <div className="fixed top-[20%] left-1/2 -translate-x-1/2 w-full max-w-xl z-[101] animate-in fade-in zoom-in-95 duration-150">
+                            <div className="bg-[#1e1e1e] border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                                {/* Search Input */}
+                                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+                                    <Search size={18} className="text-gray-500 flex-shrink-0" />
+                                    <input
+                                        ref={commandInputRef}
+                                        type="text"
+                                        value={commandQuery}
+                                        onChange={(e) => setCommandQuery(e.target.value)}
+                                        placeholder="Type a command or search..."
+                                        className="flex-1 bg-transparent border-none text-sm text-white placeholder-gray-600 focus:ring-0 focus:outline-none"
+                                        autoFocus
+                                    />
+                                    <div className="flex items-center gap-1 text-[10px] text-gray-500">
+                                        <kbd className="px-1.5 py-0.5 bg-white/5 rounded border border-white/10">⌘</kbd>
+                                        <kbd className="px-1.5 py-0.5 bg-white/5 rounded border border-white/10">P</kbd>
+                                    </div>
+                                </div>
+
+                                {/* Commands List */}
+                                <div className="max-h-[400px] overflow-y-auto">
+                                    {filteredCommands.length === 0 ? (
+                                        <div className="px-4 py-8 text-center text-gray-500 text-sm">
+                                            No commands found
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {/* Group commands by category */}
+                                            {Array.from(new Set(filteredCommands.map(cmd => cmd.category))).map((category) => {
+                                                const categoryCommands = filteredCommands.filter(cmd => cmd.category === category);
+
+                                                return (
+                                                    <div key={category}>
+                                                        <div className="px-4 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider bg-white/5">
+                                                            {category}
+                                                        </div>
+                                                        {categoryCommands.map((command, index) => {
+                                                            const globalIndex = filteredCommands.indexOf(command);
+                                                            const Icon = command.icon;
+
+                                                            return (
+                                                                <button
+                                                                    key={command.id}
+                                                                    onClick={() => command.action()}
+                                                                    className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-all ${
+                                                                        globalIndex === selectedCommandIndex
+                                                                            ? 'bg-purple-500/20 text-white border-l-2 border-purple-400'
+                                                                            : 'text-gray-300 hover:bg-white/5 border-l-2 border-transparent'
+                                                                    }`}
+                                                                    onMouseEnter={() => setSelectedCommandIndex(globalIndex)}
+                                                                >
+                                                                    <Icon size={16} className="flex-shrink-0" />
+                                                                    <span className="flex-1">{command.label}</span>
+                                                                    {command.shortcut && (
+                                                                        <span className="text-[10px] text-gray-500">{command.shortcut}</span>
+                                                                    )}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                );
+                                            })}
+                                        </>
+                                    )}
+                                </div>
+
+                                {/* Footer with hints */}
+                                <div className="px-4 py-2 border-t border-white/10 flex items-center justify-between text-[10px] text-gray-500">
+                                    <div className="flex items-center gap-3">
+                                        <span className="flex items-center gap-1">
+                                            <kbd className="px-1 py-0.5 bg-white/5 rounded">↑↓</kbd>
+                                            Navigate
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <kbd className="px-1 py-0.5 bg-white/5 rounded">↵</kbd>
+                                            Execute
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <kbd className="px-1 py-0.5 bg-white/5 rounded">Esc</kbd>
+                                            Close
+                                        </span>
+                                    </div>
+                                    <span>{filteredCommands.length} commands</span>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
             {isChristmasMode && (

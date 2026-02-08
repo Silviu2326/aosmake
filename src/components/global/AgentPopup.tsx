@@ -21,9 +21,10 @@ interface AgentPopupProps {
     nodes: Node[];
     edges: Edge[];
     onApplyActions?: (actions: AgentAction[]) => void;
+    initialMessage?: string;
 }
 
-export const AgentPopup: React.FC<AgentPopupProps> = ({ isOpen, onClose, nodes, edges, onApplyActions }) => {
+export const AgentPopup: React.FC<AgentPopupProps> = ({ isOpen, onClose, nodes, edges, onApplyActions, initialMessage }) => {
     const [messages, setMessages] = useState<Message[]>([
         { id: '1', role: 'assistant', content: 'I am your Workflow Agent. I can analyze your graph structure. What do you need?', timestamp: Date.now() }
     ]);
@@ -34,12 +35,36 @@ export const AgentPopup: React.FC<AgentPopupProps> = ({ isOpen, onClose, nodes, 
     const [mode, setMode] = useState<'question' | 'action' | 'edit-node'>('question');
     const [pendingActions, setPendingActions] = useState<AgentAction[] | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const hasProcessedInitialMessage = useRef(false);
 
     useEffect(() => {
         if (isOpen && messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages, isOpen, pendingActions]);
+
+    // Process initial message when modal opens
+    useEffect(() => {
+        if (isOpen && initialMessage && !hasProcessedInitialMessage.current) {
+            hasProcessedInitialMessage.current = true;
+            // Set mode to action for automatic modifications
+            setMode('action');
+            // Send the message after a short delay to ensure UI is ready
+            setTimeout(() => {
+                setInputValue(initialMessage);
+                // Trigger send programmatically
+                setTimeout(() => {
+                    const sendButton = document.querySelector('[data-agent-send-btn]') as HTMLButtonElement;
+                    if (sendButton) sendButton.click();
+                }, 100);
+            }, 500);
+        }
+
+        // Reset the ref when modal closes
+        if (!isOpen) {
+            hasProcessedInitialMessage.current = false;
+        }
+    }, [isOpen, initialMessage]);
 
     const toggleNodeSelection = (id: string) => {
         setSelectedNodeIds(prev =>
@@ -393,6 +418,7 @@ IMPORTANT:
                             </button>
                             {/* Send Button */}
                             <button
+                                data-agent-send-btn
                                 onClick={handleSend}
                                 disabled={!inputValue.trim()}
                                 className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all ${getModeBtnColor(mode)}`}

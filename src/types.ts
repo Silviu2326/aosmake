@@ -214,6 +214,34 @@ export interface NodeVariant {
   outputMode?: 'structured' | 'free';
 }
 
+export interface NodeVersion {
+  id: string;
+  name: string;
+  description?: string;
+  timestamp: string;
+  // Complete node configuration snapshot
+  label: string;
+  type: string;
+  model?: string;
+  systemPrompt?: string;
+  userPrompt?: string;
+  temperature?: number;
+  recency?: 'month' | 'week' | 'day' | 'hour';
+  citations?: boolean;
+  schema?: string | object;
+  outputMode?: 'structured' | 'free';
+  json?: string;
+  csv?: string;
+  csvMappings?: any[];
+  filterCondition?: FilterCondition;
+  apiKey?: string;
+  statusFilter?: string;
+  limit?: number;
+  updateField?: string;
+  customField?: string;
+  markAsSent?: boolean;
+}
+
 export interface TestCase {
   id: string;
   name: string;
@@ -255,6 +283,8 @@ export interface NodeData {
   activeVariantId?: string; // The variant currently being edited
   selectedVariantId?: string; // The "winning" variant selected during execution
   outputMode?: 'structured' | 'free';
+  // Version Management
+  nodeVersions?: NodeVersion[];
   // Data nodes
   json?: string;
   csv?: string;

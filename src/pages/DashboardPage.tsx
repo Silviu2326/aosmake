@@ -31,6 +31,7 @@ import { NotificationProvider, useNotification } from '../components/dashboard/D
 import { StageConfigModal } from '../components/dashboard/StageConfigModal';
 import { CreateCampaignModal } from '../components/dashboard/CreateCampaignModal';
 import { CompScrapImportModal } from '../components/import/CompScrapImportModal';
+import { FieldConfigModal, FieldConfig, DataTransformRule } from '../components/dashboard/FieldConfigModal';
 
 const API_URL = 'https://backendaos-production.up.railway.app/api';
 
@@ -287,8 +288,11 @@ const DashboardContent: React.FC = () => {
   const [isStageConfigOpen, setIsStageConfigOpen] = useState(false);
   const [isCreateCampaignOpen, setIsCreateCampaignOpen] = useState(false);
   const [isCompScrapImportOpen, setIsCompScrapImportOpen] = useState(false);
+  const [isFieldConfigOpen, setIsFieldConfigOpen] = useState(false);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoadingCampaigns, setIsLoadingCampaigns] = useState(false);
+  const [fieldConfig, setFieldConfig] = useState<FieldConfig[]>([]);
+  const [transformRules, setTransformRules] = useState<DataTransformRule[]>([]);
 
   // Fetch campaigns from API
   const fetchCampaigns = useCallback(async () => {
@@ -310,6 +314,45 @@ const DashboardContent: React.FC = () => {
   useEffect(() => {
     fetchCampaigns();
   }, [fetchCampaigns]);
+
+  // Load field configuration from localStorage on mount
+  useEffect(() => {
+    const savedConfig = localStorage.getItem('dashboardFieldConfig');
+    const savedRules = localStorage.getItem('dashboardTransformRules');
+
+    if (savedConfig) {
+      try {
+        setFieldConfig(JSON.parse(savedConfig));
+      } catch (error) {
+        console.error('Error loading field config:', error);
+      }
+    }
+
+    if (savedRules) {
+      try {
+        setTransformRules(JSON.parse(savedRules));
+      } catch (error) {
+        console.error('Error loading transform rules:', error);
+      }
+    }
+  }, []);
+
+  // Save field configuration and transform rules
+  const handleSaveFieldConfig = (fields: FieldConfig[], rules?: DataTransformRule[]) => {
+    setFieldConfig(fields);
+    localStorage.setItem('dashboardFieldConfig', JSON.stringify(fields));
+
+    if (rules) {
+      setTransformRules(rules);
+      localStorage.setItem('dashboardTransformRules', JSON.stringify(rules));
+    }
+
+    const rulesCount = rules?.filter(r => r.enabled).length || 0;
+    success(
+      'Configuración guardada',
+      `Campos actualizados${rulesCount > 0 ? ` • ${rulesCount} regla(s) activa(s)` : ''}`
+    );
+  };
 
   // Reset filters when changing tabs
   const handleTabChange = (tabId: typeof activeTab) => {
@@ -622,7 +665,7 @@ const DashboardContent: React.FC = () => {
             Nueva Campaña
           </button>
 
-          <button 
+          <button
             onClick={handleExport}
             className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
           >
@@ -630,7 +673,15 @@ const DashboardContent: React.FC = () => {
             Exportar
           </button>
 
-          <button 
+          <button
+            onClick={() => setIsFieldConfigOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
+          >
+            <Settings size={18} />
+            Configurar Campos
+          </button>
+
+          <button
             onClick={() => setIsStageConfigOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
           >
@@ -987,6 +1038,15 @@ const DashboardContent: React.FC = () => {
           fetchMetrics();
           success('Importación completada', 'Los datos de CompScrap han sido importados correctamente');
         }}
+      />
+
+      {/* Field Configuration Modal */}
+      <FieldConfigModal
+        isOpen={isFieldConfigOpen}
+        onClose={() => setIsFieldConfigOpen(false)}
+        onSave={handleSaveFieldConfig}
+        initialFields={fieldConfig}
+        initialTransformRules={transformRules}
       />
     </div>
   );

@@ -8,7 +8,8 @@ import {
     FlaskConical,
     Settings,
     Menu,
-    BarChart3
+    BarChart3,
+    TrendingUp
 } from 'lucide-react';
 import { useAppStore } from '../../stores/useAppStore';
 import { clsx } from 'clsx';
@@ -18,6 +19,7 @@ export function Sidebar() {
 
     const navItems = [
         { label: 'Dashboard', path: '/dashboard', icon: BarChart3 },
+        { label: 'Estadísticas', path: '/statistics', icon: TrendingUp },
         { label: 'Leads', path: '/leads', icon: Users },
         { label: 'Import', path: '/import', icon: Upload },
         { label: 'Runs', path: '/runs', icon: Play },
