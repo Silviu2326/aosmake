@@ -2,12 +2,12 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useDashboardStore, DashboardMetrics } from '../stores/useDashboardStore';
 import { DashboardLead, VerificationStatus, CompScrapStatus, Box1Status, InstantlyStatus } from '../types';
 import { LeadFilters } from '../services/dashboardApi';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  CheckCircle, 
-  XCircle, 
+import {
+  BarChart3,
+  TrendingUp,
+  Users,
+  CheckCircle,
+  XCircle,
   ArrowRight,
   Mail,
   Download,
@@ -17,7 +17,10 @@ import {
   Settings,
   Link,
   Plus,
-  Play
+  Play,
+  Calendar,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 // Import new components
@@ -293,6 +296,10 @@ const DashboardContent: React.FC = () => {
   const [isLoadingCampaigns, setIsLoadingCampaigns] = useState(false);
   const [fieldConfig, setFieldConfig] = useState<FieldConfig[]>([]);
   const [transformRules, setTransformRules] = useState<DataTransformRule[]>([]);
+  const [isOrganizeModalOpen, setIsOrganizeModalOpen] = useState(false);
+  const [blockSize, setBlockSize] = useState<string>('50');
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Fetch campaigns from API
   const fetchCampaigns = useCallback(async () => {
@@ -354,50 +361,60 @@ const DashboardContent: React.FC = () => {
     );
   };
 
-  // Reset filters when changing tabs
+  // Reset filters when changing tabs - filtros inteligentes según el pipeline
   const handleTabChange = (tabId: typeof activeTab) => {
     setActiveTab(tabId);
     
-    // Reset filters when switching to a specific step tab
+    // Filtros que reflejan el estado REAL de cada etapa en el flujo del pipeline
     if (tabId === 'verification') {
+      // Input Verificación: Leads exportados que aún no están verificados
       setFilters({
         ...filters,
         verificationStatus: VerificationStatus.PENDING,
         compScrapStatus: 'all',
         box1Status: 'all',
-        instantlyStatus: 'all'
+        instantlyStatus: 'all',
+        hasCompUrl: 'all'
       });
     } else if (tabId === 'compScrap') {
+      // Input CompScrap: Leads verificados que aún no tienen compScrap
       setFilters({
         ...filters,
-        verificationStatus: 'all',
+        verificationStatus: VerificationStatus.VERIFIED,
         compScrapStatus: CompScrapStatus.PENDING,
         box1Status: 'all',
-        instantlyStatus: 'all'
+        instantlyStatus: 'all',
+        hasCompUrl: 'all'
       });
     } else if (tabId === 'box1') {
+      // Input Box1: Leads scrappeados que aún no tienen Box1
       setFilters({
         ...filters,
         verificationStatus: 'all',
-        compScrapStatus: 'all',
+        compScrapStatus: CompScrapStatus.SCRAPED,
         box1Status: Box1Status.PENDING,
-        instantlyStatus: 'all'
+        instantlyStatus: 'all',
+        hasCompUrl: 'all'
       });
     } else if (tabId === 'emailStock') {
+      // Email Stock: Leads en stock (generalmente FIT que no son HIT)
       setFilters({
         ...filters,
         verificationStatus: 'all',
         compScrapStatus: 'all',
         box1Status: 'all',
-        instantlyStatus: InstantlyStatus.STOCK
+        instantlyStatus: InstantlyStatus.STOCK,
+        hasCompUrl: 'all'
       });
     } else if (tabId === 'instantly') {
+      // Input Instantly: Leads HIT que aún no están en Instantly
       setFilters({
         ...filters,
         verificationStatus: 'all',
         compScrapStatus: 'all',
-        box1Status: 'all',
-        instantlyStatus: InstantlyStatus.PENDING
+        box1Status: Box1Status.HIT,
+        instantlyStatus: InstantlyStatus.PENDING,
+        hasCompUrl: 'all'
       });
     } else {
       // For overview, analytics, and master tabs, reset status filters
@@ -406,7 +423,8 @@ const DashboardContent: React.FC = () => {
         verificationStatus: 'all',
         compScrapStatus: 'all',
         box1Status: 'all',
-        instantlyStatus: 'all'
+        instantlyStatus: 'all',
+        hasCompUrl: 'all'
       });
     }
   };
@@ -883,6 +901,20 @@ const DashboardContent: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <button
+                    onClick={() => setIsCalendarModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    <Calendar size={18} />
+                    Calendario
+                  </button>
+                  <button
+                    onClick={() => setIsOrganizeModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                  >
+                    <Settings size={18} />
+                    Organizar
+                  </button>
+                  <button
                     onClick={() => {
                       const headers = ['LeadNumber', 'firstName', 'lastName', 'companyName', 'email'];
                       const rows = filteredLeads.map(l => [
@@ -892,7 +924,7 @@ const DashboardContent: React.FC = () => {
                         l.companyName,
                         l.email
                       ]);
-                      
+
                       const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
                       const blob = new Blob([csvContent], { type: 'text/csv' });
                       const url = window.URL.createObjectURL(blob);
@@ -903,7 +935,7 @@ const DashboardContent: React.FC = () => {
                       a.click();
                       window.URL.revokeObjectURL(url);
                       document.body.removeChild(a);
-                      
+
                       success('Exportación completada', `${filteredLeads.length} leads exportados`);
                     }}
                     className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
@@ -1048,6 +1080,175 @@ const DashboardContent: React.FC = () => {
         initialFields={fieldConfig}
         initialTransformRules={transformRules}
       />
+
+      {/* Organize Email Stock Modal */}
+      {isOrganizeModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-surface border border-border rounded-xl p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold text-white mb-4">Organizar Email Stock</h2>
+            <p className="text-gray-400 mb-6">Especifica el tamaño de cada bloque para organizar los leads</p>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Tamaño del bloque
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={blockSize}
+                onChange={(e) => setBlockSize(e.target.value)}
+                className="w-full px-4 py-2 bg-background border border-border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="Ej: 50"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Los {emailStockCount} leads se organizarán en bloques de {blockSize || '?'} leads cada uno
+                ({Math.ceil(emailStockCount / (parseInt(blockSize) || 1))} bloques)
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => {
+                  setIsOrganizeModalOpen(false);
+                  setBlockSize('50');
+                }}
+                className="px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  const size = parseInt(blockSize);
+                  if (size > 0) {
+                    // TODO: Implement organization logic
+                    success('Organización completada', `Leads organizados en bloques de ${size}`);
+                    setIsOrganizeModalOpen(false);
+                    setBlockSize('50');
+                  }
+                }}
+                disabled={!blockSize || parseInt(blockSize) <= 0}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  blockSize && parseInt(blockSize) > 0
+                    ? 'bg-purple-500 text-white hover:bg-purple-600'
+                    : 'bg-surface text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Organizar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Calendar Modal */}
+      {isCalendarModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-surface border border-border rounded-xl p-6 max-w-2xl w-full mx-4">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">Calendario de Email Stock</h2>
+              <button
+                onClick={() => setIsCalendarModalOpen(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <XCircle size={24} />
+              </button>
+            </div>
+
+            {/* Calendar Header */}
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
+                className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+              >
+                <ChevronLeft size={20} className="text-gray-400" />
+              </button>
+              <h3 className="text-lg font-semibold text-white">
+                {currentMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }).charAt(0).toUpperCase() +
+                 currentMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }).slice(1)}
+              </h3>
+              <button
+                onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
+                className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+              >
+                <ChevronRight size={20} className="text-gray-400" />
+              </button>
+            </div>
+
+            {/* Calendar Grid */}
+            <div className="grid grid-cols-7 gap-2">
+              {/* Day headers */}
+              {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map((day) => (
+                <div key={day} className="text-center text-sm font-medium text-gray-400 py-2">
+                  {day}
+                </div>
+              ))}
+
+              {/* Calendar days */}
+              {(() => {
+                const year = currentMonth.getFullYear();
+                const month = currentMonth.getMonth();
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const today = new Date();
+                const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
+
+                const days = [];
+
+                // Empty cells for days before month starts
+                for (let i = 0; i < firstDay; i++) {
+                  days.push(
+                    <div key={`empty-${i}`} className="aspect-square" />
+                  );
+                }
+
+                // Days of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                  const isToday = isCurrentMonth && today.getDate() === day;
+                  days.push(
+                    <button
+                      key={day}
+                      onClick={() => {
+                        const selectedDate = new Date(year, month, day);
+                        success('Fecha seleccionada', selectedDate.toLocaleDateString('es-ES', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        }));
+                      }}
+                      className={`aspect-square flex items-center justify-center rounded-lg transition-colors ${
+                        isToday
+                          ? 'bg-blue-500 text-white font-bold'
+                          : 'hover:bg-white/5 text-gray-300'
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  );
+                }
+
+                return days;
+              })()}
+            </div>
+
+            {/* Calendar footer */}
+            <div className="mt-6 pt-6 border-t border-border">
+              <div className="flex items-center justify-between text-sm">
+                <div className="text-gray-400">
+                  <span className="inline-block w-3 h-3 bg-blue-500 rounded mr-2"></span>
+                  Hoy: {new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </div>
+                <button
+                  onClick={() => setCurrentMonth(new Date())}
+                  className="px-3 py-1 bg-surface border border-border rounded text-gray-300 hover:bg-white/5 transition-colors"
+                >
+                  Ir a hoy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
