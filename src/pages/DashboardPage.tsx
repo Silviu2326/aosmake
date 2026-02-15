@@ -13,14 +13,14 @@ import {
   Download,
   Upload,
   ChevronDown,
-  FileSpreadsheet,
   Settings,
   Link,
   Plus,
   Play,
   Calendar,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Bot
 } from 'lucide-react';
 
 // Import new components
@@ -35,6 +35,13 @@ import { StageConfigModal } from '../components/dashboard/StageConfigModal';
 import { CreateCampaignModal } from '../components/dashboard/CreateCampaignModal';
 import { CompScrapImportModal } from '../components/import/CompScrapImportModal';
 import { FieldConfigModal, FieldConfig, DataTransformRule } from '../components/dashboard/FieldConfigModal';
+import { AutomationManagerModal } from '../components/dashboard/AutomationManagerModal';
+import { 
+  getFieldConfig, 
+  saveFieldConfig as saveFieldConfigApi, 
+  getTransformRules, 
+  saveTransformRules as saveTransformRulesApi 
+} from '../services/settingsApi';
 
 const API_URL = 'https://backendaos-production.up.railway.app/api';
 
@@ -292,6 +299,7 @@ const DashboardContent: React.FC = () => {
   const [isCreateCampaignOpen, setIsCreateCampaignOpen] = useState(false);
   const [isCompScrapImportOpen, setIsCompScrapImportOpen] = useState(false);
   const [isFieldConfigOpen, setIsFieldConfigOpen] = useState(false);
+  const [isAutomationManagerOpen, setIsAutomationManagerOpen] = useState(false);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoadingCampaigns, setIsLoadingCampaigns] = useState(false);
   const [fieldConfig, setFieldConfig] = useState<FieldConfig[]>([]);
@@ -322,43 +330,111 @@ const DashboardContent: React.FC = () => {
     fetchCampaigns();
   }, [fetchCampaigns]);
 
-  // Load field configuration from localStorage on mount
+  // Load field configuration from server on mount, with localStorage fallback
   useEffect(() => {
-    const savedConfig = localStorage.getItem('dashboardFieldConfig');
-    const savedRules = localStorage.getItem('dashboardTransformRules');
-
-    if (savedConfig) {
+    const loadSettings = async () => {
       try {
-        setFieldConfig(JSON.parse(savedConfig));
-      } catch (error) {
-        console.error('Error loading field config:', error);
-      }
-    }
+        // Try to load from server first
+        const [serverFields, serverRules] = await Promise.all([
+          getFieldConfig(),
+          getTransformRules()
+        ]);
 
-    if (savedRules) {
-      try {
-        setTransformRules(JSON.parse(savedRules));
+        if (serverFields.length > 0) {
+          setFieldConfig(serverFields);
+        } else {
+          // Fallback to localStorage if server is empty
+          const savedConfig = localStorage.getItem('dashboardFieldConfig');
+          if (savedConfig) {
+            const parsed = JSON.parse(savedConfig);
+            setFieldConfig(parsed);
+            // Sync to server for future use
+            await saveFieldConfigApi(parsed).catch(err => 
+              console.error('Failed to sync field config to server:', err)
+            );
+          }
+        }
+
+        if (serverRules.length > 0) {
+          setTransformRules(serverRules);
+        } else {
+          const savedRules = localStorage.getItem('dashboardTransformRules');
+          if (savedRules) {
+            const parsed = JSON.parse(savedRules);
+            setTransformRules(parsed);
+            // Sync to server for future use
+            await saveTransformRulesApi(parsed).catch(err => 
+              console.error('Failed to sync transform rules to server:', err)
+            );
+          }
+        }
       } catch (error) {
-        console.error('Error loading transform rules:', error);
+        console.error('Error loading settings from server:', error);
+        // Fallback to localStorage on any error
+        const savedConfig = localStorage.getItem('dashboardFieldConfig');
+        const savedRules = localStorage.getItem('dashboardTransformRules');
+        if (savedConfig) {
+          try {
+            setFieldConfig(JSON.parse(savedConfig));
+          } catch (e) {
+            console.error('Error parsing localStorage config:', e);
+          }
+        }
+        if (savedRules) {
+          try {
+            setTransformRules(JSON.parse(savedRules));
+          } catch (e) {
+            console.error('Error parsing localStorage rules:', e);
+          }
+        }
       }
-    }
+    };
+
+    loadSettings();
   }, []);
 
-  // Save field configuration and transform rules
-  const handleSaveFieldConfig = (fields: FieldConfig[], rules?: DataTransformRule[]) => {
-    setFieldConfig(fields);
-    localStorage.setItem('dashboardFieldConfig', JSON.stringify(fields));
+  // Save field configuration and transform rules to server (and localStorage as backup)
+  const handleSaveFieldConfig = async (fields: FieldConfig[], rules?: DataTransformRule[]) => {
+    try {
+      // Save to server
+      await saveFieldConfigApi(fields);
+      if (rules) {
+        await saveTransformRulesApi(rules);
+      }
 
-    if (rules) {
-      setTransformRules(rules);
-      localStorage.setItem('dashboardTransformRules', JSON.stringify(rules));
+      // Update local state
+      setFieldConfig(fields);
+      if (rules) {
+        setTransformRules(rules);
+      }
+
+      // Also save to localStorage as backup/caching
+      localStorage.setItem('dashboardFieldConfig', JSON.stringify(fields));
+      if (rules) {
+        localStorage.setItem('dashboardTransformRules', JSON.stringify(rules));
+      }
+
+      const rulesCount = rules?.filter(r => r.enabled).length || 0;
+      success(
+        'Configuración guardada',
+        `Campos actualizados${rulesCount > 0 ? ` • ${rulesCount} regla(s) activa(s)` : ''}`
+      );
+    } catch (error) {
+      console.error('Error saving field config to server:', error);
+      
+      // Still save to localStorage so user doesn't lose their settings
+      setFieldConfig(fields);
+      localStorage.setItem('dashboardFieldConfig', JSON.stringify(fields));
+      if (rules) {
+        setTransformRules(rules);
+        localStorage.setItem('dashboardTransformRules', JSON.stringify(rules));
+      }
+      
+      success(
+        'Configuración guardada (local)',
+        'No se pudo sincronizar con el servidor. Los cambios se guardaron localmente.'
+      );
     }
-
-    const rulesCount = rules?.filter(r => r.enabled).length || 0;
-    success(
-      'Configuración guardada',
-      `Campos actualizados${rulesCount > 0 ? ` • ${rulesCount} regla(s) activa(s)` : ''}`
-    );
   };
 
   // Reset filters when changing tabs - filtros inteligentes según el pipeline
@@ -535,16 +611,20 @@ const DashboardContent: React.FC = () => {
   const emailStockCount = filteredLeads.filter(l => l.stepStatus?.instantly === 'stock').length;
   const instantlyCount = filteredLeads.filter(l => l.stepStatus?.box1 === 'hit' && l.stepStatus?.instantly === 'pending').length;
 
-  const tabs = [
-    { id: 'overview', label: 'Resumen', icon: <BarChart3 size={18} />, count: 0 },
-    { id: 'analytics', label: 'Análisis', icon: <TrendingUp size={18} />, count: 0 },
-    { id: 'master', label: 'Tabla Master', icon: <Users size={18} />, count: filteredLeads.length },
-    { id: 'verification', label: 'Input Verificación', icon: <CheckCircle size={18} />, count: verificationCount },
-    { id: 'compScrap', label: 'Input CompScrap', icon: <BarChart3 size={18} />, count: compScrapCount },
-    { id: 'box1', label: 'Input Box1', icon: <TrendingUp size={18} />, count: box1Count },
-    { id: 'emailStock', label: 'Email Stock', icon: <Mail size={18} />, count: emailStockCount },
-    { id: 'instantly', label: 'Input Instantly', icon: <ArrowRight size={18} />, count: instantlyCount }
-  ];
+  // Tabs organizados en grupos
+  const viewTabs = [
+    { id: 'overview', label: 'Resumen', icon: <BarChart3 size={16} />, count: 0, color: 'gray' },
+    { id: 'analytics', label: 'Análisis', icon: <TrendingUp size={16} />, count: 0, color: 'gray' },
+  ] as const;
+
+  const pipelineTabs = [
+    { id: 'master', label: 'Tabla Master', icon: <Users size={16} />, count: filteredLeads.length, color: 'slate' },
+    { id: 'verification', label: 'Verificación', icon: <CheckCircle size={16} />, count: verificationCount, color: 'green' },
+    { id: 'compScrap', label: 'CompScrap', icon: <BarChart3 size={16} />, count: compScrapCount, color: 'blue' },
+    { id: 'box1', label: 'Box1', icon: <TrendingUp size={16} />, count: box1Count, color: 'purple' },
+    { id: 'emailStock', label: 'Email Stock', icon: <Mail size={16} />, count: emailStockCount, color: 'cyan' },
+    { id: 'instantly', label: 'Instantly', icon: <ArrowRight size={16} />, count: instantlyCount, color: 'orange' }
+  ] as const;
 
   const handleExport = () => {
     setIsExportOpen(true);
@@ -635,103 +715,219 @@ const DashboardContent: React.FC = () => {
         </div>
       )}
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Panel de Control del Pipeline</h1>
-          <p className="text-gray-400 mt-1">Monitorea tu pipeline de procesamiento de leads</p>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          {/* Campaign Selector */}
-          <div className="relative">
-            <button
-              onClick={() => setIsCampaignOpen(!isCampaignOpen)}
-              className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
-            >
-              <Users size={18} />
-              {selectedCampaign?.name || 'Seleccionar Campaña'}
-              <ChevronDown size={16} className={`transition-transform ${isCampaignOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {isCampaignOpen && (
-              <div className="absolute right-0 top-full mt-2 w-64 bg-surface border border-border rounded-lg shadow-xl z-50">
-                {campaigns.map(campaign => (
-                  <button
-                    key={campaign.id}
-                    onClick={() => {
-                      setSelectedCampaign(campaign);
-                      setIsCampaignOpen(false);
-                    }}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/5 transition-colors first:rounded-t-lg last:rounded-b-lg ${
-                      selectedCampaign?.id === campaign.id ? 'bg-accent/20 text-accent' : 'text-gray-300'
-                    }`}
-                  >
-                    <span className="text-sm font-medium">{campaign.name}</span>
-                    <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded-full">
-                      {campaign.leadCount}
-                    </span>
-                  </button>
-                ))}
+      <div className="mb-6 space-y-4">
+        {/* Header Principal Mejorado */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-4 bg-gradient-to-r from-surface via-surface to-surface/80 border border-border/50 rounded-2xl">
+          {/* Izquierda: Icono + Título + Stats */}
+          <div className="flex items-start gap-4">
+            {/* Icono Grande con fondo */}
+            <div className="hidden sm:flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-purple-500/20 border border-accent/20">
+              <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                className="w-7 h-7 text-accent"
+                stroke="currentColor" 
+                strokeWidth="1.5"
+              >
+                <path d="M3 4h18l-3 6H6l-3-6z" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M6 10l-2 6h16l-2-6" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M9 16l-1.5 4h9l-1.5-4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            
+            {/* Título y subtítulo */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 flex-wrap">
+                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
+                  Pipeline
+                </h1>
+                {/* Badge de estado */}
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  Activo
+                </span>
               </div>
-            )}
+              <p className="text-gray-400 text-sm mt-1">
+                Gestión y seguimiento de leads en tiempo real
+              </p>
+              
+              {/* Stats rápidas */}
+              <div className="flex items-center gap-4 mt-3">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-lg font-semibold text-white">{formatNumber(metrics.totalExport)}</span>
+                  <span className="text-xs text-gray-500">Total Leads</span>
+                </div>
+                <div className="w-px h-4 bg-border/50" />
+                <div className="flex items-center gap-1.5">
+                  <span className="text-lg font-semibold text-green-400">{formatPercent(metrics.conversionRatio)}</span>
+                  <span className="text-xs text-gray-500">Conversión</span>
+                </div>
+                <div className="w-px h-4 bg-border/50 hidden sm:block" />
+                <div className="hidden sm:flex items-center gap-1.5">
+                  <span className="text-lg font-semibold text-accent">{formatNumber(metrics.estimatedFitHit)}</span>
+                  <span className="text-xs text-gray-500">Est. FIT&HIT</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Create Campaign Button */}
-          <button
-            onClick={() => setIsCreateCampaignOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-          >
-            <Plus size={18} />
-            Nueva Campaña
-          </button>
+          {/* Derecha: Campaña activa */}
+          {selectedCampaign && (
+            <div className="flex items-center gap-3 px-4 py-3 bg-background/50 rounded-xl border border-border/50">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                <Users size={20} className="text-accent" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">Campaña Activa</p>
+                <p className="text-sm font-medium text-white truncate max-w-[200px]">{selectedCampaign.name}</p>
+              </div>
+              <span className="ml-2 px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full">
+                {selectedCampaign.leadCount}
+              </span>
+            </div>
+          )}
+        </div>
+        
+        {/* Toolbar organizada con grupos */}
+        <div className="flex flex-wrap items-center gap-3 p-2 bg-surface/50 border border-border/50 rounded-xl">
+          
+          {/* Grupo: Campaña */}
+          <div className="flex items-center gap-1 bg-background rounded-lg p-1 border border-border/50">
+            <div className="relative">
+              <button
+                onClick={() => setIsCampaignOpen(!isCampaignOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-gray-300 hover:bg-white/5 transition-colors"
+              >
+                <Users size={16} className="text-accent" />
+                <span className="max-w-[120px] truncate">{selectedCampaign?.name || 'Seleccionar Campaña'}</span>
+                <ChevronDown size={14} className={`transition-transform ${isCampaignOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {isCampaignOpen && (
+                <div className="absolute left-0 top-full mt-2 w-64 bg-surface border border-border rounded-lg shadow-xl z-50">
+                  {campaigns.map(campaign => (
+                    <button
+                      key={campaign.id}
+                      onClick={() => {
+                        setSelectedCampaign(campaign);
+                        setIsCampaignOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/5 transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                        selectedCampaign?.id === campaign.id ? 'bg-accent/20 text-accent' : 'text-gray-300'
+                      }`}
+                    >
+                      <span className="text-sm font-medium">{campaign.name}</span>
+                      <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded-full">
+                        {campaign.leadCount}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="w-px h-5 bg-border/50" />
+            <button
+              onClick={() => setIsCreateCampaignOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-green-400 hover:text-green-300 hover:bg-green-500/10 rounded-md transition-colors"
+              title="Nueva Campaña"
+            >
+              <Plus size={16} />
+              <span className="hidden sm:inline">Nueva</span>
+            </button>
+          </div>
 
-          <button
-            onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
-          >
-            <FileSpreadsheet size={18} />
-            Exportar
-          </button>
+          {/* Separador vertical en desktop */}
+          <div className="hidden md:block w-px h-8 bg-border/50" />
 
-          <button
-            onClick={() => setIsFieldConfigOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
-          >
-            <Settings size={18} />
-            Configurar Campos
-          </button>
+          {/* Grupo: Configuración */}
+          <div className="flex items-center gap-1 bg-background rounded-lg p-1 border border-border/50">
+            <button
+              onClick={() => setIsFieldConfigOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+              title="Configurar Campos"
+            >
+              <Settings size={16} />
+              <span className="hidden lg:inline">Campos</span>
+            </button>
+            <div className="w-px h-5 bg-border/50" />
+            <button
+              onClick={() => setIsStageConfigOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+              title="Configurar Etapas"
+            >
+              <Link size={16} />
+              <span className="hidden lg:inline">Etapas</span>
+            </button>
+          </div>
 
+          {/* Botón destacado: Automatización */}
           <button
-            onClick={() => setIsStageConfigOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
+            onClick={() => setIsAutomationManagerOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 ml-auto bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors shadow-lg shadow-accent/20"
           >
-            <Link size={18} />
-            Configurar Etapas
+            <Bot size={18} />
+            <span className="hidden sm:inline">Gestionar Automatización</span>
+            <span className="sm:hidden">Automatizar</span>
           </button>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => handleTabChange(tab.id as typeof activeTab)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
-              activeTab === tab.id 
-                ? 'bg-accent text-white' 
-                : 'bg-surface text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            {tab.icon}
-            {tab.label}
-            {tab.count > 0 && (
-              <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${
-                activeTab === tab.id ? 'bg-white/20 text-white' : 'bg-accent/20 text-accent'
-              }`}>
-                {tab.count}
-              </span>
-            )}
-          </button>
-        ))}
+      {/* Tabs - Organizados en grupos */}
+      <div className="flex flex-wrap items-center gap-4 mb-6 overflow-x-auto pb-2">
+        
+        {/* Grupo: Visualización */}
+        <div className="flex items-center gap-1 p-1 bg-surface/50 border border-border/50 rounded-xl">
+          {viewTabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => handleTabChange(tab.id as typeof activeTab)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all whitespace-nowrap ${
+                activeTab === tab.id 
+                  ? 'bg-accent text-white shadow-sm' 
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Separador */}
+        <div className="hidden sm:block w-px h-8 bg-border/50" />
+
+        {/* Grupo: Pipeline */}
+        <div className="flex items-center gap-1 p-1 bg-surface/50 border border-border/50 rounded-xl">
+          {pipelineTabs.map(tab => {
+            const colorClasses = {
+              slate: activeTab === tab.id ? 'bg-slate-500 text-white' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-500/10',
+              green: activeTab === tab.id ? 'bg-green-500 text-white' : 'text-green-400 hover:text-green-300 hover:bg-green-500/10',
+              blue: activeTab === tab.id ? 'bg-blue-500 text-white' : 'text-blue-400 hover:text-blue-300 hover:bg-blue-500/10',
+              purple: activeTab === tab.id ? 'bg-purple-500 text-white' : 'text-purple-400 hover:text-purple-300 hover:bg-purple-500/10',
+              cyan: activeTab === tab.id ? 'bg-cyan-500 text-white' : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10',
+              orange: activeTab === tab.id ? 'bg-orange-500 text-white' : 'text-orange-400 hover:text-orange-300 hover:bg-orange-500/10',
+              gray: activeTab === tab.id ? 'bg-gray-500 text-white' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-500/10'
+            }[tab.color];
+
+            return (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id as typeof activeTab)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all whitespace-nowrap ${colorClasses}`}
+              >
+                {tab.icon}
+                <span className="hidden md:inline">{tab.label}</span>
+                <span className="md:hidden">{tab.label.split(' ')[0]}</span>
+                {tab.count > 0 && (
+                  <span className={`ml-0.5 px-1.5 py-0 rounded-full text-xs font-medium ${
+                    activeTab === tab.id ? 'bg-white/25 text-white' : 'bg-current/20'
+                  }`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Content */}
@@ -1079,6 +1275,12 @@ const DashboardContent: React.FC = () => {
         onSave={handleSaveFieldConfig}
         initialFields={fieldConfig}
         initialTransformRules={transformRules}
+      />
+
+      {/* Automation Manager Modal */}
+      <AutomationManagerModal
+        isOpen={isAutomationManagerOpen}
+        onClose={() => setIsAutomationManagerOpen(false)}
       />
 
       {/* Organize Email Stock Modal */}

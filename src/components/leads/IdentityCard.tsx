@@ -1,13 +1,28 @@
 import React from 'react';
-import { Lead } from '../../stores/useAppStore';
+import { Lead, FieldConfig } from '../../stores/useAppStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Mail, Linkedin, Phone, MapPin, Globe } from 'lucide-react';
 
 interface IdentityCardProps {
     lead: Lead;
+    visibleFields?: FieldConfig[];
 }
 
-export function IdentityCard({ lead }: IdentityCardProps) {
+export function IdentityCard({ lead, visibleFields }: IdentityCardProps) {
+    // Determine if a field is visible
+    const isFieldVisible = (fieldId: string) => {
+        if (!visibleFields) return true;
+        const field = visibleFields.find(f => f.id === fieldId);
+        return field?.visible ?? true;
+    };
+
+    // Check if any identity fields are visible
+    const hasVisibleFields = [
+        'email', 'person_linkedin_url', 'phone', 'person_location', 'person_title', 'source'
+    ].some(id => isFieldVisible(id));
+
+    if (!hasVisibleFields) return null;
+
     return (
         <Card>
             <CardHeader>
@@ -15,19 +30,21 @@ export function IdentityCard({ lead }: IdentityCardProps) {
             </CardHeader>
             <CardContent className="space-y-4">
 
-                {/* Email - siempre visible */}
-                <div className="flex items-start gap-3">
-                    <Mail className="w-4 h-4 text-gray-500 mt-1" />
-                    <div className="flex-1">
-                        <div className="text-sm font-medium text-gray-300">Email</div>
-                        <a href={`mailto:${lead.email}`} className="text-sm text-accent hover:underline block break-all">
-                            {lead.email}
-                        </a>
+                {/* Email */}
+                {isFieldVisible('email') && (
+                    <div className="flex items-start gap-3">
+                        <Mail className="w-4 h-4 text-gray-500 mt-1" />
+                        <div className="flex-1">
+                            <div className="text-sm font-medium text-gray-300">Email</div>
+                            <a href={`mailto:${lead.email}`} className="text-sm text-accent hover:underline block break-all">
+                                {lead.email}
+                            </a>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* LinkedIn - solo si existe */}
-                {lead.person_linkedin_url && (
+                {isFieldVisible('person_linkedin_url') && lead.person_linkedin_url && (
                     <div className="flex items-start gap-3">
                         <Linkedin className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -40,7 +57,7 @@ export function IdentityCard({ lead }: IdentityCardProps) {
                 )}
 
                 {/* Phone - solo si existe */}
-                {lead.phone && (
+                {isFieldVisible('phone') && lead.phone && (
                     <div className="flex items-start gap-3">
                         <Phone className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -51,7 +68,7 @@ export function IdentityCard({ lead }: IdentityCardProps) {
                 )}
 
                 {/* Location - solo si existe */}
-                {lead.person_location && (
+                {isFieldVisible('person_location') && lead.person_location && (
                     <div className="flex items-start gap-3">
                         <MapPin className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -62,7 +79,7 @@ export function IdentityCard({ lead }: IdentityCardProps) {
                 )}
 
                 {/* Title - solo si existe */}
-                {lead.person_title && (
+                {isFieldVisible('person_title') && lead.person_title && (
                     <div className="flex items-start gap-3">
                         <BriefcaseIcon className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -72,14 +89,16 @@ export function IdentityCard({ lead }: IdentityCardProps) {
                     </div>
                 )}
 
-                {/* Source - siempre visible */}
-                <div className="flex items-start gap-3">
-                    <Globe className="w-4 h-4 text-gray-500 mt-1" />
-                    <div className="flex-1">
-                        <div className="text-sm font-medium text-gray-300">Source</div>
-                        <div className="text-sm text-gray-400 capitalize">{lead.source.replace('_', ' ')}</div>
+                {/* Source */}
+                {isFieldVisible('source') && (
+                    <div className="flex items-start gap-3">
+                        <Globe className="w-4 h-4 text-gray-500 mt-1" />
+                        <div className="flex-1">
+                            <div className="text-sm font-medium text-gray-300">Source</div>
+                            <div className="text-sm text-gray-400 capitalize">{lead.source.replace('_', ' ')}</div>
+                        </div>
                     </div>
-                </div>
+                )}
 
             </CardContent>
         </Card>

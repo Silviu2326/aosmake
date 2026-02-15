@@ -1,0 +1,40 @@
+{
+  "company_name": "TechCardinal Consulting LLC",
+  "company_description": "A technology and business consulting firm specializing in digital transformation, process optimization, and infrastructure transformation. They help organizations assess technology and buying decisions to ensure positive ROI.",
+  "business_lines": [
+    {
+      "line_name": "IT & Business Consulting",
+      "b2b_b2c": "B2B",
+      "business_model": {
+        "classification": "Consulting Firm",
+        "offering": "Technology assessment, buying decision support (software, hardware, services), digital transformation, and process optimization.",
+        "revenue_mechanics": "Service fees (likely project-based or retainer models for advisory services) [Assumed | Confidence: High | Evidence: company.industry | Reason: Standard model for consulting firms].",
+        "area_operations": "HQ: Plano, Texas, United States; Operates: United States [Assumed | Confidence: High | Evidence: company.companyLocation | Reason: HQ and founder location in Texas].",
+        "example_steps_revenue": "Logic: Client seeks tech ROI | Action: They provide assessment and strategy | Result: Client pays service fees"
+      },
+      "buyer_segments": [
+        {
+          "target_sector": "General B2B; Technology-dependent sectors",
+          "target_role": "CIO; CTO; IT Director; C-Suite (CEO/CFO)",
+          "target_geo": "United States",
+          "volume_intent": "SELECTIVE",
+          "volume_intent_reason": "Consulting firms typically focus on fewer, higher-value engagements requiring deep expertise."
+        }
+      ],
+      "client_acquisition_operation": {
+        "definition": "Acquiring clients through professional networking and channel partnerships.",
+        "channels_observed": "unknown",
+        "channels_assumed": "Professional Networking; Channel Partnerships; Referrals [Assumed | Confidence: High | Evidence: person.professionalBackground | Reason: Founder is a 'Senior Channel Sales Leader' skilled in 'Channel Revenue Growth'].",
+        "example_steps_CAO": "Logic: Leverage channel network | Action: Founder connects with enterprise partners | Result: New consulting engagement signed"
+      }
+    }
+  ],
+  "b2b_presence": {
+    "status": "YES",
+    "notes": "They provide consulting services to other organizations."
+  },
+  "hit_filter": {
+    "verdict": "STORAGE",
+    "reason": "The company is an IT and Business Consulting firm, not a Recruiting and Staffing company as requested in the target definition."
+  }
+}

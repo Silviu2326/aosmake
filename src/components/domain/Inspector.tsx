@@ -1,13 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { NodeData, NodeVariant, TestCase, NodeVersion } from '../../types';
 import { Edge } from 'reactflow';
-import { X, Play, Save, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Sparkles, Maximize2, Download, Loader2, XCircle, AlignLeft, History } from 'lucide-react';
+import { X, Play, Save, Shield, FlaskConical, Plus, Code, Trash2, GitBranch, Copy, CheckCircle2, Sparkles, Maximize2, Download, Loader2, XCircle, AlignLeft, History, Database } from 'lucide-react';
 import { getNodeFields } from '../../utils/nodeUtils';
 import { VariationGeneratorModal } from '../ui/VariationGeneratorModal';
 import { PromptEditorModal } from '../ui/PromptEditorModal';
 import { MutationModal } from '../ui/MutationModal';
 import { VariableHighlighter } from '../ui/VariableHighlighter';
 import { NodeVersionModal } from '../ui/NodeVersionModal';
+import { getFieldConfig, FieldConfig as DashboardFieldConfig } from '../../services/settingsApi';
 
 interface InspectorProps {
     node?: NodeData;
@@ -34,6 +35,10 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
     const [isMutationModalOpen, setIsMutationModalOpen] = useState(false);
     const [isPromptEditorOpen, setIsPromptEditorOpen] = useState(false);
     const [isVersionModalOpen, setIsVersionModalOpen] = useState(false);
+    
+    // Available fields from Supabase for saving LLM results
+    const [availableFields, setAvailableFields] = useState<DashboardFieldConfig[]>([]);
+    const [isLoadingFields, setIsLoadingFields] = useState(false);
 
     // Tests state
     const [testCases, setTestCases] = useState<TestCase[]>([]);
@@ -91,6 +96,25 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
             setTestCases([]);
         }
     }, [node?.id, node?.testCases]);
+
+    // Load available fields from Supabase when saveToSupabase is enabled
+    useEffect(() => {
+        if (node?.saveToSupabase && availableFields.length === 0) {
+            loadAvailableFields();
+        }
+    }, [node?.saveToSupabase]);
+
+    const loadAvailableFields = async () => {
+        setIsLoadingFields(true);
+        try {
+            const fields = await getFieldConfig();
+            setAvailableFields(fields);
+        } catch (error) {
+            console.error('Error loading available fields:', error);
+        } finally {
+            setIsLoadingFields(false);
+        }
+    };
 
     const saveTestCases = (cases: TestCase[]) => {
         setTestCases(cases);
@@ -230,7 +254,10 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
             limit: node.limit,
             updateField: node.updateField,
             customField: node.customField,
-            markAsSent: node.markAsSent
+            markAsSent: node.markAsSent,
+            saveToSupabase: node.saveToSupabase,
+            supabaseTargetField: node.supabaseTargetField,
+            customSupabaseField: node.customSupabaseField
         };
 
         const currentVersions = node.nodeVersions || [];
@@ -261,7 +288,10 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
             limit: version.limit,
             updateField: version.updateField,
             customField: version.customField,
-            markAsSent: version.markAsSent
+            markAsSent: version.markAsSent,
+            saveToSupabase: version.saveToSupabase,
+            supabaseTargetField: version.supabaseTargetField,
+            customSupabaseField: version.customSupabaseField
         });
 
         setIsVersionModalOpen(false);
@@ -713,6 +743,80 @@ export const Inspector: React.FC<InspectorProps> = ({ node, availableNodes = [],
                                         />
                                     </div>
                                 )}
+
+                                {/* Save to Supabase option for Gemini/Perplexity nodes */}
+                                <div className="space-y-3 pt-2 border-t border-white/10">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            id="saveToSupabase"
+                                            checked={node.saveToSupabase || false}
+                                            onChange={(e) => onNodeUpdate(node.id, { saveToSupabase: e.target.checked })}
+                                            className="rounded border-white/10 bg-white/5 checked:bg-accent focus:ring-accent"
+                                        />
+                                        <label htmlFor="saveToSupabase" className="text-xs text-gray-300 flex items-center gap-2">
+                                            <Database size={12} className="text-accent" />
+                                            Guardar resultado en Supabase
+                                        </label>
+                                    </div>
+                                    
+                                    {/* Dropdown to select target field */}
+                                    {node.saveToSupabase && (
+                                        <div className="space-y-2 pl-5 border-l-2 border-accent/30">
+                                            <label className="text-xs text-gray-500 flex items-center gap-2">
+                                                <Save size={10} />
+                                                Campo destino en la base de datos
+                                            </label>
+                                            {isLoadingFields ? (
+                                                <div className="flex items-center gap-2 text-xs text-gray-500">
+                                                    <Loader2 size={12} className="animate-spin" />
+                                                    Cargando campos...
+                                                </div>
+                                            ) : availableFields.length > 0 ? (
+                                                <select
+                                                    value={node.supabaseTargetField || ''}
+                                                    onChange={(e) => onNodeUpdate(node.id, { supabaseTargetField: e.target.value })}
+                                                    className="w-full bg-background border border-border rounded p-2 text-xs text-white"
+                                                >
+                                                    <option value="">-- Seleccionar campo --</option>
+                                                    {availableFields.map((field) => (
+                                                        <option key={field.id} value={field.id}>
+                                                            {field.label} ({field.id})
+                                                            {field.custom && ' ⭐'}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <div className="text-xs text-yellow-400">
+                                                    No se pudieron cargar los campos. 
+                                                    <button 
+                                                        onClick={loadAvailableFields}
+                                                        className="ml-2 underline hover:text-yellow-300"
+                                                    >
+                                                        Reintentar
+                                                    </button>
+                                                </div>
+                                            )}
+                                            
+                                            {/* Campo personalizado opcional */}
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] text-gray-500">
+                                                    O escribe un campo personalizado:
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={node.customSupabaseField || ''}
+                                                    onChange={(e) => onNodeUpdate(node.id, { 
+                                                        customSupabaseField: e.target.value,
+                                                        supabaseTargetField: e.target.value ? 'custom' : node.supabaseTargetField
+                                                    })}
+                                                    placeholder="ej: resultado_llm, notas_ia"
+                                                    className="w-full bg-background border border-border rounded p-2 text-xs text-white"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
 

@@ -240,6 +240,9 @@ export interface NodeVersion {
   updateField?: string;
   customField?: string;
   markAsSent?: boolean;
+  saveToSupabase?: boolean;
+  supabaseTargetField?: string;
+  customSupabaseField?: string;
 }
 
 export interface TestCase {
@@ -307,6 +310,10 @@ export interface NodeData {
   updates?: Record<string, any>;
   // AnymailFinder
   apiKey?: string;
+  // Supabase persistence for LLM/Perplexity nodes
+  saveToSupabase?: boolean;
+  supabaseTargetField?: string;
+  customSupabaseField?: string;
   // Filter
   filterField?: string;
 }

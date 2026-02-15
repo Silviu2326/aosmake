@@ -1,4 +1,12 @@
 import { create } from 'zustand';
+import { getTableFields, saveTableFields, getPageFields, savePageFields, SimpleFieldConfig } from '../services/settingsApi';
+
+// Field configuration for customization
+export interface FieldConfig {
+    id: string;
+    label: string;
+    visible: boolean;
+}
 
 // Basic Type Definitions based on spec
 export type EmailStatus = 'valid' | 'invalid' | 'risky' | 'pending' | 'unknown';
@@ -72,6 +80,8 @@ export interface Lead {
         is_catchall?: boolean;
         confidence?: number;
     };
+    // Allow dynamic custom fields
+    [key: string]: any;
 }
 
 export interface Flow {
@@ -91,14 +101,52 @@ interface AppState {
     isLoading: boolean;
     error: string | null;
 
+    // Field Customization
+    tableFields: FieldConfig[];
+    pageFields: FieldConfig[];
+    fieldsLoaded: boolean;
+
     // Actions
     toggleSidebar: () => void;
     setLeads: (leads: Lead[]) => void;
     addLead: (lead: Lead) => void;
     fetchLeads: () => Promise<void>;
+    setTableFields: (fields: FieldConfig[]) => Promise<void>;
+    setPageFields: (fields: FieldConfig[]) => Promise<void>;
+    loadFieldSettings: () => Promise<void>;
 }
 
 const API_BASE_URL = 'https://backendaos-production.up.railway.app/api';
+
+// Storage keys for field preferences
+const TABLE_FIELDS_STORAGE_KEY = 'aos_leads_table_fields';
+const PAGE_FIELDS_STORAGE_KEY = 'aos_leads_page_fields';
+
+// Default fields for the table
+const defaultTableFields: FieldConfig[] = [
+    { id: 'name', label: 'Name', visible: true },
+    { id: 'company', label: 'Company', visible: true },
+    { id: 'email', label: 'Email', visible: true },
+    { id: 'pipeline', label: 'Pipeline', visible: true },
+    { id: 'source', label: 'Source', visible: true },
+    { id: 'created', label: 'Created', visible: true },
+];
+
+// Default fields for the lead detail page
+const defaultPageFields: FieldConfig[] = [
+    { id: 'email', label: 'Email', visible: true },
+    { id: 'person_linkedin_url', label: 'LinkedIn Profile', visible: true },
+    { id: 'phone', label: 'Phone', visible: true },
+    { id: 'person_location', label: 'Location', visible: true },
+    { id: 'person_title', label: 'Title', visible: true },
+    { id: 'source', label: 'Source', visible: true },
+    { id: 'company', label: 'Company Name', visible: true },
+    { id: 'company_website', label: 'Company Website', visible: true },
+    { id: 'company_linkedin_url', label: 'Company LinkedIn', visible: true },
+    { id: 'company_sales_url', label: 'Company Sales Page', visible: true },
+    { id: 'company_size', label: 'Company Size', visible: true },
+    { id: 'company_industry', label: 'Company Industry', visible: true },
+];
 
 // Transform backend lead to frontend lead
 const transformLead = (backendLead: any): Lead => ({
@@ -166,12 +214,91 @@ export const useAppStore = create<AppState>((set, get) => ({
     theme: 'dark',
     isLoading: false,
     error: null,
+    // Start with defaults, then load from server
+    tableFields: defaultTableFields,
+    pageFields: defaultPageFields,
+    fieldsLoaded: false,
 
     toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
 
     setLeads: (leads) => set({ leads }),
     
     addLead: (lead) => set((state) => ({ leads: [...state.leads, lead] })),
+
+    // Load field settings from server (with localStorage fallback)
+    loadFieldSettings: async () => {
+        try {
+            const [serverTableFields, serverPageFields] = await Promise.all([
+                getTableFields(),
+                getPageFields()
+            ]);
+
+            // If server has data, use it; otherwise try localStorage
+            if (serverTableFields.length > 0) {
+                set({ tableFields: serverTableFields as FieldConfig[] });
+            } else {
+                const saved = localStorage.getItem(TABLE_FIELDS_STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    set({ tableFields: parsed });
+                    // Sync to server
+                    saveTableFields(parsed).catch(err => 
+                        console.error('Failed to sync table fields to server:', err)
+                    );
+                }
+            }
+
+            if (serverPageFields.length > 0) {
+                set({ pageFields: serverPageFields as FieldConfig[] });
+            } else {
+                const saved = localStorage.getItem(PAGE_FIELDS_STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    set({ pageFields: parsed });
+                    // Sync to server
+                    savePageFields(parsed).catch(err => 
+                        console.error('Failed to sync page fields to server:', err)
+                    );
+                }
+            }
+
+            set({ fieldsLoaded: true });
+        } catch (error) {
+            console.error('Error loading field settings from server:', error);
+            // Fallback to localStorage
+            const savedTable = localStorage.getItem(TABLE_FIELDS_STORAGE_KEY);
+            const savedPage = localStorage.getItem(PAGE_FIELDS_STORAGE_KEY);
+            set({ 
+                tableFields: savedTable ? JSON.parse(savedTable) : defaultTableFields,
+                pageFields: savedPage ? JSON.parse(savedPage) : defaultPageFields,
+                fieldsLoaded: true 
+            });
+        }
+    },
+
+    setTableFields: async (fields) => {
+        try {
+            // Save to server
+            await saveTableFields(fields as SimpleFieldConfig[]);
+        } catch (error) {
+            console.error('Failed to save table fields to server:', error);
+        }
+        // Always save to localStorage as backup
+        localStorage.setItem(TABLE_FIELDS_STORAGE_KEY, JSON.stringify(fields));
+        set({ tableFields: fields });
+    },
+
+    setPageFields: async (fields) => {
+        try {
+            // Save to server
+            await savePageFields(fields as SimpleFieldConfig[]);
+        } catch (error) {
+            console.error('Failed to save page fields to server:', error);
+        }
+        // Always save to localStorage as backup
+        localStorage.setItem(PAGE_FIELDS_STORAGE_KEY, JSON.stringify(fields));
+        set({ pageFields: fields });
+    },
 
     fetchLeads: async () => {
         set({ isLoading: true, error: null });

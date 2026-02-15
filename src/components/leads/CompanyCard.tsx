@@ -1,15 +1,28 @@
 import React from 'react';
-import { Lead } from '../../stores/useAppStore';
+import { Lead, FieldConfig } from '../../stores/useAppStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Building2, Globe, MapPin, Users, Briefcase } from 'lucide-react';
+import { Building2, Globe, Users, Briefcase } from 'lucide-react';
 
 interface CompanyCardProps {
     lead: Lead;
+    visibleFields?: FieldConfig[];
 }
 
-export function CompanyCard({ lead }: CompanyCardProps) {
-    // Si no hay company, no mostrar la tarjeta
-    if (!lead.company) return null;
+export function CompanyCard({ lead, visibleFields }: CompanyCardProps) {
+    // Determine if a field is visible
+    const isFieldVisible = (fieldId: string) => {
+        if (!visibleFields) return true;
+        const field = visibleFields.find(f => f.id === fieldId);
+        return field?.visible ?? true;
+    };
+
+    // Check if any company fields are visible
+    const hasVisibleFields = [
+        'company', 'company_website', 'company_linkedin_url', 'company_sales_url', 'company_size', 'company_industry'
+    ].some(id => isFieldVisible(id));
+
+    // Si no hay company o no hay campos visibles, no mostrar la tarjeta
+    if (!lead.company || !hasVisibleFields) return null;
 
     return (
         <Card>
@@ -18,17 +31,19 @@ export function CompanyCard({ lead }: CompanyCardProps) {
             </CardHeader>
             <CardContent className="space-y-4">
 
-                {/* Company Name - siempre visible si existe company */}
-                <div className="flex items-start gap-3">
-                    <Building2 className="w-4 h-4 text-gray-500 mt-1" />
-                    <div className="flex-1">
-                        <div className="text-sm font-medium text-gray-300">Name</div>
-                        <div className="text-sm text-white font-medium">{lead.company}</div>
+                {/* Company Name */}
+                {isFieldVisible('company') && (
+                    <div className="flex items-start gap-3">
+                        <Building2 className="w-4 h-4 text-gray-500 mt-1" />
+                        <div className="flex-1">
+                            <div className="text-sm font-medium text-gray-300">Name</div>
+                            <div className="text-sm text-white font-medium">{lead.company}</div>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Website - solo si existe */}
-                {lead.company_website && (
+                {isFieldVisible('company_website') && lead.company_website && (
                     <div className="flex items-start gap-3">
                         <Globe className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -41,7 +56,7 @@ export function CompanyCard({ lead }: CompanyCardProps) {
                 )}
 
                 {/* LinkedIn URL - solo si existe */}
-                {lead.company_linkedin_url && (
+                {isFieldVisible('company_linkedin_url') && lead.company_linkedin_url && (
                     <div className="flex items-start gap-3">
                         <LinkedinIcon className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -54,7 +69,7 @@ export function CompanyCard({ lead }: CompanyCardProps) {
                 )}
 
                 {/* Sales URL - solo si existe */}
-                {lead.company_sales_url && (
+                {isFieldVisible('company_sales_url') && lead.company_sales_url && (
                     <div className="flex items-start gap-3">
                         <SalesIcon className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -67,7 +82,7 @@ export function CompanyCard({ lead }: CompanyCardProps) {
                 )}
 
                 {/* Size - solo si existe */}
-                {lead.company_size && (
+                {isFieldVisible('company_size') && lead.company_size && (
                     <div className="flex items-start gap-3">
                         <Users className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
@@ -78,7 +93,7 @@ export function CompanyCard({ lead }: CompanyCardProps) {
                 )}
 
                 {/* Industry - solo si existe */}
-                {lead.company_industry && (
+                {isFieldVisible('company_industry') && lead.company_industry && (
                     <div className="flex items-start gap-3">
                         <Briefcase className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">

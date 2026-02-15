@@ -6,6 +6,7 @@ import { useAppStore, Lead } from '../stores/useAppStore';
 import { LeadHeader } from '../components/leads/LeadHeader';
 import { IdentityCard } from '../components/leads/IdentityCard';
 import { CompanyCard } from '../components/leads/CompanyCard';
+import { DynamicFieldsCard } from '../components/leads/DynamicFieldsCard';
 import { ActivityTimeline } from '../components/leads/ActivityTimeline';
 import { TagsSection } from '../components/leads/TagsSection';
 
@@ -14,7 +15,7 @@ const API_BASE_URL = 'https://backendaos-production.up.railway.app/api';
 export function LeadDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { leads } = useAppStore();
+    const { leads, pageFields } = useAppStore();
     const [lead, setLead] = useState<Lead | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -79,8 +80,9 @@ export function LeadDetailPage() {
 
                 {/* Sidebar Column (1/3) */}
                 <div className="space-y-6">
-                    <IdentityCard lead={lead} />
-                    <CompanyCard lead={lead} />
+                    <IdentityCard lead={lead} visibleFields={pageFields} />
+                    <CompanyCard lead={lead} visibleFields={pageFields} />
+                    <DynamicFieldsCard lead={lead} visibleFields={pageFields} />
                     <TagsSection />
                 </div>
             </div>
@@ -90,7 +92,7 @@ export function LeadDetailPage() {
 
 // Transform backend lead to frontend format
 function transformBackendLead(backendLead: any): Lead {
-    return {
+    const baseLead = {
         id: backendLead.lead_number,
         LeadNumber: backendLead.lead_number,
         email: backendLead.email || '',
@@ -111,4 +113,21 @@ function transformBackendLead(backendLead: any): Lead {
         company_size: backendLead.company_size || undefined,
         company_industry: backendLead.company_industry || undefined
     };
+
+    // Include any additional fields from backend (like custom fields)
+    const additionalFields: any = {};
+    
+    // Copy fields that might be custom/JSON fields
+    Object.keys(backendLead).forEach(key => {
+        // Skip fields we already mapped
+        if (key in baseLead) return;
+        if (['lead_number', 'first_name', 'last_name', 'company_name', 
+             'company_name_from_p', 'email', 'email_validation', 'source', 
+             'created_at', 'step_status'].includes(key)) return;
+        
+        // Include the field
+        additionalFields[key] = backendLead[key];
+    });
+
+    return { ...baseLead, ...additionalFields } as Lead;
 }

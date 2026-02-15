@@ -551,30 +551,78 @@ export const StatisticsPage: React.FC = () => {
     setTimeout(() => setIsExporting(false), 1000);
   };
 
+  // Format helpers
+  const formatNumber = (value: number) => value.toLocaleString('es-ES');
+  const formatCurrency = (value: number) => `$${value.toFixed(4)}`;
+  const formatPercent = (value: number) => `${value.toFixed(1)}%`;
+
   return (
     <div className="min-h-screen bg-background text-white p-6">
-      {/* Header */}
+      {/* Header Mejorado */}
       <div className="max-w-[1800px] mx-auto mb-8">
-        <div className="flex items-start justify-between gap-4 mb-6">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold tracking-tight">Estadísticas por API Key</h1>
-              <span className="px-2 py-1 bg-purple-500/10 border border-purple-500/20 rounded text-xs text-purple-400 font-mono flex items-center gap-1">
-                <Key size={12} /> Gemini
-              </span>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-4 bg-gradient-to-r from-surface via-surface to-surface/80 border border-border/50 rounded-2xl mb-6">
+          {/* Izquierda: Icono + Título + Stats */}
+          <div className="flex items-start gap-4">
+            {/* Icono Grande con fondo */}
+            <div className="hidden sm:flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/20">
+              <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                className="w-7 h-7 text-purple-400"
+                stroke="currentColor" 
+                strokeWidth="1.5"
+              >
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
-            <p className="text-gray-500 text-sm">
-              Consumo detallado de cada API key de Gemini configurada
-            </p>
+            
+            {/* Título y subtítulo */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 flex-wrap">
+                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
+                  Estadísticas
+                </h1>
+                {/* Badge de estado */}
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                  <Key size={12} />
+                  Gemini API
+                </span>
+              </div>
+              <p className="text-gray-400 text-sm mt-1">
+                Consumo detallado y métricas de uso de API keys
+              </p>
+              
+              {/* Stats rápidas */}
+              <div className="flex items-center gap-4 mt-3">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-lg font-semibold text-white">{formatNumber(totalStats.totalCalls)}</span>
+                  <span className="text-xs text-gray-500">Llamadas</span>
+                </div>
+                <div className="w-px h-4 bg-border/50" />
+                <div className="flex items-center gap-1.5">
+                  <span className="text-lg font-semibold text-emerald-400">{formatCurrency(totalStats.totalCost)}</span>
+                  <span className="text-xs text-gray-500">Costo</span>
+                </div>
+                <div className="w-px h-4 bg-border/50 hidden sm:block" />
+                <div className="hidden sm:flex items-center gap-1.5">
+                  <span className="text-lg font-semibold text-cyan-400">{formatPercent(totalStats.avgSuccessRate)}</span>
+                  <span className="text-xs text-gray-500">Éxito</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          {/* Derecha: Acciones */}
           <div className="flex items-center gap-2">
             <button onClick={handleRefresh} disabled={isRefreshing}
               className="flex items-center gap-2 px-4 py-2.5 bg-surface border border-white/5 hover:border-white/10 rounded-lg transition-all disabled:opacity-50 text-sm">
-              <RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} /> Actualizar
+              <RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} /> 
+              <span className="hidden sm:inline">Actualizar</span>
             </button>
             <button onClick={handleExport} disabled={isExporting}
               className="flex items-center gap-2 px-4 py-2.5 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 rounded-lg transition-all disabled:opacity-50 text-sm text-purple-400">
-              <Download size={16} /> {isExporting ? 'Exportando...' : 'Exportar CSV'}
+              <Download size={16} /> 
+              <span className="hidden sm:inline">{isExporting ? 'Exportando...' : 'Exportar'}</span>
             </button>
           </div>
         </div>

@@ -462,24 +462,24 @@ export const PreCrafterPanel: React.FC = () => {
 
     // Command Palette - Define available commands
     const commands = useMemo(() => [
-        { id: 'add-llm', label: 'Add LLM Node', icon: Plus, action: () => { setIsAddModalOpen(true); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
-        { id: 'add-filter', label: 'Add Filter Node', icon: GitBranch, action: () => { confirmAddNode('', '', 'Filter', 'FILTER'); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
-        { id: 'add-json', label: 'Add JSON Node', icon: Plus, action: () => { confirmAddNode('', '', 'JSON', 'JSON'); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
-        { id: 'add-csv-input', label: 'Add CSV Input Node', icon: Plus, action: () => { confirmAddNode('', '', 'CSV Input', 'CSV_INPUT'); setIsCommandPaletteOpen(false); }, category: 'Nodes' },
-        { id: 'run-workflow', label: 'Run Workflow', icon: Play, action: () => { setIsRunConfigOpen(true); setIsCommandPaletteOpen(false); }, category: 'Actions', shortcut: 'Cmd+Enter' },
-        { id: 'test-nodes', label: 'Test Nodes', icon: FlaskConical, action: () => { setIsMultiTestOpen(true); setIsCommandPaletteOpen(false); }, category: 'Actions' },
-        { id: 'save-workflow', label: 'Save Workflow', icon: Save, action: () => { saveWorkflow(); setIsCommandPaletteOpen(false); }, category: 'Actions', shortcut: 'Cmd+S' },
-        { id: 'workflow-documentation', label: 'Document Workflow', icon: BookOpen, action: () => { setIsDocumentationOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
-        { id: 'workflow-variables', label: 'Configure Workflow Variables', icon: Variable, action: () => { setIsWorkflowVariablesOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
-        { id: 'export-json', label: 'Export to JSON', icon: Download, action: () => { handleExport(); setIsCommandPaletteOpen(false); }, category: 'File' },
-        { id: 'import-json', label: 'Import from JSON', icon: Upload, action: () => { fileInputRef.current?.click(); setIsCommandPaletteOpen(false); }, category: 'File' },
-        { id: 'layout-horizontal', label: 'Auto Layout (Horizontal)', icon: Layout, action: () => { onLayout('LR'); setIsCommandPaletteOpen(false); }, category: 'Layout' },
-        { id: 'layout-vertical', label: 'Auto Layout (Vertical)', icon: Layout, action: () => { onLayout('TB'); setIsCommandPaletteOpen(false); }, category: 'Layout' },
-        { id: 'group-nodes', label: 'Group Selected Nodes', icon: BoxSelect, action: () => { handleGroupNodes(); setIsCommandPaletteOpen(false); }, category: 'Layout' },
-        { id: 'open-agent', label: 'Open AI Agent', icon: Bot, action: () => { setIsAgentOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
-        { id: 'open-history', label: 'Version History', icon: History, action: () => { setIsHistoryOpen(true); setIsCommandPaletteOpen(false); }, category: 'Tools' },
-        { id: 'clone-workflow', label: 'Clone Workflow', icon: GitBranch, action: () => { handleClone(); setIsCommandPaletteOpen(false); }, category: 'Tools' },
-        { id: 'api-config', label: 'API Configuration', icon: Settings, action: () => { setIsApiConfigOpen(true); setIsCommandPaletteOpen(false); }, category: 'Settings' },
+        { id: 'add-llm', label: 'Añadir Nodo LLM', icon: Plus, action: () => { setIsAddModalOpen(true); setIsCommandPaletteOpen(false); }, category: 'Nodos' },
+        { id: 'add-filter', label: 'Añadir Nodo Filtro', icon: GitBranch, action: () => { confirmAddNode('', '', 'Filter', 'FILTER'); setIsCommandPaletteOpen(false); }, category: 'Nodos' },
+        { id: 'add-json', label: 'Añadir Nodo JSON', icon: Plus, action: () => { confirmAddNode('', '', 'JSON', 'JSON'); setIsCommandPaletteOpen(false); }, category: 'Nodos' },
+        { id: 'add-csv-input', label: 'Añadir Nodo CSV Input', icon: Plus, action: () => { confirmAddNode('', '', 'CSV Input', 'CSV_INPUT'); setIsCommandPaletteOpen(false); }, category: 'Nodos' },
+        { id: 'run-workflow', label: 'Ejecutar Workflow', icon: Play, action: () => { setIsRunConfigOpen(true); setIsCommandPaletteOpen(false); }, category: 'Acciones', shortcut: 'Cmd+Enter' },
+        { id: 'test-nodes', label: 'Probar Nodos', icon: FlaskConical, action: () => { setIsMultiTestOpen(true); setIsCommandPaletteOpen(false); }, category: 'Acciones' },
+        { id: 'save-workflow', label: 'Guardar Workflow', icon: Save, action: () => { saveWorkflow(); setIsCommandPaletteOpen(false); }, category: 'Acciones', shortcut: 'Cmd+S' },
+        { id: 'workflow-documentation', label: 'Documentar Workflow', icon: BookOpen, action: () => { setIsDocumentationOpen(true); setIsCommandPaletteOpen(false); }, category: 'Herramientas' },
+        { id: 'workflow-variables', label: 'Configurar Variables', icon: Variable, action: () => { setIsWorkflowVariablesOpen(true); setIsCommandPaletteOpen(false); }, category: 'Herramientas' },
+        { id: 'export-json', label: 'Exportar a JSON', icon: Download, action: () => { handleExport(); setIsCommandPaletteOpen(false); }, category: 'Archivo' },
+        { id: 'import-json', label: 'Importar desde JSON', icon: Upload, action: () => { fileInputRef.current?.click(); setIsCommandPaletteOpen(false); }, category: 'Archivo' },
+        { id: 'layout-horizontal', label: 'Auto Layout (Horizontal)', icon: Layout, action: () => { onLayout('LR'); setIsCommandPaletteOpen(false); }, category: 'Diseño' },
+        { id: 'layout-vertical', label: 'Auto Layout (Vertical)', icon: Layout, action: () => { onLayout('TB'); setIsCommandPaletteOpen(false); }, category: 'Diseño' },
+        { id: 'group-nodes', label: 'Agrupar Nodos Seleccionados', icon: BoxSelect, action: () => { handleGroupNodes(); setIsCommandPaletteOpen(false); }, category: 'Diseño' },
+        { id: 'open-agent', label: 'Abrir Asistente IA', icon: Bot, action: () => { setIsAgentOpen(true); setIsCommandPaletteOpen(false); }, category: 'Herramientas' },
+        { id: 'open-history', label: 'Historial de Versiones', icon: History, action: () => { setIsHistoryOpen(true); setIsCommandPaletteOpen(false); }, category: 'Herramientas' },
+        { id: 'clone-workflow', label: 'Clonar Workflow', icon: GitBranch, action: () => { handleClone(); setIsCommandPaletteOpen(false); }, category: 'Herramientas' },
+        { id: 'api-config', label: 'Configuración API', icon: Settings, action: () => { setIsApiConfigOpen(true); setIsCommandPaletteOpen(false); }, category: 'Configuración' },
     ], []);
 
     // Filter commands based on query
@@ -1331,34 +1331,49 @@ Actualiza el campo 'documentation' de cada nodo con la descripción generada.`;
 
     return (
         <div className="flex flex-col h-full bg-[#0D0D0D]">
-            {/* Panel Header */}
-            {/* Premium Header */}
-            <div className="h-16 border-b border-white/5 flex items-center justify-between px-6 bg-surface/80 backdrop-blur-md sticky top-0 z-20 shadow-md">
+            {/* Panel Header Mejorado */}
+            <div className="border-b border-white/5 flex items-center justify-between px-4 py-3 bg-gradient-to-r from-surface via-surface to-surface/80 backdrop-blur-md sticky top-0 z-20 shadow-md">
 
-                {/* Left: Brand & Status */}
-                <div className="flex items-center gap-4">
+                {/* Left: Icon + Brand & Status */}
+                <div className="flex items-center gap-3">
+                    {/* Icono */}
+                    <div className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/20">
+                        <svg 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            className="w-5 h-5 text-blue-400"
+                            stroke="currentColor" 
+                            strokeWidth="1.5"
+                        >
+                            <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </div>
+                    
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                            <span className="font-bold text-white tracking-tight text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                            <span className="font-bold text-white tracking-tight text-lg bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
                                 Builder
                             </span>
-                           
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                <Zap size={10} />
+                                Workflow
+                            </span>
                         </div>
                         <div className="flex items-center gap-2 text-[10px] text-gray-500">
                             {isRunning ? (
                                 <span className="flex items-center gap-1 text-green-400">
                                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                    Running Workflow...
+                                    Ejecutando...
                                 </span>
                             ) : waitingNodeId ? (
                                 <span className="flex items-center gap-1 text-amber-400">
                                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                                    Waiting for Input
+                                    Esperando entrada
                                 </span>
                             ) : (
                                 <span className="flex items-center gap-1">
-                                    <span className={`w-1.5 h-1.5 rounded-full ${isSaving ? 'bg-yellow-500' : 'bg-gray-600'}`} />
-                                    {isSaving ? 'Saving changes...' : lastSaved ? `Saved ${lastSaved}` : 'Ready'}
+                                    <span className={`w-1.5 h-1.5 rounded-full ${isSaving ? 'bg-yellow-500' : 'bg-green-500'}`} />
+                                    {isSaving ? 'Guardando...' : lastSaved ? `Guardado ${lastSaved}` : 'Listo'}
                                 </span>
                             )}
                         </div>
@@ -1373,33 +1388,33 @@ Actualiza el campo 'documentation' de cada nodo con la descripción generada.`;
                         <button
                             onClick={() => setIsAddModalOpen(true)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-white/10 text-gray-300 hover:text-white transition-all text-xs font-medium"
-                            title="Add new node (Cmd+N)"
+                            title="Añadir nodo (Cmd+N)"
                         >
                             <Plus size={14} className="text-purple-400" />
-                            Add Node
+                            <span className="hidden sm:inline">Añadir</span>
                         </button>
                         <div className="w-px h-4 bg-white/10 mx-1" />
                         <button
                             onClick={() => setIsRunConfigOpen(true)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-green-500/20 text-gray-300 hover:text-green-400 transition-all text-xs font-medium"
-                            title="Run Workflow (Cmd+Enter)"
+                            title="Ejecutar Workflow (Cmd+Enter)"
                             disabled={isRunning}
                         >
                             <Play size={14} className={isRunning ? "animate-pulse" : ""} />
-                            Run
+                            <span className="hidden sm:inline">Ejecutar</span>
                         </button>
                         <button
                             onClick={() => setIsMultiTestOpen(true)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-purple-500/20 text-gray-300 hover:text-purple-400 transition-all text-xs font-medium"
-                            title="Test selected nodes"
+                            title="Probar nodos seleccionados"
                         >
                             <FlaskConical size={14} />
-                            Test
+                            <span className="hidden sm:inline">Probar</span>
                         </button>
                     </div>
 
                     {/* TOOLS GROUP - Workflow utilities */}
-                    <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/5">
+                    <div className="hidden md:flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/5">
                         <button
                             onClick={() => setIsDocumentationOpen(true)}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-blue-400 transition-colors"
@@ -1410,35 +1425,35 @@ Actualiza el campo 'documentation' de cada nodo con la descripción generada.`;
                         <button
                             onClick={() => setIsWorkflowVariablesOpen(true)}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-purple-400 transition-colors"
-                            title="Configurar Variables del Workflow"
+                            title="Configurar Variables"
                         >
                             <Variable size={16} />
                         </button>
                         <button
                             onClick={() => setIsAgentOpen(true)}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-purple-400 transition-colors"
-                            title="AI Agent Assistant"
+                            title="Asistente IA"
                         >
                             <Bot size={16} />
                         </button>
                         <button
                             onClick={() => saveWorkflow()}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-                            title="Save Workflow (Cmd+S)"
+                            title="Guardar (Cmd+S)"
                         >
                             <Save size={16} />
                         </button>
                         <button
                             onClick={() => setIsHistoryOpen(true)}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-                            title="Version History"
+                            title="Historial de Versiones"
                         >
                             <History size={16} />
                         </button>
                         <button
                             onClick={handleClone}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-                            title="Clone Workflow"
+                            title="Clonar Workflow"
                         >
                             <GitBranch size={16} />
                         </button>
@@ -1449,14 +1464,14 @@ Actualiza el campo 'documentation' de cada nodo con la descripción generada.`;
                         <button
                             onClick={handleExport}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-                            title="Export to JSON"
+                            title="Exportar JSON"
                         >
                             <Download size={16} />
                         </button>
                         <button
                             onClick={() => fileInputRef.current?.click()}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-                            title="Import from JSON"
+                            title="Importar JSON"
                         >
                             <Upload size={16} />
                         </button>
@@ -1467,7 +1482,7 @@ Actualiza el campo 'documentation' de cada nodo con la descripción generada.`;
                         <button
                             onClick={() => setIsApiConfigOpen(true)}
                             className="p-2 rounded-md hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-                            title="API Configuration"
+                            title="Configuración API"
                         >
                             <Settings size={16} />
                         </button>
@@ -1494,7 +1509,7 @@ Actualiza el campo 'documentation' de cada nodo con la descripción generada.`;
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search nodes (Cmd+K)"
+                            placeholder="Buscar nodos (Cmd+K)"
                             className="bg-transparent border-none text-xs text-white placeholder-gray-600 focus:ring-0 focus:outline-none w-40"
                         />
                         {searchQuery && (
